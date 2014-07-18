@@ -55,9 +55,7 @@ abstract class JHtmlBootstrap
 
 			// Attach affix to document
 			JFactory::getDocument()->addScriptDeclaration(
-				"(function($){
-					$('#$selector').affix($options);
-					})(jQuery);"
+				"jQuery(function($){ $('#$selector').affix($options); });"
 			);
 
 			// Set static array
@@ -89,9 +87,7 @@ abstract class JHtmlBootstrap
 
 		// Attach the alerts to the document
 		JFactory::getDocument()->addScriptDeclaration(
-			"(function($){
-				$('.$selector').alert();
-				})(jQuery);"
+			"jQuery(function($){ $('.$selector').alert(); });"
 		);
 
 		static::$loaded[__METHOD__][$selector] = true;
@@ -121,9 +117,7 @@ abstract class JHtmlBootstrap
 
 		// Attach the button to the document
 		JFactory::getDocument()->addScriptDeclaration(
-			"(function($){
-				$('.$selector').button();
-				})(jQuery);"
+			"jQuery(function($){ $('.$selector').button(); });"
 		);
 
 		static::$loaded[__METHOD__][$selector] = true;
@@ -163,9 +157,7 @@ abstract class JHtmlBootstrap
 
 			// Attach the carousel to document
 			JFactory::getDocument()->addScriptDeclaration(
-				"(function($){
-					$('.$selector').carousel($options);
-					})(jQuery);"
+				"jQuery(function($){ $('.$selector').carousel($options); });"
 			);
 
 			// Set static array
@@ -197,9 +189,7 @@ abstract class JHtmlBootstrap
 
 		// Attach the dropdown to the document
 		JFactory::getDocument()->addScriptDeclaration(
-			"(function($){
-				$('.$selector').dropdown();
-				})(jQuery);"
+			"jQuery(function($){ $('.$selector').dropdown(); });"
 		);
 
 		static::$loaded[__METHOD__][$selector] = true;
@@ -277,9 +267,7 @@ abstract class JHtmlBootstrap
 
 			// Attach the modal to document
 			JFactory::getDocument()->addScriptDeclaration(
-				"(function($){
-					$('#$selector').modal($options);
-					})(jQuery);"
+				"jQuery(function($){ $('#$selector').modal($options); });"
 			);
 
 			// Set static array
@@ -375,10 +363,7 @@ abstract class JHtmlBootstrap
 
 		// Attach the popover to the document
 		JFactory::getDocument()->addScriptDeclaration(
-			"jQuery(document).ready(function()
-			{
-				jQuery('" . $selector . "').popover(" . $options . ");
-			});"
+			"jQuery(function($) { $('" . $selector . "').popover(" . $options . "); });"
 		);
 
 		static::$loaded[__METHOD__][$selector] = true;
@@ -414,9 +399,7 @@ abstract class JHtmlBootstrap
 
 			// Attach ScrollSpy to document
 			JFactory::getDocument()->addScriptDeclaration(
-				"(function($){
-					$('#$selector').scrollspy($options);
-					})(jQuery);"
+				"jQuery(function($){ $('#$selector').scrollspy($options); });"
 			);
 
 			// Set static array
@@ -477,27 +460,27 @@ abstract class JHtmlBootstrap
 
 			// Build the script.
 			$script = array();
-			$script[] = "jQuery(document).ready(function(){";
-			$script[] = "\tjQuery('" . $selector . "').tooltip(" . $options . ");";
+			$script[] = "jQuery(function($){";
+			$script[] = "\t$('" . $selector . "').tooltip(" . $options . ");";
 
 			if ($onShow)
 			{
-				$script[] = "\tjQuery('" . $selector . "').on('show.bs.tooltip', " . $onShow . ");";
+				$script[] = "\t$('" . $selector . "').on('show.bs.tooltip', " . $onShow . ");";
 			}
 
 			if ($onShown)
 			{
-				$script[] = "\tjQuery('" . $selector . "').on('shown.bs.tooltip', " . $onShown . ");";
+				$script[] = "\t$('" . $selector . "').on('shown.bs.tooltip', " . $onShown . ");";
 			}
 
 			if ($onHide)
 			{
-				$script[] = "\tjQuery('" . $selector . "').on('hide.bs.tooltip', " . $onHide . ");";
+				$script[] = "\t$('" . $selector . "').on('hide.bs.tooltip', " . $onHide . ");";
 			}
 
 			if ($onHidden)
 			{
-				$script[] = "\tjQuery('" . $selector . "').on('hidden.bs.tooltip', " . $onHidden . ");";
+				$script[] = "\t$('" . $selector . "').on('hidden.bs.tooltip', " . $onHidden . ");";
 			}
 
 			$script[] = "});";
@@ -558,10 +541,7 @@ abstract class JHtmlBootstrap
 
 			// Attach typehead to document
 			JFactory::getDocument()->addScriptDeclaration(
-				"jQuery(document).ready(function()
-				{
-					jQuery('" . $selector . "').typeahead(" . $options . ");
-				});"
+				"jQuery(function($) { $('" . $selector . "').typeahead(" . $options . "); });"
 			);
 
 			// Set static array
@@ -604,9 +584,7 @@ abstract class JHtmlBootstrap
 
 			// Attach accordion to document
 			JFactory::getDocument()->addScriptDeclaration(
-				"(function($){
-					$('#$selector').collapse($options);
-				})(jQuery);"
+				"jQuery(function($){ $('#$selector').collapse($options); });"
 			);
 
 			// Set static array
@@ -789,12 +767,12 @@ abstract class JHtmlBootstrap
 
 			// Attach tab to document
 			JFactory::getDocument()->addScriptDeclaration(
-				"(function($){
+				"jQuery(function($){
 					$('#$selector a').click(function (e) {
 						e.preventDefault();
 						$(this).tab('show');
 					});
-				})(jQuery);"
+				});"
 			);
 
 			// Set static array
