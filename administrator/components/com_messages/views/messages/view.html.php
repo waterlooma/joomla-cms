@@ -8,7 +8,6 @@
  */
 
 defined('_JEXEC') or die;
-JHtml::_('behavior.modal');
 
 /**
  * View class for a list of messages.
@@ -81,10 +80,7 @@ class MessagesViewMessages extends JViewLegacy
 		$bar = JToolBar::getInstance('toolbar');
 
 		// Instantiate a new JLayoutFile instance and render the layout
-		JHtml::_('behavior.modal', 'a.messagesSettings');
-		$layout = new JLayoutFile('toolbar.mysettings');
-
-		$bar->appendButton('Custom', $layout->render(array()), 'upload');
+		$bar->appendButton('Popup', 'cog', 'COM_MESSAGES_TOOLBAR_MY_SETTINGS', 'index.php?option=com_messages&amp;view=config&amp;tmpl=component', 600, 250);
 
 		if ($state->get('filter.state') == -2 && $canDo->get('core.delete'))
 		{

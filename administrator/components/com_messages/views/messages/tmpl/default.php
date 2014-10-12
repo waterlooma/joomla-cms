@@ -20,6 +20,12 @@ $user		= JFactory::getUser();
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
 ?>
+<script type="text/javascript">
+	Joomla.closeModalDialog = function()
+	{
+		jQuery('#modal-cog').modal('hide');
+	}
+</script>
 
 <form action="<?php echo JRoute::_('index.php?option=com_messages&view=messages'); ?>" method="post" name="adminForm" id="adminForm">
 <?php if (!empty( $this->sidebar)) : ?>
