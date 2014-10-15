@@ -26,42 +26,20 @@ JFactory::getDocument()->addScriptDeclaration("
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_messages'); ?>" method="post" name="adminForm" id="message-form" class="form-validate form-horizontal">
 	<fieldset>
-		<div>
-			<div style="display:inline-block; width:40%;">
-				<button class="btn btn-success btn-block" type="submit" onclick="Joomla.submitform('config.save', this.form); window.parent.jQuery('#modal-cog').modal('hide');">
-					<?php echo JText::_('JAPPLY'); ?></button>
-			</div>
 
-			<div style="display:inline-block; width:40%; float: right;">
-			<button class="btn btn-default btn-block" type="submit" onclick="window.parent.jQuery('#modal-cog').modal('hide');">
-				<?php echo JText::_('JCANCEL');?></button>
+		<div class="clearfix">
+			<div class="btn-group pull-right">
+				<button class="btn btn-success" type="submit" onclick="Joomla.submitform('config.save', this.form); window.parent.jQuery('#modal-cog').modal('hide');"><?php echo JText::_('JAPPLY'); ?></button>
 			</div>
+			<div class="btn-group pull-left">
+				<button class="btn btn-default" type="submit" onclick="window.parent.jQuery('#modal-cog').modal('hide');"><?php echo JText::_('JCANCEL');?></button>
+				</div>
 		</div>
-		<hr />
-		<div class="control-group">
-			<div class="control-label">
-				<?php echo $this->form->getLabel('lock'); ?>
-			</div>
-			<div class="controls">
-				<?php echo $this->form->getInput('lock'); ?>
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="control-label">
-				<?php echo $this->form->getLabel('mail_on_new'); ?>
-			</div>
-			<div class="controls">
-				<?php echo $this->form->getInput('mail_on_new'); ?>
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="control-label">
-				<?php echo $this->form->getLabel('auto_purge'); ?>
-			</div>
-			<div class="controls">
-				<?php echo $this->form->getInput('auto_purge'); ?>
-			</div>
-		</div>
+
+		<hr/>
+		<?php echo $this->form->getField('lock')->getControlGroup();
+			echo $this->form->getField('mail_on_new')->getControlGroup();
+			echo $this->form->getField('auto_purge')->getControlGroup(); ?>
 
 		</fieldset>
 		<input type="hidden" name="task" value="" />
