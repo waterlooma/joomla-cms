@@ -26,22 +26,19 @@ JFactory::getDocument()->addScriptDeclaration("
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_messages'); ?>" method="post" name="adminForm" id="message-form" class="form-validate form-horizontal">
 	<fieldset>
-
-		<div class="clearfix">
-			<div class="btn-group pull-right">
-				<button class="btn btn-success" type="submit" onclick="Joomla.submitform('config.save', this.form); window.parent.jQuery('#modal-cog').modal('hide');"><?php echo JText::_('JAPPLY'); ?></button>
-			</div>
-			<div class="btn-group pull-left">
-				<button class="btn btn-default" type="submit" onclick="window.parent.jQuery('#modal-cog').modal('hide');"><?php echo JText::_('JCANCEL');?></button>
-				</div>
-		</div>
-
-		<hr/>
 		<?php echo $this->form->getField('lock')->getControlGroup();
 			echo $this->form->getField('mail_on_new')->getControlGroup();
 			echo $this->form->getField('auto_purge')->getControlGroup(); ?>
-
 		</fieldset>
+	<hr/>
+	<div class="clearfix">
+		<div class="btn-group pull-right">
+			<button class="btn btn-success" type="submit" onclick="Joomla.submitform('config.save', this.form); window.parent.jQuery('#modal-cog').modal('hide');"><?php echo JText::_('JAPPLY'); ?></button>
+		</div>
+		<div class="btn-group pull-left">
+			<button class="btn btn-default" type="submit" onclick="window.parent.jQuery('#modal-cog').modal('hide');"><?php echo JText::_('JCANCEL');?></button>
+		</div>
+	</div>
 		<input type="hidden" name="task" value="" />
 		<?php echo JHtml::_('form.token'); ?>
 </form>
