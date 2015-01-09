@@ -90,6 +90,12 @@ class JFormFieldMedia extends JFormField
 	protected $previewHeight;
 
 	/**
+	 * Layout to render
+	 *
+	 * @var  string
+	 */
+	protected $layout = 'joomla.form.field.media';
+	/**
 	 * Method to get certain otherwise inaccessible properties from the form field object.
 	 *
 	 * @param   string  $name  The property name for which to the the value.
@@ -198,166 +204,95 @@ class JFormFieldMedia extends JFormField
 			$asset = JFactory::getApplication()->input->get('option');
 		}
 
-		if (!self::$initialised)
-		{
-			// Load the modal behavior script.
-			JHtml::_('behavior.modal');
-
-			// Include jQuery
-			JHtml::_('jquery.framework');
-			JHtml::_('script', 'media/mediafield-mootools.min.js', true, true, false, false, true);
-
-			self::$initialised = true;
-		}
-
-		$html = array();
-		$attr = '';
-
-		// Tooltip for INPUT showing whole image path
-		$options = array(
-			'onShow' => 'jMediaRefreshImgpathTip',
-		);
-		JHtml::_('behavior.tooltip', '.hasTipImgpath', $options);
-
-		if (!empty($this->class))
-		{
-			$this->class .= ' hasTipImgpath';
-		}
-		else
-		{
-			$this->class = 'hasTipImgpath';
-		}
-
-		$attr .= ' title="' . htmlspecialchars('<span id="TipImgpath"></span>', ENT_COMPAT, 'UTF-8') . '"';
-
-		// Initialize some field attributes.
-		$attr .= !empty($this->class) ? ' class="input-small ' . $this->class . '"' : ' class="input-small"';
-		$attr .= !empty($this->size) ? ' size="' . $this->size . '"' : '';
-
-		// Initialize JavaScript field attributes.
-		$attr .= !empty($this->onchange) ? ' onchange="' . $this->onchange . '"' : '';
-
-		// The text field.
-		$html[] = '<div class="input-prepend input-append">';
-
-		// The Preview.
-		$showPreview = true;
-		$showAsTooltip = false;
-
-		switch ($this->preview)
-		{
-			case 'no': // Deprecated parameter value
-			case 'false':
-			case 'none':
-				$showPreview = false;
-				break;
-
-			case 'yes': // Deprecated parameter value
-			case 'true':
-			case 'show':
-				break;
-
-			case 'tooltip':
-			default:
-				$showAsTooltip = true;
-				$options = array(
-					'onShow' => 'jMediaRefreshPreviewTip',
-				);
-				JHtml::_('behavior.tooltip', '.hasTipPreview', $options);
-				break;
-		}
-
-		if ($showPreview)
-		{
-			if ($this->value && file_exists(JPATH_ROOT . '/' . $this->value))
-			{
-				$src = JUri::root() . $this->value;
-			}
-			else
-			{
-				$src = '';
-			}
-
-			$width = $this->previewWidth;
-			$height = $this->previewHeight;
-			$style = '';
-			$style .= ($width > 0) ? 'max-width:' . $width . 'px;' : '';
-			$style .= ($height > 0) ? 'max-height:' . $height . 'px;' : '';
-
-			$imgattr = array(
-				'id' => $this->id . '_preview',
-				'class' => 'media-preview',
-				'style' => $style,
-			);
-
-			$img = JHtml::image($src, JText::_('JLIB_FORM_MEDIA_PREVIEW_ALT'), $imgattr);
-			$previewImg = '<div id="' . $this->id . '_preview_img"' . ($src ? '' : ' style="display:none"') . '>' . $img . '</div>';
-			$previewImgEmpty = '<div id="' . $this->id . '_preview_empty"' . ($src ? ' style="display:none"' : '') . '>'
-				. JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '</div>';
-
-			if ($showAsTooltip)
-			{
-				$html[] = '<div class="media-preview add-on">';
-				$tooltip = $previewImgEmpty . $previewImg;
-				$options = array(
-					'title' => JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'),
-					'text' => '<span class="icon-eye"></span>',
-					'class' => 'hasTipPreview'
-				);
-
-				$html[] = JHtml::tooltip($tooltip, $options);
-				$html[] = '</div>';
-			}
-			else
-			{
-				$html[] = '<div class="media-preview add-on" style="height:auto">';
-				$html[] = ' ' . $previewImgEmpty;
-				$html[] = ' ' . $previewImg;
-				$html[] = '</div>';
-			}
-		}
-
-		$html[] = '	<input type="text" name="' . $this->name . '" id="' . $this->id . '" value="'
-			. htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8') . '" readonly="readonly"' . $attr . ' data-basepath="'
-			. JUri::root() . '"/>';
-
 		if ($this->value && file_exists(JPATH_ROOT . '/' . $this->value))
 		{
-			$folder = explode('/', $this->value);
-			$folder = array_diff_assoc($folder, explode('/', JComponentHelper::getParams('com_media')->get('image_path', 'images')));
-			array_pop($folder);
-			$folder = implode('/', $folder);
+			$this->folder = explode('/', $this->value);
+			$this->folder = array_diff_assoc($this->folder, explode('/', JComponentHelper::getParams('com_media')->get('image_path', 'images')));
+			array_pop($this->folder);
+			$this->folder = implode('/', $this->folder);
 		}
 		elseif (file_exists(JPATH_ROOT . '/' . JComponentHelper::getParams('com_media')->get('image_path', 'images') . '/' . $this->directory))
 		{
-			$folder = $this->directory;
+			$this->folder = $this->directory;
 		}
 		else
 		{
-			$folder = '';
+			$this->folder = '';
 		}
 
-		// The button.
-		if ($this->disabled != true)
+		if (!self::$initialised)
 		{
-			JHtml::_('bootstrap.tooltip');
-
-			$html[] = '<a class="modal btn" title="' . JText::_('JLIB_FORM_BUTTON_SELECT') . '" href="'
-				. ($this->readonly ? ''
-				: ($this->link ? $this->link
-					: 'index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=' . $asset . '&amp;author='
-					. $this->form->getValue($this->authorField)) . '&amp;fieldid=' . $this->id . '&amp;folder=' . $folder) . '"'
-				. ' rel="{handler: \'iframe\', size: {x: 800, y: 500}}">';
-			$html[] = JText::_('JLIB_FORM_BUTTON_SELECT') . '</a><a class="btn hasTooltip" title="'
-				. JText::_('JLIB_FORM_BUTTON_CLEAR') . '" href="#" onclick="';
-			$html[] = 'jInsertFieldValue(\'\', \'' . $this->id . '\');';
-			$html[] = 'return false;';
-			$html[] = '">';
-			$html[] = '<span class="icon-remove"></span></a>';
+			// Add the script to the document head.
+			JFactory::getDocument()->addScriptDeclaration('
+		function jInsertFieldValue(value, id) {
+			var $ = jQuery.noConflict();
+			var old_value = $("#" + id).val();
+			if (old_value != value) {
+				var $elem = $("#" + id);
+				$elem.val(value);
+				$elem.trigger("change");
+				if (typeof($elem.get(0).onchange) === "function") {
+					$elem.get(0).onchange();
+				}
+				jMediaRefreshPreview(id);
+			}
 		}
 
-		$html[] = '</div>';
+		function jMediaRefreshPreview(id) {
+			var $ = jQuery.noConflict();
+			var value = $("#" + id).val();
+			var $img = $("#" + id + "_preview");
+			if ($img.length) {
+				if (value) {
+					$img.attr("src", "' . JUri::root() . '" + value);
+					$("#" + id + "_preview_empty").hide();
+					$("#" + id + "_preview_img").show()
+				} else {
+					$img.attr("src", "")
+					$("#" + id + "_preview_empty").show();
+					$("#" + id + "_preview_img").hide();
+				}
+			}
+		}
 
-		return implode("\n", $html);
+		function jMediaRefreshPreviewTip(tip) {
+			var $ = jQuery.noConflict();
+			var $tip = $(tip);
+			var $img = $tip.find("img.media-preview");
+			$tip.find("div.tip").css("max-width", "none");
+			var id = $img.attr("id");
+			id = id.substring(0, id.length - "_preview".length);
+			jMediaRefreshPreview(id);
+			$tip.show();
+		}
+		');
+
+			$initialised = false;
+		}
+
+			return
+				JLayoutHelper::render($this->layout,
+				array(
+
+					'id'            => $this->id,
+					'initialised'   => $initialised,
+					'class'         => $this->class,
+					'size'          => $this->size,
+					'onchange'      => $this->onchange,
+					'readonly'      => $this->readonly,
+					'link'          => $this->link,
+					'asset'         => $asset,
+					'form'          => $this->form,
+					'field'         => $this,
+					'authorField'   => $this->authorField,
+					'preview'       => $this->preview,
+					'value'         => $this->value,
+					'previewWidth'  => $this->previewWidth,
+					'previewHeight' => $this->previewHeight,
+					'folder'        => $this->folder,
+					'disabled'      => $this->disabled,
+					'name'          => $this->name
+				)
+			);
 	}
 }
