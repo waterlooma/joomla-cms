@@ -58,19 +58,20 @@ class JFormFieldUser extends JFormField
 		if ($this->layout)
 		{
 			return
-				JLayoutHelper::render($this->layout,
-				array(
-					'id'        => $this->id,
-					'element'   => $this->element,
-					'field'     => $this,
-					'name'      => $this->name,
-					'required'  => $this->required,
-					'value'     => $this->value,
-					'class'     => $this->class,
-					'size'      => $this->size,
-					'groups'    => $this->getGroups(),
-					'excluded'  => $this->getExcluded()
-				)
+				JLayoutHelper::render(
+					$this->layout,
+					array(
+						'id'        => $this->id,
+						'element'   => $this->element,
+						'field'     => $this,
+						'name'      => $this->name,
+						'required'  => $this->required,
+						'value'     => $this->value,
+						'class'     => $this->class,
+						'size'      => $this->size,
+						'groups'    => $this->getGroups(),
+						'excluded'  => $this->getExcluded()
+					)
 			);
 		}
 
