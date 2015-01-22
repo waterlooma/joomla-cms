@@ -31,9 +31,8 @@ $b = hexdec($color{5} . $color{6});
 $highlightMatchColor = 'rgba(' . $r . ', ' . $g . ', ' . $b . ', .5)';
 
 ?>
-<?php ob_start(); ?>
-<style type="text/css">
-<?php ob_end_clean(); ?>
+<?php // We don't actually want a script tag but this will cause text editors to switch to css mode ?>
+<?php if (false) : ?><style type="text/css"><?php endif; ?>
 
 .CodeMirror
 {
@@ -91,6 +90,5 @@ $highlightMatchColor = 'rgba(' . $r . ', ' . $g . ', ' . $b . ', .5)';
 	float: right;
 }
 
-<?php ob_start(); ?>
-</style>
-<?php ob_end_clean(); ?>
+<?php // And now switch it off ?>
+<?php if (false) : ?></style><?php endif; ?>
