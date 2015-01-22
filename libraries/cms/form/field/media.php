@@ -227,9 +227,7 @@ class JFormFieldMedia extends JFormField
 		}
 
 			return
-				JLayoutHelper::render($this->layout,
-				array(
-
+				JLayoutHelper::render($this->layout, array(
 					'id'            => $this->id,
 					'initialised'   => $initialised,
 					'class'         => $this->class,
@@ -247,8 +245,7 @@ class JFormFieldMedia extends JFormField
 					'previewHeight' => $this->previewHeight,
 					'folder'        => $this->folder,
 					'disabled'      => $this->disabled,
-					'name'          => $this->name
-				)
+					'name'          => $this->name)
 			);
 	}
 }
