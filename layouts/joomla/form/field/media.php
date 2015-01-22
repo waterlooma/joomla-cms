@@ -68,13 +68,11 @@ $url = ($readonly ? ''
 
 // Render the modal
 echo JHtmlBootstrap::renderModal(
-						'imageModal_'. $id,
-						array(
+						'imageModal_'. $id, array(
 							'url' => $url,
 							'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
 							'width' => '800px',
-							'height' => '565px'
-							)
+							'height' => '565px')
 						);
 
 /*
@@ -111,7 +109,7 @@ JFactory::getDocument()->addScriptDeclaration('
 		function jMediaRefreshPopover(id) {
 			var $ = jQuery.noConflict();
 			var some = $("#" + id, parent.document).val();
-			var popover = jQuery("#media-preview", parent.document).data("popover");
+			var popover = jQuery("#media_preview_' . $id . '", parent.document).data("popover");
 			var imgPreview = new Image(' .$previewWidth .', ' .$previewHeight .');
 			if (some == "' . JUri::root() . '" || some == "") {
 				popover.options.content = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
@@ -122,17 +120,20 @@ JFactory::getDocument()->addScriptDeclaration('
 		}
 
 		jQuery(document).ready(function(){
-			var imagePreview = new Image(' .$previewWidth .', ' .$previewHeight .');
-			imagePreview.src = "' . $src . '";
-			console.log(imagePreview.src);
-			jQuery("#media-preview").popover({trigger: "hover", placement: "right", content: imagePreview, html: true});
+			if ("' . $src . '" === "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '") {
+				imagePreview = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
+			} else {
+				var imagePreview = new Image(' .$previewWidth .', ' .$previewHeight .');
+				imagePreview.src = "' . $src . '";
+			}
+			jQuery("#media_preview_' . $id . '").popover({trigger: "hover", placement: "right", content: imagePreview, html: true});
 		});
 ');
 ?>
 <?php if ($showPreview) : ?>
 <div class="input-prepend input-append">
 	<div class="media-preview add-on" style="padding: 0; border: 0;">
-		<span id="media-preview" rel="popover" class="btn" title="<?php echo
+		<span id="media_preview_<?php echo $id; ?>" rel="popover" class="btn" title="<?php echo
 		JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-content="" data-original-title="<?php
 		echo JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-trigger="hover">
 		<i class="icon-eye"></i>
