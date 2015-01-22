@@ -18,9 +18,8 @@ $fskeys[] = $params->get('fullScreen', 'F10');
 $fullScreenCombo = implode('-', $fskeys);
 
 ?>
-<?php ob_start(); ?>
-<script type="text/javascript">
-<?php ob_end_clean(); ?>
+<?php // We don't actually want a script tag but this will cause text editors to switch to javascript mode ?>
+<?php if (false) : ?><script type="text/javascript"><?php endif; ?>
 
 <?php // Requires CodeMirror and jQuery ?>
 ;(function (cm, $) {
@@ -86,7 +85,6 @@ $fullScreenCombo = implode('-', $fskeys);
 			<?php // Listen for Bootstrap's 'shown' event. If this editor was in a hidden element when created, it may need to be refreshed. ?>
 			$(document.body).on("shown shown.bs.tab shown.bs.modal", function () { editor.refresh(); });
 		});
-
 	});
 
 	function toggleFullScreen(cm)
@@ -105,6 +103,5 @@ $fullScreenCombo = implode('-', $fskeys);
 	}
 }(CodeMirror, jQuery));
 
-<?php ob_start(); ?>
-</script>
-<?php ob_end_clean(); ?>
+<?php // And now switch it off ?>
+<?php if (false) : ?></script><?php endif; ?>
