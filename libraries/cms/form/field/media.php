@@ -242,87 +242,10 @@ class JFormFieldMedia extends JFormField
 			$this->folder = '';
 		}
 
-		$attr .= ' title="' . htmlspecialchars('<span id="TipImgpath"></span>', ENT_COMPAT, 'UTF-8') . '"';
-
-		// Initialize some field attributes.
-		$attr .= !empty($this->class) ? ' class="input-small ' . $this->class . '"' : ' class="input-small"';
-		$attr .= !empty($this->size) ? ' size="' . $this->size . '"' : '';
-
-		// Initialize JavaScript field attributes.
-		$attr .= !empty($this->onchange) ? ' onchange="' . $this->onchange . '"' : '';
-
-		// The text field.
-		$html[] = '<div class="input-prepend input-append">';
-
-		// The Preview.
-		$showPreview = true;
-		$showAsTooltip = false;
-
-		switch ($this->preview)
+		if (!self::$initialised)
 		{
-			// Add the script to the document head.
-			JFactory::getDocument()->addScriptDeclaration('
-		function jInsertFieldValue(value, id) {
-			var $ = jQuery.noConflict();
-			var old_value = $("#" + id).val();
-			if (old_value != value) {
-				var $elem = $("#" + id);
-				$elem.val(value);
-				$elem.trigger("change");
-				if (typeof($elem.get(0).onchange) === "function") {
-					$elem.get(0).onchange();
-				}
-				jMediaRefreshPreview(id);
-			}
-		}
-
-		function jMediaRefreshPreview(id) {
-			var $ = jQuery.noConflict();
-			var value = $("#" + id).val();
-			var $img = $("#" + id + "_preview");
-			if ($img.length) {
-				if (value) {
-					$img.attr("src", "' . JUri::root() . '" + value);
-					$("#" + id + "_preview_empty").hide();
-					$("#" + id + "_preview_img").show()
-				} else {
-					$img.attr("src", "")
-					$("#" + id + "_preview_empty").show();
-					$("#" + id + "_preview_img").hide();
-				}
-			}
-		}
-
-		$html[] = '	<input type="text" name="' . $this->name . '" id="' . $this->id . '" value="'
-			. htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8') . '" readonly="readonly"' . $attr . ' data-basepath="'
-			. JUri::root() . '"/>';
-
-		if ($this->value && file_exists(JPATH_ROOT . '/' . $this->value))
-		{
-			$folder = explode('/', $this->value);
-			$folder = array_diff_assoc($folder, explode('/', JComponentHelper::getParams('com_media')->get('image_path', 'images')));
-			array_pop($folder);
-			$folder = implode('/', $folder);
-		}
-		');
-
-		// The button.
-		if ($this->disabled != true)
-		{
-			JHtml::_('bootstrap.tooltip');
-
-			$html[] = '<a class="modal btn" title="' . JText::_('JLIB_FORM_BUTTON_SELECT') . '" href="'
-				. ($this->readonly ? ''
-				: ($this->link ? $this->link
-					: 'index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=' . $asset . '&amp;author='
-					. $this->form->getValue($this->authorField)) . '&amp;fieldid=' . $this->id . '&amp;folder=' . $folder) . '"'
-				. ' rel="{handler: \'iframe\', size: {x: ' . $this->width . ', y: ' . $this->height . '}}">';
-			$html[] = JText::_('JLIB_FORM_BUTTON_SELECT') . '</a><a class="btn hasTooltip" title="'
-				. JText::_('JLIB_FORM_BUTTON_CLEAR') . '" href="#" onclick="';
-			$html[] = 'jInsertFieldValue(\'\', \'' . $this->id . '\');';
-			$html[] = 'return false;';
-			$html[] = '">';
-			$html[] = '<span class="icon-remove"></span></a>';
+		// @TODO maybe pass an option to layout ?
+			$initialised = false;
 		}
 
 			return
