@@ -19,7 +19,6 @@ if ($disabled != true)
 	JHtml::_('bootstrap.tooltip');
 }
 
-
 $attr = '';
 
 // Initialize some field attributes.
@@ -29,32 +28,13 @@ $attr .= !empty($size) ? ' size="' . $size . '"' : '';
 // Initialize JavaScript field attributes.
 $attr .= !empty($onchange) ? ' onchange="' . $onchange . '"' : '';
 
-
-// The Preview.
-$showPreview = true;
-$showAsTooltip = false;
-
-$url = ($readonly ? ''
-		: ($link ? $link
-		: 'index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=' . $asset . '&amp;author='
-		. $form->getValue($authorField)) . '&amp;fieldid=' . $id . '&amp;folder=' . $folder) . '"';
-
-echo JHtmlBootstrap::renderModal(
-						'imageModal_'. $id,
-						array(
-							'url' => $url,
-							'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
-							'width' => '800px',
-							'height' => '565px'
-							)
-						);
-
 switch ($preview)
 {
 	case 'no': // Deprecated parameter value
 	case 'false':
 	case 'none':
 		$showPreview = false;
+		$showAsTooltip = false;
 		break;
 	case 'yes': // Deprecated parameter value
 	case 'true':
@@ -62,10 +42,12 @@ switch ($preview)
 		break;
 	case 'tooltip':
 	default:
+		$showPreview = true;
 		$showAsTooltip = true;
 		break;
 }
 
+// Pre fill the contents of the popover
 if ($showPreview)
 {
 	if ($value && file_exists(JPATH_ROOT . '/' . $value))
@@ -78,8 +60,29 @@ if ($showPreview)
 	}
 }
 
-// Add the proxy jModalClose for closing the modal
-// Replace popover image/text
+// The url for the modal
+$url = ($readonly ? ''
+		: ($link ? $link
+		: 'index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=' . $asset . '&amp;author='
+		. $form->getValue($authorField)) . '&amp;fieldid=' . $id . '&amp;folder=' . $folder) . '"';
+
+// Render the modal
+echo JHtmlBootstrap::renderModal(
+						'imageModal_'. $id,
+						array(
+							'url' => $url,
+							'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
+							'width' => '800px',
+							'height' => '565px'
+							)
+						);
+
+/*
+ * Add javascript for:
+ * the proxy jModalClose to close the modal
+ * the image/text to replace the popover
+ * initialize popover
+ */
 JFactory::getDocument()->addScriptDeclaration('
 		if(typeof jModalClose == "function"){
 			var fnCode = jModalClose.toString() ;
@@ -108,15 +111,12 @@ JFactory::getDocument()->addScriptDeclaration('
 		function jMediaRefreshPopover(id) {
 			var $ = jQuery.noConflict();
 			var some = $("#" + id, parent.document).val();
-			var imgPreview = new Image(200, 200);
+			var popover = jQuery("#media-preview", parent.document).data("popover");
+			var imgPreview = new Image(' .$previewWidth .', ' .$previewHeight .');
 			if (some == "' . JUri::root() . '" || some == "") {
-				var popover = jQuery("#media-preview", parent.document).data("popover");
 				popover.options.content = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
 			} else {
-				console.log("3");
-				var imgPreview = new Image(' .$previewWidth .', ' .$previewHeight .');
 				imgPreview.src = "' . JUri::root() . '" + some ;
-				var popover = jQuery("#media-preview", parent.document).data("popover");
 				popover.options.content = imgPreview;
 			}
 		}
@@ -129,7 +129,7 @@ JFactory::getDocument()->addScriptDeclaration('
 		});
 ');
 ?>
-<?php if ($showPreview) :?>
+<?php if ($showPreview) : ?>
 <div class="input-prepend input-append">
 	<div class="media-preview add-on" style="padding: 0; border: 0;">
 		<span id="media-preview" rel="popover" class="btn" title="<?php echo
@@ -138,6 +138,9 @@ JFactory::getDocument()->addScriptDeclaration('
 		<i class="icon-eye"></i>
 		</span>
 	</div>
+<? endif; ?>
+<?php if (!$showPreview) : ?>
+<div class="input-append">
 <? endif; ?>
 	<input type="text" name="<?php echo $name; ?>" id="<?php echo $id; ?>" value="<?php echo htmlspecialchars($value, ENT_COMPAT, 'UTF-8'); ?>" readonly="readonly"<?php echo $attr; ?>/>
 
@@ -148,6 +151,4 @@ JFactory::getDocument()->addScriptDeclaration('
 		<i class="icon-remove"></i>
 	</a>
 <?php endif; ?>
-<?php if ($showPreview) :?>
 </div>
-<? endif; ?>
