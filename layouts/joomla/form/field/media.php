@@ -19,18 +19,6 @@ if ($disabled != true)
 	JHtml::_('bootstrap.tooltip');
 }
 
-// Add the proxy jModalClose for closing the modal
-JFactory::getDocument()->addScriptDeclaration('
-if(typeof jModalClose == "function"){
-	var fnCode = jModalClose.toString() ;
-	fnCode = fnCode.replace(/\}$/, "jQuery(\"#imageModal' . $id . '\").modal(\"hide\");\n}");
-			window.eval(fnCode);
-		} else {
-	function jModalClose() {
-		jQuery("#imageModal' . $id . '").modal("hide");
-	}
-}
-');
 
 $attr = '';
 
@@ -52,7 +40,7 @@ $url = ($readonly ? ''
 		. $form->getValue($authorField)) . '&amp;fieldid=' . $id . '&amp;folder=' . $folder) . '"';
 
 echo JHtmlBootstrap::renderModal(
-						'imageModal'. $id,
+						'imageModal_'. $id,
 						array(
 							'url' => $url,
 							'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
@@ -75,12 +63,9 @@ switch ($preview)
 	case 'tooltip':
 	default:
 		$showAsTooltip = true;
-		$options = array(
-			'onShow' => 'jMediaRefreshPreviewTip',
-		);
-		JHtml::_('behavior.tooltip', '.hasTipPreview', $options);
 		break;
 }
+
 if ($showPreview)
 {
 	if ($value && file_exists(JPATH_ROOT . '/' . $value))
@@ -89,54 +74,80 @@ if ($showPreview)
 	}
 	else
 	{
-		$src = '';
-	}
-	$width = $previewWidth;
-	$height = $previewHeight;
-	$style = '';
-	$style .= ($width > 0) ? 'max-width:' . $width . 'px;' : '';
-	$style .= ($height > 0) ? 'max-height:' . $height . 'px;' : '';
-	$imgattr = array(
-		'id' => $id . '_preview',
-		'class' => 'media-preview',
-		'style' => $style,
-	);
-	$img = JHtml::image($src, JText::_('JLIB_FORM_MEDIA_PREVIEW_ALT'), $imgattr);
-	$previewImg = '<div id="' . $id . '_preview_img"' . ($src ? '' : ' style="display:none"') . '>' . $img . '</div>';
-	$previewImgEmpty = '<div id="' . $id . '_preview_empty"' . ($src ? ' style="display:none"' : '') . '>'
-		. JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '</div>';
-
-	echo '<div class="input-prepend input-append">';
-	if ($showAsTooltip)
-	{
-		echo '<div class="media-preview add-on">';
-		$tooltip = $previewImgEmpty . $previewImg;
-		$options = array(
-			'title' => JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'),
-			'text' => '<i class="icon-eye"></i>',
-			'class' => 'hasTipPreview'
-		);
-		echo JHtml::tooltip($tooltip, $options);
-		echo '</div>';
-	}
-	else
-	{
-		echo '<div class="media-preview add-on" style="height:auto">';
-		echo ' ' . $previewImgEmpty;
-		echo ' ' . $previewImg;
-		echo '</div>';
+		$src = JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY');
 	}
 }
 
-?>
+// Add the proxy jModalClose for closing the modal
+// Replace popover image/text
+JFactory::getDocument()->addScriptDeclaration('
+		if(typeof jModalClose == "function"){
+			var fnCode = jModalClose.toString() ;
+			fnCode = fnCode.replace(/\}$/, "jQuery(\"#imageModal_' . $id . '\").modal(\"hide\");\n}");
+					window.eval(fnCode);
+				} else {
+			function jModalClose() {
+				jQuery("#imageModal_' . $id . '").modal("hide");
+			}
+		}
 
+		function jInsertFieldValue(value, id) {
+			var $ = jQuery.noConflict();
+			var old_value = $("#" + id, parent.document).val();
+			if (old_value != value) {
+				var $elem = $("#" + id, parent.document);
+				$elem.val(value);
+				$elem.trigger("change");
+				if (typeof($elem.get(0).onchange) === "function") {
+					$elem.get(0).onchange();
+				}
+				jMediaRefreshPopover(id);
+			}
+		}
+
+		function jMediaRefreshPopover(id) {
+			var $ = jQuery.noConflict();
+			var some = $("#" + id, parent.document).val();
+			var imgPreview = new Image(200, 200);
+			if (some == "' . JUri::root() . '" || some == "") {
+				var popover = jQuery("#media-preview", parent.document).data("popover");
+				popover.options.content = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
+			} else {
+				console.log("3");
+				var imgPreview = new Image(' .$previewWidth .', ' .$previewHeight .');
+				imgPreview.src = "' . JUri::root() . '" + some ;
+				var popover = jQuery("#media-preview", parent.document).data("popover");
+				popover.options.content = imgPreview;
+			}
+		}
+
+		jQuery(document).ready(function(){
+			var imagePreview = new Image(' .$previewWidth .', ' .$previewHeight .');
+			imagePreview.src = "' . $src . '";
+			console.log(imagePreview.src);
+			jQuery("#media-preview").popover({trigger: "hover", placement: "right", content: imagePreview, html: true});
+		});
+');
+?>
+<?php if ($showPreview) :?>
+<div class="input-prepend input-append">
+	<div class="media-preview add-on" style="padding: 0; border: 0;">
+		<span id="media-preview" rel="popover" class="btn" title="<?php echo
+		JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-content="" data-original-title="<?php
+		echo JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-trigger="hover">
+		<i class="icon-eye"></i>
+		</span>
+	</div>
+<? endif; ?>
 	<input type="text" name="<?php echo $name; ?>" id="<?php echo $id; ?>" value="<?php echo htmlspecialchars($value, ENT_COMPAT, 'UTF-8'); ?>" readonly="readonly"<?php echo $attr; ?>/>
 
 <?php if ($disabled != true) : ?>
-	<a href="#imageModal<?php echo $id; ?>" role="button" class="btn" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
+	<a href="#imageModal_<?php echo $id; ?>" role="button" class="btn" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
 
-	<a class="btn hasTooltip" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="jInsertFieldValue('', '<?php echo $id; ?>'); return false; ">
+	<a class="btn hasTooltip" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="jInsertFieldValue('', '<?php echo $id; ?>');">
 		<i class="icon-remove"></i>
 	</a>
 <?php endif; ?>
+<?php if ($showPreview) :?>
 </div>
+<? endif; ?>
