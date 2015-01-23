@@ -242,33 +242,33 @@ class JFormFieldMedia extends JFormField
 			$this->folder = '';
 		}
 
+		$displayData = array(
+			'id'            => $this->id,
+			'class'         => $this->class,
+			'size'          => $this->size,
+			'onchange'      => $this->onchange,
+			'readonly'      => $this->readonly,
+			'link'          => $this->link,
+			'asset'         => $asset,
+			'form'          => $this->form,
+			'field'         => $this,
+			'authorField'   => $this->authorField,
+			'preview'       => $this->preview,
+			'value'         => $this->value,
+			'previewWidth'  => $this->previewWidth,
+			'previewHeight' => $this->previewHeight,
+			'folder'        => $this->folder,
+			'disabled'      => $this->disabled,
+			'name'          => $this->name);
+
 		if (!self::$initialised)
 		{
-		// @TODO maybe pass an option to layout ?
-			$initialised = false;
+			$initScript = JLayoutHelper::render('joomla.form.field.media-js', $displayData, __DIR__ . '/layouts');
+			JFactory::getDocument()->addScriptDeclaration($initScript);
+
+			self::$initialised = true;
 		}
 
-			return
-				JLayoutHelper::render(
-					$this->layout, array(
-					'id'            => $this->id,
-					'initialised'   => $initialised,
-					'class'         => $this->class,
-					'size'          => $this->size,
-					'onchange'      => $this->onchange,
-					'readonly'      => $this->readonly,
-					'link'          => $this->link,
-					'asset'         => $asset,
-					'form'          => $this->form,
-					'field'         => $this,
-					'authorField'   => $this->authorField,
-					'preview'       => $this->preview,
-					'value'         => $this->value,
-					'previewWidth'  => $this->previewWidth,
-					'previewHeight' => $this->previewHeight,
-					'folder'        => $this->folder,
-					'disabled'      => $this->disabled,
-					'name'          => $this->name)
-			);
+			return JLayoutHelper::render($this->layout, $displayData);
 	}
 }
