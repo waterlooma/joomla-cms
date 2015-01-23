@@ -77,57 +77,29 @@ echo JHtmlBootstrap::renderModal(
 
 /*
  * Add javascript for:
- * the proxy jModalClose to close the modal
- * the image/text to replace the popover
+ * proxy jModalClose to close the modal
  * initialize popover
  */
 JFactory::getDocument()->addScriptDeclaration('
-		if(typeof jModalClose == "function"){
-			var fnCode = jModalClose.toString() ;
-			fnCode = fnCode.replace(/\}$/, "jQuery(\"#imageModal_' . $id . '\").modal(\"hide\");\n}");
-					window.eval(fnCode);
-				} else {
-			function jModalClose() {
-				jQuery("#imageModal_' . $id . '").modal("hide");
-			}
+	if(typeof jModalClose == "function"){
+		var fnCode = jModalClose.toString() ;
+		fnCode = fnCode.replace(/\}$/, "jQuery(\"#imageModal_' . $id . '\").modal(\"hide\");\n}");
+		window.eval(fnCode);
+	} else {
+		function jModalClose() {
+			jQuery("#imageModal_' . $id . '").modal("hide");
 		}
+	}
 
-		function jInsertFieldValue(value, id) {
-			var $ = jQuery.noConflict();
-			var old_value = $("#" + id, parent.document).val();
-			if (old_value != value) {
-				var $elem = $("#" + id, parent.document);
-				$elem.val(value);
-				$elem.trigger("change");
-				if (typeof($elem.get(0).onchange) === "function") {
-					$elem.get(0).onchange();
-				}
-				jMediaRefreshPopover(id);
-			}
+	jQuery(document).ready(function(){
+		if ("' . $src . '" === "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '") {
+			imagePreview = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
+		} else {
+			var imagePreview = new Image(' .$previewWidth .', ' .$previewHeight .');
+			imagePreview.src = "' . $src . '";
 		}
-
-		function jMediaRefreshPopover(id) {
-			var $ = jQuery.noConflict();
-			var some = $("#" + id, parent.document).val();
-			var popover = jQuery("#media_preview_' . $id . '", parent.document).data("popover");
-			var imgPreview = new Image(' .$previewWidth .', ' .$previewHeight .');
-			if (some == "' . JUri::root() . '" || some == "") {
-				popover.options.content = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
-			} else {
-				imgPreview.src = "' . JUri::root() . '" + some ;
-				popover.options.content = imgPreview;
-			}
-		}
-
-		jQuery(document).ready(function(){
-			if ("' . $src . '" === "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '") {
-				imagePreview = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
-			} else {
-				var imagePreview = new Image(' .$previewWidth .', ' .$previewHeight .');
-				imagePreview.src = "' . $src . '";
-			}
-			jQuery("#media_preview_' . $id . '").popover({trigger: "hover", placement: "right", content: imagePreview, html: true});
-		});
+		jQuery("#media_preview_' . $id . '").popover({trigger: "hover", placement: "right", content: imagePreview, html: true});
+	});
 ');
 ?>
 <?php if ($showPreview) : ?>
