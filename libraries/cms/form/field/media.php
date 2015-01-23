@@ -249,7 +249,8 @@ class JFormFieldMedia extends JFormField
 		}
 
 			return
-				JLayoutHelper::render($this->layout, array(
+				JLayoutHelper::render(
+					$this->layout, array(
 					'id'            => $this->id,
 					'initialised'   => $initialised,
 					'class'         => $this->class,
