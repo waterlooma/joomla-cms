@@ -9,6 +9,26 @@
 // No direct access
 defined('_JEXEC') or die;
 
+/**
+ * Layout variables
+ * ---------------------
+ * $asset          : (string)   The asset text
+ * $authorField    : (string)   The label text
+ * $authorId       : (integer)  The author id
+ * $class          : (string)   The class text
+ * $disabled       : (boolean)  True if field is disabled
+ * $folder         : (string)   The folder text
+ * $id             : (string)   The label text
+ * $link           : (string)   The link text
+ * $name           : (string)   The name text
+ * $preview        : (string)   The preview image relative path
+ * $previewHeight  : (integer)  The image preview height
+ * $previewWidth   : (integer)  The image preview width
+ * $onchange       : (string)   The onchange text
+ * $readonly       : (boolean)  True if field is readonly
+ * $size           : (integer)  The size text
+ * $value          : (string)   The value text
+ */
 extract($displayData);
 ?>
 	function jInsertFieldValue(value, id) {
