@@ -8,25 +8,27 @@
  */
 
 defined('_JEXEC') or die;
+
 /**
  * Layout variables
  * ---------------------
- * $asset          : (string)   The asset text
- * $authorField    : (string)   The label text
- * $authorId       : (integer)  The author id
- * $class          : (string)   The class text
- * $disabled       : (boolean)  True if field is disabled
- * $folder         : (string)   The folder text
- * $id             : (string)   The label text
- * $link           : (string)   The link text
- * $name           : (string)   The name text
- * $preview        : (string)   The preview image relative path
- * $previewHeight  : (integer)  The image preview height
- * $previewWidth   : (integer)  The image preview width
- * $onchange       : (string)   The onchange text
- * $readonly       : (boolean)  True if field is readonly
- * $size           : (integer)  The size text
- * $value          : (string)   The value text
+ *
+ * @var  string   $asset The asset text
+ * @var  string   $authorField The label text
+ * @var  integer  $authorId The author id
+ * @var  string   $class The class text
+ * @var  boolean  $disabled True if field is disabled
+ * @var  string   $folder The folder text
+ * @var  string   $id The label text
+ * @var  string   $link The link text
+ * @var  string   $name The name text
+ * @var  string   $preview The preview image relative path
+ * @var  integer  $previewHeight The image preview height
+ * @var  integer  $previewWidth The image preview width
+ * @var  string   $onchange  The onchange text
+ * @var  boolean  $readonly True if field is readonly
+ * @var  integer  $size The size text
+ * @var  string   $value The value text
  */
 extract($displayData);
 
