@@ -8,7 +8,26 @@
  */
 
 defined('_JEXEC') or die;
-
+/**
+ * Layout variables
+ * ---------------------
+ * $asset          : (string)   The asset text
+ * $authorField    : (string)   The label text
+ * $authorId       : (integer)  The author id
+ * $class          : (string)   The class text
+ * $disabled       : (boolean)  True if field is disabled
+ * $folder         : (string)   The folder text
+ * $id             : (string)   The label text
+ * $link           : (string)   The link text
+ * $name           : (string)   The name text
+ * $preview        : (string)   The preview image relative path
+ * $previewHeight  : (integer)  The image preview height
+ * $previewWidth   : (integer)  The image preview width
+ * $onchange       : (string)   The onchange text
+ * $readonly       : (boolean)  True if field is readonly
+ * $size           : (integer)  The size text
+ * $value          : (string)   The value text
+ */
 extract($displayData);
 
 JHtml::_('bootstrap.modal');
@@ -64,7 +83,7 @@ if ($showPreview)
 $url = ($readonly ? ''
 		: ($link ? $link
 		: 'index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=' . $asset . '&amp;author='
-		. $form->getValue($authorField)) . '&amp;fieldid=' . $id . '&amp;folder=' . $folder) . '"';
+		. $authorId) . '&amp;fieldid=' . $id . '&amp;folder=' . $folder) . '"';
 
 // Render the modal
 echo JHtmlBootstrap::renderModal(

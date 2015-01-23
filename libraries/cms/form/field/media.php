@@ -221,23 +221,22 @@ class JFormFieldMedia extends JFormField
 		}
 
 		$displayData = array(
-			'id'            => $this->id,
+			'asset'         => $asset,
+			'authorField'   => $this->authorField,
+			'authorId'      => $this->form->getValue($this->authorField),
 			'class'         => $this->class,
-			'size'          => $this->size,
+			'disabled'      => $this->disabled,
+			'folder'        => $this->folder,
+			'id'            => $this->id,
+			'link'          => $this->link,
+			'name'          => $this->name,
+			'preview'       => $this->preview,
+			'previewHeight' => $this->previewHeight,
+			'previewWidth'  => $this->previewWidth,
 			'onchange'      => $this->onchange,
 			'readonly'      => $this->readonly,
-			'link'          => $this->link,
-			'asset'         => $asset,
-			'form'          => $this->form,
-			'field'         => $this,
-			'authorField'   => $this->authorField,
-			'preview'       => $this->preview,
-			'value'         => $this->value,
-			'previewWidth'  => $this->previewWidth,
-			'previewHeight' => $this->previewHeight,
-			'folder'        => $this->folder,
-			'disabled'      => $this->disabled,
-			'name'          => $this->name);
+			'size'          => $this->size,
+			'value'         => $this->value);
 
 		if (!self::$initialised)
 		{
