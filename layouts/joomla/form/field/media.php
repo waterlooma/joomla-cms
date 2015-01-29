@@ -102,16 +102,6 @@ echo JHtmlBootstrap::renderModal(
  * initialize popover
  */
 JFactory::getDocument()->addScriptDeclaration('
-	if(typeof jModalClose == "function"){
-		var fnCode = jModalClose.toString() ;
-		fnCode = fnCode.replace(/\}$/, "jQuery(\"#imageModal_' . $id . '\").modal(\"hide\");\n}");
-		window.eval(fnCode);
-	} else {
-		function jModalClose() {
-			jQuery("#imageModal_' . $id . '").modal("hide");
-		}
-	}
-
 	jQuery(document).ready(function(){
 		if ("' . $src . '" === "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '") {
 			imagePreview = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
