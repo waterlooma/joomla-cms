@@ -39,9 +39,6 @@ extract($displayData);
 			var $elem = $("#" + id, parent.document);
 			$elem.val(value);
 			$elem.trigger("change");
-			if (typeof($elem.get(0).onchange) === "function") {
-				$elem.get(0).onchange();
-			}
 			jMediaRefreshPopover(id);
 		}
 	}
@@ -53,8 +50,15 @@ extract($displayData);
 		var imgPreview = new Image(<?php echo $previewWidth; ?>, <?php echo $previewHeight; ?>);
 		if (some == "") {
 			popover.options.content = "<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY'); ?>";
+			// Reset tooltip
+			$("#" + id, parent.document).tooltip('destroy');
 		} else {
 			imgPreview.src = "<?php echo JUri::root(); ?>" + some ;
 			popover.options.content = imgPreview;
+			// Reset tooltip
+			$("#" + id, parent.document).tooltip('destroy');
+			$("#" + id, parent.document).tooltip({'placement':'top', 'title': some});
+			$("#" + id, parent.document).tooltip('show');
+
 		}
 	}
