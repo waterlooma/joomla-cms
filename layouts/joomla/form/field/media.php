@@ -43,7 +43,7 @@ if ($disabled != true)
 $attr = '';
 
 // Initialize some field attributes.
-$attr .= !empty($class) ? ' class="input-small ' . $class . '"' : ' class="input-small"';
+$attr .= !empty($class) ? ' class="input-small hasTooltip ' . $class . '"' : ' class="input-small hasTooltip"';
 $attr .= !empty($size) ? ' size="' . $size . '"' : '';
 
 // Initialize JavaScript field attributes.
