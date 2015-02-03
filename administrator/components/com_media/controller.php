@@ -41,8 +41,7 @@ class MediaController extends JControllerLegacy
 				$mName = 'manager';
 				// Get/Create the view
 				$view = $this->getView($vName, $vType);
-				if (JFactory::getApplication()->isSite() && !file_exists(JPATH_ROOT . '/templates/' . JFactory::getApplication()->getTemplate() .
-					'/html/com_media/images/default.php'))
+				if (JFactory::getApplication()->isSite() && !file_exists(JPATH_ROOT . '/templates/' . JFactory::getApplication()->getTemplate() . '/html/com_media/images/default.php'))
 				{
 					$view->addTemplatePath($this->basePath . '/views/' . strtolower($vName) . '/tmpl');
 				}
