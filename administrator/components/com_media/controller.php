@@ -38,8 +38,14 @@ class MediaController extends JControllerLegacy
 		{
 			case 'images':
 				$vLayout = $this->input->get('layout', 'default', 'string');
-				$mName   = 'manager';
-
+				$mName = 'manager';
+				// Get/Create the view
+				$view = $this->getView($vName, $vType);
+				if (JFactory::getApplication()->isSite() && !file_exists(JPATH_ROOT . '/templates/' . JFactory::getApplication()->getTemplate() .
+					'/html/com_media/images/default.php'))
+				{
+					$view->addTemplatePath($this->basePath . '/views/' . strtolower($vName) . '/tmpl');
+				}
 				break;
 
 			case 'imagesList':
