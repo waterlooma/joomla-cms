@@ -83,7 +83,7 @@ class PlgEditorCodemirror extends JPlugin
 		$font = $this->params->get('fontFamily', 0);
 		$fontInfo = $this->getFontInfo($font);
 
-		if (isset($fontInfo) && isset($fontInfo->url))
+		if (isset($fontInfo))
 		{
 			if (isset($fontInfo->url))
 			{
