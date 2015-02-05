@@ -74,7 +74,11 @@ class PlgEditorCodemirror extends JPlugin
 			);
 
 		$initScript = JLayoutHelper::render('editors.codemirror.init', $displayData, __DIR__ . '/layouts');
-		$doc->addScriptDeclaration($initScript);
+
+		if ($initScript)
+		{
+			$doc->addScriptDeclaration($initScript);
+		}
 
 		$font = $this->params->get('fontFamily', 0);
 		$fontInfo = $this->getFontInfo($font);
@@ -93,7 +97,11 @@ class PlgEditorCodemirror extends JPlugin
 		}
 
 		$styles = JLayoutHelper::render('editors.codemirror.styles', $displayData, __DIR__ . '/layouts');
-		$doc->addStyleDeclaration($styles);
+
+		if ($styles)
+		{
+			$doc->addStyleDeclaration($styles);
+		}
 
 		return '';
 	}
