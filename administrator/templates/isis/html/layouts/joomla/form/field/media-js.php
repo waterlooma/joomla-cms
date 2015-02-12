@@ -34,58 +34,31 @@ extract($displayData);
 ?>
 	function jInsertFieldValue(value, id) {
 		var $ = jQuery.noConflict();
-		var old_value = $("#" + id).val();
+		var old_value = $("#" + id, parent.document).val();
 		if (old_value != value) {
-			var $elem = $("#" + id);
+			var $elem = $("#" + id, parent.document);
 			$elem.val(value);
 			$elem.trigger("change");
-			if (typeof($elem.get(0).onchange) === "function") {
-				$elem.get(0).onchange();
-			}
-			jMediaRefreshPreview(id);
+			jMediaRefreshPopover(id);
 		}
 	}
 
-	function jMediaRefreshPreview(id) {
+	function jMediaRefreshPopover(id) {
 		var $ = jQuery.noConflict();
-		var value = $("#" + id).val();
-		var $img = $("#" + id + "_preview");
-		if ($img.length) {
-			if (value) {
-				$img.attr("src", "<?php echo JUri::root(); ?>" + value);
-				$("#" + id + "_preview_empty").hide();
-				$("#" + id + "_preview_img").show()
-			} else { 
-				$img.attr("src", "")
-				$("#" + id + "_preview_empty").show();
-				$("#" + id + "_preview_img").hide();
-			} 
-		} 
-	}
-
-	function jMediaRefreshPreviewTip(tip)
-	{
-		var $ = jQuery.noConflict();
-		var $tip = $(tip);
-		var $img = $tip.find("img.media-preview");
-		$tip.find("div.tip").css("max-width", "none");
-		var id = $img.attr("id");
-		id = id.substring(0, id.length - "_preview".length);
-		jMediaRefreshPreview(id);
-		$tip.show();
-	}
-
-	// JQuery for tooltip for INPUT showing whole image path
-	function jMediaRefreshImgpathTip(tip)
-	{
-		var $ = jQuery.noConflict();
-		var $tip = $(tip);
-		$tip.css("max-width", "none");
-		var $imgpath = $("#" + "<?php echo $id; ?>").val();
-		$("#TipImgpath").html($imgpath);
-		if ($imgpath.length) {
-		 $tip.show();
+		var some = $("#" + id, parent.document).val();
+		var popover = jQuery("#media_preview_" + id, parent.document).data("popover");
+		var imgPreview = new Image(<?php echo $previewWidth; ?>, <?php echo $previewHeight; ?>);
+		if (some == "") {
+			popover.options.content = "<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY'); ?>";
+			// Reset tooltip
+			$("#" + id, parent.document).tooltip('destroy');
 		} else {
-		 $tip.hide();
+			imgPreview.src = "<?php echo JUri::root(); ?>" + some ;
+			popover.options.content = imgPreview;
+			// Reset tooltip
+			$("#" + id, parent.document).tooltip('destroy');
+			$("#" + id, parent.document).tooltip({'placement':'top', 'title': some});
+			$("#" + id, parent.document).tooltip('show');
+
 		}
 	}
