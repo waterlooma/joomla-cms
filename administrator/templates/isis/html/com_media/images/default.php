@@ -18,10 +18,12 @@ $user   = JFactory::getUser();
 $input  = JFactory::getApplication()->input;
 $params = JComponentHelper::getParams('com_media');
 
+// fieldid refers to input and e_name refers to editor image button
 JFactory::getDocument()->addScriptDeclaration("
 var image_base_path = '" . $params->get('image_path', 'images') . "/';
 	function bsMediaModalClose(){
 		parent.jQuery('#imageModal_" . $input->getCmd('fieldid') . "', parent.document).modal('hide');
+		parent.jQuery('#imageModal_" . $input->getCmd('e_name') . "', parent.document).modal('hide');
 	};
 ");
 ?>
