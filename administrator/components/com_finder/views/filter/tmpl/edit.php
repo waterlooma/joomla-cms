@@ -41,7 +41,7 @@ JFactory::getDocument()->addScriptDeclaration('
 					<button class="btn btn-default" type="button" class="jform-rightbtn" onclick="jQuery('.filter-node').attr('checked', !jQuery('.filter-node').attr('checked'));">
 						<i class="icon-checkbox-partial"></i> <?php echo JText::_('JGLOBAL_SELECTION_INVERT'); ?>
 					</button>
-				<button class="btn btn-default" type="button" class="jform-rightbtn" onclick="jQuery('.accordion-body').collapse('show');">
+				<button class="btn btn-default" type="button" class="jform-rightbtn" onclick="jQuery('[class^=\'accordion-body\']').removeClass('in'); jQuery('.accordion-body').collapse('show');">
 					<i class="icon-checkbox-partial"></i> <?php echo JText::_('JSHOW'); ?> <?php echo JText::_('JALL'); ?>
 				</button>
 					<hr />
