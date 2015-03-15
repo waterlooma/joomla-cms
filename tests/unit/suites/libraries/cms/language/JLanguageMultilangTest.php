@@ -8,7 +8,7 @@
  */
 
 /**
- * Test class for JComponentHelper.
+ * Test class for JLanguageMultiLang.
  *
  * @package     Joomla.UnitTest
  * @subpackage  Language
@@ -33,11 +33,10 @@ class JLanguageMultiLangTest extends TestCaseDatabase
 	}
 
 	/**
-	 * Test JComponentHelper::isEnabled
+	 * @testdox  Ensure isEnabled() proxies correctly to JApplicationSite
 	 *
-	 * @return  void
-	 *
-	 * @since   3.2
+	 * @covers   JLanguageMultiLang::isEnabled
+	 * @uses     JApplicationSite
 	 */
 	public function testIsEnabledWithSiteApp()
 	{
@@ -49,11 +48,10 @@ class JLanguageMultiLangTest extends TestCaseDatabase
 	}
 
 	/**
-	 * Test JComponentHelper::isEnabled
+	 * @testdox  Ensure isEnabled() database query works correctly
 	 *
-	 * @return  void
-	 *
-	 * @since   3.2
+	 * @covers   JLanguageMultiLang::isEnabled
+	 * @uses     JApplicationAdministrator
 	 */
 	public function testIsEnabledWithAdminApp()
 	{
