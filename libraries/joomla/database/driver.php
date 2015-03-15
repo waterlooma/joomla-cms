@@ -255,6 +255,18 @@ abstract class JDatabaseDriver extends JDatabase implements JDatabaseInterface
 		$options['database'] = (isset($options['database'])) ? $options['database'] : null;
 		$options['select']   = (isset($options['select'])) ? $options['select'] : true;
 
+		// If the selected driver is `mysql` and we are on PHP 7 or greater, switch to the `mysqli` driver.
+		if ($options['driver'] == 'mysql' && PHP_MAJOR_VERSION >= 7)
+		{
+			JLog::add(
+				'The PHP `ext/mysql` extension is removed in PHP 7, cannot use the `mysql` driver.  Trying `mysqli` instead.',
+				JLog::WARNING,
+				'deprecated'
+			);
+
+			$options['driver'] = 'mysqli';
+		}
+
 		// Get the options signature for the database connector.
 		$signature = md5(serialize($options));
 
