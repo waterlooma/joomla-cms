@@ -122,10 +122,10 @@ JFactory::getDocument()->addScriptDeclaration('
 		<i class="icon-eye"></i>
 		</span>
 	</div>
-<? endif; ?>
+<?php endif; ?>
 <?php if (!$showPreview) : ?>
 <div class="input-append">
-<? endif; ?>
+<?php endif; ?>
 	<input type="text" name="<?php echo $name; ?>" id="<?php echo $id; ?>" value="<?php echo htmlspecialchars($value, ENT_COMPAT, 'UTF-8'); ?>" readonly="readonly"<?php echo $attr; ?>/>
 
 <?php if ($disabled != true) : ?>
