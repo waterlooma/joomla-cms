@@ -32,8 +32,6 @@ defined('_JEXEC') or die;
  */
 extract($displayData);
 
-JHtml::_('bootstrap.modal');
-
 // The button.
 if ($disabled != true)
 {
