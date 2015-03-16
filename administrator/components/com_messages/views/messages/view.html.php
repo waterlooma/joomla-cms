@@ -80,7 +80,8 @@ class MessagesViewMessages extends JViewLegacy
 		$bar = JToolBar::getInstance('toolbar');
 
 		// Instantiate a new JLayoutFile instance and render the layout
-		$bar->appendButton('Popup', 'cog', 'COM_MESSAGES_TOOLBAR_MY_SETTINGS', 'index.php?option=com_messages&amp;view=config&amp;tmpl=component', 600, 250);
+		$bar->appendButton('Popup', 'cog', 'COM_MESSAGES_TOOLBAR_MY_SETTINGS', 'index.php?option=com_messages&amp;view=config&amp;tmpl=component', 600, 250, 0, 0, '', '', '<a href="#" class="btn" onclick="window.parent.jQuery(\'#modal-cog\').modal(\'hide\');">' .JText::_('JCANCEL') . '</a>
+<a href="#" class="btn btn-primary" onclick="Joomla.submitform(\'config.save\', jQuery(\'#message-form\').form); window.parent.jQuery(\'#modal-cog\').modal(\'hide\');">' .JText::_('JAPPLY') . '</a>');
 
 		if ($state->get('filter.state') == -2 && $canDo->get('core.delete'))
 		{
