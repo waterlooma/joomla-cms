@@ -7,6 +7,8 @@
  * @license     GNU General Public License version 2 or later; see LICENSE
  */
 
+use Joomla\Registry\Registry;
+
 /**
  * Test class for JLanguageMultiLang.
  *
@@ -49,6 +51,14 @@ class JLanguageMultiLangTest extends TestCaseDatabase
 	protected $backupServer;
 
 	/**
+	 * Backup of the SERVER superglobal
+	 *
+	 * @var    Registry
+	 * @since  3.4
+	 */
+	protected $config;
+
+	/**
 	 * Setup for testing.
 	 *
 	 * @return  void
@@ -71,6 +81,10 @@ class JLanguageMultiLangTest extends TestCaseDatabase
 		$_SERVER['HTTP_USER_AGENT'] = self::TEST_USER_AGENT;
 		$_SERVER['REQUEST_URI'] = self::TEST_REQUEST_URI;
 		$_SERVER['SCRIPT_NAME'] = '/index.php';
+
+		// Set the config for the app
+		$this->config = new Registry;
+		$this->config->set('session', false);
 	}
 
 	/**
@@ -117,10 +131,10 @@ class JLanguageMultiLangTest extends TestCaseDatabase
 	 */
 	public function testIsEnabledWithSiteApp()
 	{
-		JApplicationCms::getInstance('site');
+		$app = new JApplicationSite($this->getMockInput(), $this->config);
 
 		$this->assertFalse(
-			JLanguageMultilang::isEnabled()
+			JLanguageMultilang::isEnabled($app)
 		);
 	}
 
@@ -132,10 +146,10 @@ class JLanguageMultiLangTest extends TestCaseDatabase
 	 */
 	public function testIsEnabledWithAdminApp()
 	{
-		JApplicationCms::getInstance('administrator');
+		$app = new JApplicationAdministrator($this->getMockInput(), $this->config);
 
 		$this->assertFalse(
-			JLanguageMultilang::isEnabled()
+			JLanguageMultilang::isEnabled($app)
 		);
 	}
 }
