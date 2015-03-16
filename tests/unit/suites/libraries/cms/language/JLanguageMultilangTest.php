@@ -51,7 +51,7 @@ class JLanguageMultiLangTest extends TestCaseDatabase
 	protected $backupServer;
 
 	/**
-	 * Backup of the SERVER superglobal
+	 * Config to be injected into the Application object
 	 *
 	 * @var    Registry
 	 * @since  3.4
