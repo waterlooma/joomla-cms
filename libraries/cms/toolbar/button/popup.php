@@ -74,7 +74,7 @@ class JToolbarButtonPopup extends JToolbarButton
 		$params['url']    = $options['doTask'];
 		$params['height'] = $height;
 		$params['width']  = $width;
-		$params['footer']  = $footer;
+		if ($footer != '') $params['footer'] = $footer;
 		$html[] = JHtml::_('bootstrap.renderModal', 'modal-' . $name, $params);
 
 		// If an $onClose event is passed, add it to the modal JS object
