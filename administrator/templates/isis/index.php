@@ -174,7 +174,7 @@ function colorIsLight($color)
 								<li>
 									<span>
 										<span class="icon-user"></span>
-										<span><?php echo $user->name; ?></span>
+										<strong><?php echo $user->name; ?></strong>
 									</span>
 								</li>
 								<li class="divider"></li>
