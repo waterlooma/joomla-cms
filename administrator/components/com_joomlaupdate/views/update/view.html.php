@@ -41,9 +41,6 @@ class JoomlaupdateViewUpdate extends JViewLegacy
 			JToolbarHelper::preferences('com_joomlaupdate');
 		}
 
-		// Load mooTools.
-		JHtml::_('behavior.framework', true);
-
 		// Include jQuery.
 		JHtml::_('jquery.framework');
 
@@ -61,7 +58,6 @@ ENDSCRIPT;
 		$document->addScript('../media/com_joomlaupdate/encryption.js');
 		$document->addScript('../media/com_joomlaupdate/update.js');
 		JHtml::_('jquery.framework');
-		JHtml::_('script', 'system/progressbar.js', true, true);
 		JHtml::_('stylesheet', 'media/mediamanager.css', array(), true);
 		$document->addScriptDeclaration($updateScript);
 
