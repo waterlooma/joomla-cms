@@ -9,9 +9,6 @@
 
 defined('_JEXEC') or die;
 
-// Load the stylesheet
-JHtml::stylesheet('media/mediamanager.css', false, true, false);
-
 // Include jQuery.
 JHtml::_('jquery.framework');
 
@@ -36,7 +33,6 @@ JFactory::getDocument()->addScriptDeclaration(
 ?>
 
 <p class="nowarning"><?php echo JText::_('COM_JOOMLAUPDATE_VIEW_UPDATE_INPROGRESS') ?></p>
-<div class="joomlaupdate_spinner" ></div>
 
 <div id="update-progress">
 	<div id="extprogress">
