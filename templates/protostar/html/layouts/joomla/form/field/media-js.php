@@ -33,32 +33,30 @@ defined('_JEXEC') or die;
 extract($displayData);
 ?>
 	function jInsertFieldValue(value, id) {
-		var $ = jQuery.noConflict();
-		var old_value = $("#" + id, parent.document).val();
+		var old_value = jQuery("#" + id, parent.document).val();
 		if (old_value != value) {
-			var $elem = $("#" + id, parent.document);
-			$elem.val(value);
-			$elem.trigger("change");
+			var elem = jQuery("#" + id, parent.document);
+			elem.val(value);
+			elem.trigger("change");
 			jMediaRefreshPopover(id);
 		}
 	}
 
 	function jMediaRefreshPopover(id) {
-		var $ = jQuery.noConflict();
-		var some = $("#" + id, parent.document).val();
+		var some = jQuery("#" + id, parent.document).val();
 		var popover = jQuery("#media_preview_" + id, parent.document).data("popover");
 		var imgPreview = new Image(<?php echo $previewWidth; ?>, <?php echo $previewHeight; ?>);
 		if (some == "") {
 			popover.options.content = "<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY'); ?>";
 			// Reset tooltip
-			$("#" + id, parent.document).tooltip('destroy');
+			jQuery("#" + id, parent.document).tooltip('destroy');
 		} else {
 			imgPreview.src = "<?php echo JUri::root(); ?>" + some ;
 			popover.options.content = imgPreview;
 			// Reset tooltip
-			$("#" + id, parent.document).tooltip('destroy');
-			$("#" + id, parent.document).tooltip({'placement':'top', 'title': some});
-			$("#" + id, parent.document).tooltip('show');
+			jQuery("#" + id, parent.document).tooltip('destroy');
+			jQuery("#" + id, parent.document).tooltip({'placement':'top', 'title': some});
+			jQuery("#" + id, parent.document).tooltip('show');
 
 		}
 	}
