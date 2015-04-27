@@ -91,7 +91,9 @@ echo JHtmlBootstrap::renderModal(
 							'url' => $url,
 							'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
 							'width' => '800px',
-							'height' => '565px')
+							'height' => '565px',
+							'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">' . JText::_("JLIB_HTML_BEHAVIOR_CLOSE") . '</button>
+    <button id="btn_' . $id . '" class="btn btn-success" data-dismiss="modal" aria-hidden="true">' . JText::_("JLIB_FORM_CHANGE_IMAGE") . '</button>')
 						);
 
 /*
@@ -101,7 +103,7 @@ echo JHtmlBootstrap::renderModal(
  */
 JFactory::getDocument()->addScriptDeclaration('
 	jQuery(document).ready(function(){
-		// Preview image button
+		// Initialize the preview image button
 		if ("' . $src . '" === "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '") {
 			imagePreview = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
 		} else {
@@ -112,8 +114,34 @@ JFactory::getDocument()->addScriptDeclaration('
 
 		// Initialize the tooltip
 		jQuery("#' . $id . '").tooltip(\'destroy\');
-		var some = jQuery("#' . $id . '").val();
-		jQuery("#' . $id . '").tooltip({\'placement\':\'top\', \'title\': some});
+		var imgValue = jQuery("#' . $id . '").val();
+		jQuery("#' . $id . '").tooltip({\'placement\':\'top\', \'title\': imgValue});
+
+		//Remove iframe on close
+		jQuery("#imageModal_' . $id . '").on("hidden", function () {
+			jQuery("#imageModal_' . $id . ' > .modal-body > iframe").remove();
+		});
+
+		// Save and close modal
+		jQuery("#btn_' . $id . '").on("click", function() {
+			value_' . $id . ' = jQuery("#imageModal_' . $id . ' iframe").contents().find("#f_url").val();
+			jQuery("#' . $id . '").val(value_' . $id . ').trigger("change");
+
+			// Reset tooltip and preview
+			var imgValue = jQuery("#' . $id . '").val();
+			var popover = jQuery("#media_preview_' . $id . '").data("popover");
+			var imgPreview = new Image(' . $previewWidth . ', ' . $previewHeight . ');
+			if (imgValue == "") {
+				popover.options.content = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
+				jQuery("#' . $id . '").tooltip("destroy");
+			} else {
+				imgPreview.src = "' . JUri::root() . '" + imgValue ;
+				popover.options.content = imgPreview;
+				jQuery("#' . $id . '").tooltip("destroy");
+				jQuery("#' . $id . '").tooltip({"placement":"top", "title": imgValue});
+				jQuery("#' . $id . '").tooltip("show");
+			}
+		});
 	});
 ');
 ?>
