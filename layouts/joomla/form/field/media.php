@@ -38,9 +38,9 @@ JHtml::_('behavior.modal');
 // Include jQuery
 JHtml::_('jquery.framework');
 
-JFactory::getDocument()->addStyleDeclaration(
+JFactory::getDocument()->addScriptDeclaration(
 	'
-		function jInsertFieldValue(value, id) {
+	function jInsertFieldValue(value, id) {
 		var $ = jQuery.noConflict();
 		var old_value = $("#" + id).val();
 		if (old_value != value) {
