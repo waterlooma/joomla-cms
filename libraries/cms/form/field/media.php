@@ -238,14 +238,6 @@ class JFormFieldMedia extends JFormField
 			'size'          => $this->size,
 			'value'         => $this->value);
 
-		if (!self::$initialised)
-		{
-			$initScript = JLayoutHelper::render('joomla.form.field.media-js', $displayData, __DIR__ . '/layouts');
-			JFactory::getDocument()->addScriptDeclaration($initScript);
-
-			self::$initialised = true;
-		}
-
 			return JLayoutHelper::render($this->layout, $displayData);
 	}
 }

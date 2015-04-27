@@ -33,7 +33,7 @@ var image_base_path = '" . $params->get('image_path', 'images') . "/';
 	</div>
 	<div class="well">
 		<div class="row">
-			<div class="span9 control-group">
+			<div class="control-group">
 				<div class="control-label">
 					<label class="control-label" for="folder"><?php echo JText::_('COM_MEDIA_DIRECTORY') ?></label>
 				</div>
@@ -41,10 +41,6 @@ var image_base_path = '" . $params->get('image_path', 'images') . "/';
 					<?php echo $this->folderList; ?>
 					<button class="btn" type="button" id="upbutton" title="<?php echo JText::_('COM_MEDIA_DIRECTORY_UP') ?>"><?php echo JText::_('COM_MEDIA_UP') ?></button>
 				</div>
-			</div>
-			<div class="pull-right">
-				<button class="btn btn-success" type="button" onclick="<?php if ($this->state->get('field.id')):?>window.parent.jInsertFieldValue(document.getElementById('f_url').value,'<?php echo $this->state->get('field.id');?>');<?php else:?>ImageManager.onok();<?php endif;?>bsMediaModalClose();"><?php echo JText::_('COM_MEDIA_INSERT') ?></button>
-				<button class="btn btn-danger" type="button" onclick="bsMediaModalClose();"><?php echo JText::_('JCANCEL') ?></button>
 			</div>
 		</div>
 	</div>
