@@ -38,6 +38,67 @@ JHtml::_('behavior.modal');
 // Include jQuery
 JHtml::_('jquery.framework');
 
+JFactory::getDocument()->addStyleDeclaration(
+	'
+		function jInsertFieldValue(value, id) {
+		var $ = jQuery.noConflict();
+		var old_value = $("#" + id).val();
+		if (old_value != value) {
+			var $elem = $("#" + id);
+			$elem.val(value);
+			$elem.trigger("change");
+			if (typeof($elem.get(0).onchange) === "function") {
+				$elem.get(0).onchange();
+			}
+			jMediaRefreshPreview(id);
+		}
+	}
+
+	function jMediaRefreshPreview(id) {
+		var $ = jQuery.noConflict();
+		var value = $("#" + id).val();
+		var $img = $("#" + id + "_preview");
+		if ($img.length) {
+			if (value) {
+				$img.attr("src", "' . JUri::root() . '" + value);
+				$("#" + id + "_preview_empty").hide();
+				$("#" + id + "_preview_img").show()
+			} else {
+				$img.attr("src", "")
+				$("#" + id + "_preview_empty").show();
+				$("#" + id + "_preview_img").hide();
+			}
+		}
+	}
+
+	function jMediaRefreshPreviewTip(tip)
+	{
+		var $ = jQuery.noConflict();
+		var $tip = $(tip);
+		var $img = $tip.find("img.media-preview");
+		$tip.find("div.tip").css("max-width", "none");
+		var id = $img.attr("id");
+		id = id.substring(0, id.length - "_preview".length);
+		jMediaRefreshPreview(id);
+		$tip.show();
+	}
+
+	// JQuery for tooltip for INPUT showing whole image path
+	function jMediaRefreshImgpathTip(tip)
+	{
+		var $ = jQuery.noConflict();
+		var $tip = $(tip);
+		$tip.css("max-width", "none");
+		var $imgpath = $("#" + "' . $id . '").val();
+		$("#TipImgpath").html($imgpath);
+		if ($imgpath.length) {
+		 $tip.show();
+		} else {
+		 $tip.hide();
+		}
+	}
+	'
+);
 // Tooltip for INPUT showing whole image path
 $options = array(
 	'onShow' => 'jMediaRefreshImgpathTip',
