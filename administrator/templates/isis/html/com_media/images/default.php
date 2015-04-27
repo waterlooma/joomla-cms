@@ -33,7 +33,7 @@ var image_base_path = '" . $params->get('image_path', 'images') . "/';
 	</div>
 	<div class="well">
 		<div class="row">
-			<div class="control-group">
+			<div class="span12 control-group">
 				<div class="control-label">
 					<label class="control-label" for="folder"><?php echo JText::_('COM_MEDIA_DIRECTORY') ?></label>
 				</div>
