@@ -101,36 +101,37 @@ echo JHtmlBootstrap::renderModal(
  */
 JFactory::getDocument()->addScriptDeclaration('
 	jQuery(document).ready(function(){
+		// Preview image button
 		if ("' . $src . '" === "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '") {
 			imagePreview = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
 		} else {
-			var imagePreview = new Image(' .$previewWidth .', ' .$previewHeight .');
+			var imagePreview = new Image(' . $previewWidth . ', ' .$previewHeight . ');
 			imagePreview.src = "' . $src . '";
 		}
 		jQuery("#media_preview_' . $id . '").popover({trigger: "hover", placement: "right", content: imagePreview, html: true});
+
+		// Initialize the tooltip
+		jQuery("#' . $id . '").tooltip(\'destroy\');
+		var some = jQuery("#' . $id . '").val();
+		jQuery("#' . $id . '").tooltip({\'placement\':\'top\', \'title\': some});
 	});
 ');
 ?>
 <?php if ($showPreview) : ?>
-<div class="input-prepend input-append">
-	<div class="media-preview add-on" style="padding: 0; border: 0;">
-		<span id="media_preview_<?php echo $id; ?>" rel="popover" class="btn" title="<?php echo
-		JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-content="" data-original-title="<?php
-		echo JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-trigger="hover">
-		<i class="icon-eye"></i>
-		</span>
-	</div>
+<div class="input-prepend input-append" id="media_field_<?php echo $id; ?>">
+	<span id="media_preview_<?php echo $id; ?>" rel="popover" class="add-on" title="<?php echo
+	JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-content="" data-original-title="<?php
+	echo JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-trigger="hover">
+	<i class="icon-eye"></i>
+	</span>
 <?php endif; ?>
 <?php if (!$showPreview) : ?>
-<div class="input-append">
+<div class="input-append" id="media_field_<?php echo $id; ?>">
 <?php endif; ?>
 	<input type="text" name="<?php echo $name; ?>" id="<?php echo $id; ?>" value="<?php echo htmlspecialchars($value, ENT_COMPAT, 'UTF-8'); ?>" readonly="readonly"<?php echo $attr; ?>/>
 
 <?php if ($disabled != true) : ?>
-	<a href="#imageModal_<?php echo $id; ?>" role="button" class="btn" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
-
-	<a class="btn hasTooltip" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="jInsertFieldValue('', '<?php echo $id; ?>');">
-		<i class="icon-remove"></i>
-	</a>
+	<a href="#imageModal_<?php echo $id; ?>" role="button" class="btn add-on" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
+	<a class="btn icon-remove hasTooltip add-on" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="jInsertFieldValue('', '<?php echo $id; ?>'); return false;"></a>
 <?php endif; ?>
 </div>
