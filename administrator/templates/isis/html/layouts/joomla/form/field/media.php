@@ -117,11 +117,6 @@ JFactory::getDocument()->addScriptDeclaration('
 		var imgValue = jQuery("#' . $id . '").val();
 		jQuery("#' . $id . '").tooltip({\'placement\':\'top\', \'title\': imgValue});
 
-		//Remove iframe on close
-		jQuery("#imageModal_' . $id . '").on("hidden", function () {
-			jQuery("#imageModal_' . $id . ' > .modal-body > iframe").remove();
-		});
-
 		// Save and close modal
 		jQuery("#btn_' . $id . '").on("click", function() {
 			value_' . $id . ' = jQuery("#imageModal_' . $id . ' iframe").contents().find("#f_url").val();
@@ -137,12 +132,18 @@ JFactory::getDocument()->addScriptDeclaration('
 			} else {
 				imgPreview.src = "' . JUri::root() . '" + imgValue ;
 				popover.options.content = imgPreview;
-				jQuery("#' . $id . '").tooltip("destroy");
-				jQuery("#' . $id . '").tooltip({"placement":"top", "title": imgValue});
-				jQuery("#' . $id . '").tooltip("show");
+				jQuery("#' . $id . '").tooltip("destroy").tooltip({"placement":"top", "title": imgValue});
 			}
 		});
 	});
+
+	// Clear button
+	function clear_' . $id . '(){
+		jQuery("#' . $id .'").val("");
+		jQuery("#media_preview_' . $id . '").data("popover").options.content = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
+		jQuery("#' . $id . '").tooltip("destroy");
+		return false;
+	};
 ');
 ?>
 <?php if ($showPreview) : ?>
@@ -160,6 +161,6 @@ JFactory::getDocument()->addScriptDeclaration('
 
 <?php if ($disabled != true) : ?>
 	<a href="#imageModal_<?php echo $id; ?>" role="button" class="btn add-on" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
-	<a class="btn icon-remove hasTooltip add-on" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="jInsertFieldValue('', '<?php echo $id; ?>'); return false;"></a>
+	<a class="btn icon-remove hasTooltip add-on" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="clear_<?php echo $id; ?>();"></a>
 <?php endif; ?>
 </div>
