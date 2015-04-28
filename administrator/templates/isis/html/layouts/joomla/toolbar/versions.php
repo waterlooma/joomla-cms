@@ -15,7 +15,17 @@ $link = 'index.php?option=com_contenthistory&amp;view=history&amp;layout=modal&a
 	. (int) $displayData['itemId'] . '&amp;type_id=' . $displayData['typeId'] . '&amp;type_alias='
 	. $displayData['typeAlias'] . '&amp;' . JSession::getFormToken() . '=1';
 
-echo JHtmlBootstrap::renderModal('versionsModal', array( 'url' => $link, 'title' => JText::_('COM_CONTENTHISTORY_MODAL_TITLE'),'height' => '500px', 'width' => '800px'), '');
+echo JHtmlBootstrap::renderModal(
+	'versionsModal',
+	array(
+		'url' => $link,
+		'title' => JText::_('COM_CONTENTHISTORY_MODAL_TITLE'),
+		'height' => '300px',
+		'width' => '800px',
+		'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'
+			. JText::_("JLIB_HTML_BEHAVIOR_CLOSE") . '</button>'
+		)
+	);
 ?>
 <button onclick="jQuery('#versionsModal').modal('show')" class="btn btn-small" data-toggle="modal" title="<?php echo $displayData['title']; ?>">
 	<span class="icon-archive"></span><?php echo $displayData['title']; ?>

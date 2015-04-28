@@ -13,7 +13,17 @@ extract($displayData);
 
 JHtml::_('bootstrap.modal');
 
-echo JHtmlBootstrap::renderModal('versionsModal', array( 'url' => $link, 'title' => $displayData['label'], 'height' => '500px', 'width' => '800px'), '');
+echo JHtmlBootstrap::renderModal(
+		'versionsModal',
+		array(
+			'url' => $link,
+			'title' => $displayData['label'],
+			'height' => '300px',
+			'width' => '800px',
+			'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'
+				. JText::_("JLIB_HTML_BEHAVIOR_CLOSE") . '</button>'
+		)
+	);
 
 ?>
 <button onclick="jQuery('#versionsModal').modal('show')" class="btn" data-toggle="modal" title="<?php echo $displayData['label']; ?>">
