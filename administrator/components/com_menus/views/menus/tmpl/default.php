@@ -43,6 +43,15 @@ foreach ($this->items as $item) :
 		$script[] = '		document.getElementById("' . $item->id . '").value = name;';
 		$script[] = '		jQuery(".modal").modal("hide");';
 		$script[] = '	};';
+
+		foreach ($this->modules[$item->menutype] as &$module)
+		{
+			$script[] = 'jQuery(document).ready(function() {';
+			$script[] = '	jQuery("#btn_' . $module->id . '").on("click", function() {';
+			$script[] = '		jQuery("#module' . $module->id . 'Modal iframe").contents().find("#saveBtn").click();';
+			$script[] = '	})';
+			$script[] = '});';
+		}
 	endif;
 endforeach;
 
@@ -52,6 +61,8 @@ $script[] = '			window.parent.location.reload();';
 $script[] = '		},1000);';
 $script[] = '	});';
 $script[] = "});";
+
+
 
 JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));
 ?>
@@ -175,7 +186,21 @@ JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));
 								<?php foreach ($this->modules[$item->menutype] as &$module) : ?>
 									<?php if ($canEdit) : ?>
 										<?php $link = JRoute::_('index.php?option=com_modules&task=module.edit&id=' . $module->id . '&return=' . $return . '&tmpl=component&layout=modal'); ?>
-										<?php echo JHtmlBootstrap::renderModal('module' . $module->id . 'Modal', array( 'url' => $link, 'title' => JText::_('COM_MENUS_EDIT_MODULE_SETTINGS'),'height' => '500px', 'width' => '800px'), ''); ?>
+										<?php echo
+							JHtmlBootstrap::renderModal(
+								'module' . $module->id . 'Modal',
+								array(
+									'url' => $link,
+									'title' => JText::_('COM_MENUS_EDIT_MODULE_SETTINGS'),
+									'height' => '300px',
+									'width' => '800px',
+									'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'
+										. JText::_("JLIB_HTML_BEHAVIOR_CLOSE") . '</button>'
+										. '<button id="btn_' . $module->id . '" class="btn btn-success" data-dismiss="modal" aria-hidden="true">'
+										. JText::_("JSAVE") . '</button>'
+								)
+							);
+										?>
 									<?php endif; ?>
 								<?php endforeach; ?>
 							<?php elseif ($modMenuId) : ?>
