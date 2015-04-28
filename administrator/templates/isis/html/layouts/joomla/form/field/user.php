@@ -91,7 +91,17 @@ else
 		<a href="#userModal" role="button" class="btn btn-primary" data-toggle="modal" title="<?php echo JText::_('JLIB_FORM_CHANGE_USER') ?>"><i class="icon-user"></i></a>
 
 		<?php // Create the bootstrap modal
-		echo JHtmlBootstrap::renderModal('userModal', array( 'url' => $link, 'title' => JText::_('JLIB_FORM_CHANGE_USER'),'height' => '500px', 'width' => '800px'), '');
+		echo JHtmlBootstrap::renderModal(
+						'userModal',
+						array(
+							'url' => $link,
+							'title' => JText::_('JLIB_FORM_CHANGE_USER'),
+							'height' => '500px',
+							'width' => '800px',
+							'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'
+								. JText::_("JLIB_HTML_BEHAVIOR_CLOSE") . '</button>'
+						)
+			);
 	endif; ?>
 </div>
 
