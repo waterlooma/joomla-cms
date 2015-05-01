@@ -29,6 +29,7 @@ defined('_JEXEC') or die;
  * @var  boolean  $readonly True if field is readonly
  * @var  integer  $size The size text
  * @var  string   $value The value text
+ * @var  string   $src The path and filename of the image
  */
 extract($displayData);
 
@@ -82,8 +83,9 @@ if ($showPreview)
 // The url for the modal
 $url = ($readonly ? ''
 		: ($link ? $link
-		: 'index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset=' . $asset . '&amp;author='
-		. $authorId) . '&amp;fieldid=' . $id . '&amp;folder=' . $folder) . '"';
+			: 'index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset='
+			. $asset . '&amp;author=' . $authorId)
+			. '&amp;fieldid=' . $id . '&amp;folder=' . $folder) . '"';
 
 // Render the modal
 echo JHtmlBootstrap::renderModal(
@@ -97,54 +99,26 @@ echo JHtmlBootstrap::renderModal(
 						);
 
 /*
- * Add javascript for:
- * proxy jModalClose to close the modal
- * initialize popover
+ * Pass values to javascript
  */
-JFactory::getDocument()->addScriptDeclaration('
+JFactory::getDocument()->addScriptDeclaration(
+	'
 	jQuery(document).ready(function(){
-		// Initialize the preview image button
-		if ("' . $src . '" === "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '") {
-			imagePreview = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
-		} else {
-			var imagePreview = new Image(' . $previewWidth . ', ' .$previewHeight . ');
-			imagePreview.src = "' . $src . '";
+		if (typeof path == "undefined") {
+			var path = "' . JUri::root() . '";
 		}
-		jQuery("#media_preview_' . $id . '").popover({trigger: "hover", placement: "right", content: imagePreview, html: true});
+		if (typeof empty == "undefined") {
+			var empty = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
+		}
+		var previewWidth = ' . $previewWidth . ',
+			previewHeight = ' .$previewHeight . ',
+			source = "' . $src . '",
+			fieldId = "' . $id . '";
+		initializeMedia(path, empty, previewWidth, previewHeight, source, fieldId);
+		});'
+);
 
-		// Initialize the tooltip
-		jQuery("#' . $id . '").tooltip(\'destroy\');
-		var imgValue = jQuery("#' . $id . '").val();
-		jQuery("#' . $id . '").tooltip({\'placement\':\'top\', \'title\': imgValue});
-
-		// Save and close modal
-		jQuery("#btn_' . $id . '").on("click", function() {
-			value_' . $id . ' = jQuery("#imageModal_' . $id . ' iframe").contents().find("#f_url").val();
-			jQuery("#' . $id . '").val(value_' . $id . ').trigger("change");
-
-			// Reset tooltip and preview
-			var imgValue = jQuery("#' . $id . '").val();
-			var popover = jQuery("#media_preview_' . $id . '").data("popover");
-			var imgPreview = new Image(' . $previewWidth . ', ' . $previewHeight . ');
-			if (imgValue == "") {
-				popover.options.content = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
-				jQuery("#' . $id . '").tooltip("destroy");
-			} else {
-				imgPreview.src = "' . JUri::root() . '" + imgValue ;
-				popover.options.content = imgPreview;
-				jQuery("#' . $id . '").tooltip("destroy").tooltip({"placement":"top", "title": imgValue});
-			}
-		});
-	});
-
-	// Clear button
-	function clear_' . $id . '(){
-		jQuery("#' . $id .'").val("");
-		jQuery("#media_preview_' . $id . '").data("popover").options.content = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
-		jQuery("#' . $id . '").tooltip("destroy");
-		return false;
-	};
-');
+JHtml::script('media/mediafield.min.js', false, true, false, false, true);
 ?>
 <?php if ($showPreview) : ?>
 <div class="input-prepend input-append" id="media_field_<?php echo $id; ?>">
@@ -161,6 +135,6 @@ JFactory::getDocument()->addScriptDeclaration('
 
 <?php if ($disabled != true) : ?>
 	<a href="#imageModal_<?php echo $id; ?>" role="button" class="btn add-on" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
-	<a class="btn icon-remove hasTooltip add-on" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="clear_<?php echo $id; ?>();"></a>
+	<a class="btn icon-remove hasTooltip add-on" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="clearMediaInput('<?php echo $id; ?>', '<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY'); ?>');"></a>
 <?php endif; ?>
 </div>
