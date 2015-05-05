@@ -104,13 +104,9 @@ echo JHtmlBootstrap::renderModal(
 JFactory::getDocument()->addScriptDeclaration(
 	'
 	jQuery(document).ready(function(){
-		if (typeof path == "undefined") {
-			var path = "' . JUri::root() . '";
-		}
-		if (typeof empty == "undefined") {
-			var empty = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '";
-		}
-		var previewWidth = ' . $previewWidth . ',
+		var path = "' . JUri::root() . '",
+			empty = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '",
+			previewWidth = ' . $previewWidth . ',
 			previewHeight = ' .$previewHeight . ',
 			source = "' . $src . '",
 			fieldId = "' . $id . '";
