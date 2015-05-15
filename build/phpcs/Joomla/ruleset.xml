@@ -42,6 +42,8 @@
   	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/joomla/*</exclude-pattern>
   	<exclude-pattern type="relative">administrator/includes/*</exclude-pattern>
+  	<exclude-pattern type="relative">templates/*</exclude-pattern>
+  	<exclude-pattern type="relative">layouts/*</exclude-pattern>
 </rule>
 <rule ref="Generic.Formatting.DisallowMultipleStatements">
 	<exclude-pattern type="relative">*/tmpl/*</exclude-pattern>
@@ -115,6 +117,7 @@
   	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/joomla/*</exclude-pattern>
   	<exclude-pattern type="relative">cli/*</exclude-pattern>
+  	<exclude-pattern type="relative">installation/*</exclude-pattern>
 </rule>
 
 <!-- Include some additional sniffs from the Squiz standard -->
