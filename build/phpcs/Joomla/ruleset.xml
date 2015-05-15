@@ -40,6 +40,8 @@
   	<exclude-pattern type="relative">components/*</exclude-pattern>
   	<exclude-pattern type="relative">modules/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/joomla/*</exclude-pattern>
+  	<exclude-pattern type="relative">administrator/includes/*</exclude-pattern>
 </rule>
 <rule ref="Generic.Formatting.DisallowMultipleStatements">
 	<exclude-pattern type="relative">*/tmpl/*</exclude-pattern>
@@ -111,6 +113,8 @@
   	<exclude-pattern type="relative">components/*</exclude-pattern>
   	<exclude-pattern type="relative">modules/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/joomla/*</exclude-pattern>
+  	<exclude-pattern type="relative">cli/*</exclude-pattern>
 </rule>
 
 <!-- Include some additional sniffs from the Squiz standard -->
@@ -127,6 +131,8 @@
   	<exclude-pattern type="relative">components/*</exclude-pattern>
   	<exclude-pattern type="relative">modules/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/joomla/*</exclude-pattern>
+  	<exclude-pattern type="relative">cli/*</exclude-pattern>
 </rule>
 <rule ref="Squiz.Operators.IncrementDecrementUsage">
 	<exclude name="Squiz.Operators.IncrementDecrementUsage.processAssignment" />
@@ -150,10 +156,13 @@
 <rule ref="Squiz.WhiteSpace.MemberVarSpacing">
 	<!-- These exceptions are temporary for now -->
   	<exclude-pattern type="relative">administrator/components/*</exclude-pattern>
+  	<exclude-pattern type="relative">administrator/includes/*</exclude-pattern>
   	<exclude-pattern type="relative">components/*</exclude-pattern>
   	<exclude-pattern type="relative">modules/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
   	<exclude-pattern type="relative">installation/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/joomla/*</exclude-pattern>
+  	<exclude-pattern type="relative">cli/*</exclude-pattern>
 </rule>
 <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
 
