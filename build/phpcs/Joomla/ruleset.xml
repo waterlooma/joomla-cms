@@ -33,6 +33,7 @@
   	<exclude-pattern type="relative">components/*</exclude-pattern>
   	<exclude-pattern type="relative">modules/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/joomla/*</exclude-pattern>
 </rule>
 <rule ref="Generic.Files.EndFileNewline">
 	<!-- These exceptions are temporary for now -->
@@ -170,6 +171,7 @@
   	<exclude-pattern type="relative">cli/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/legacy/*</exclude-pattern>
   	<exclude-pattern type="relative">plugins/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/loader.php</exclude-pattern>
 </rule>
 <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
 
