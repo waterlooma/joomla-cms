@@ -20,14 +20,27 @@
 <exclude-pattern type="relative">libraries/vendor/*</exclude-pattern>
 <exclude-pattern type="relative">libraries/ClassLoader.php</exclude-pattern>
 <exclude-pattern type="relative">libraries/composer_autoload.php</exclude-pattern>
+<exclude-pattern type="relative">bin/keychain.php/exclude-pattern>
 
 <exclude-pattern type="relative">administrator/components/com_joomlaupdate/restore.php</exclude-pattern>
 <exclude-pattern type="relative">configuration.php</exclude-pattern>
 <exclude-pattern type="relative">plugins/captcha/recaptcha/recaptchalib.php</exclude-pattern>
 
 <!-- Include all sniffs in an external standard directory -->
-<rule ref="Generic.CodeAnalysis.UselessOverridingMethod" />
-<rule ref="Generic.Files.EndFileNewline" />
+<rule ref="Generic.CodeAnalysis.UselessOverridingMethod">
+	<!-- These exceptions are temporary for now -->
+  	<exclude-pattern type="relative">administrator/components/*</exclude-pattern>
+  	<exclude-pattern type="relative">components/*</exclude-pattern>
+  	<exclude-pattern type="relative">modules/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+</rule>
+<rule ref="Generic.Files.EndFileNewline">
+	<!-- These exceptions are temporary for now -->
+  	<exclude-pattern type="relative">administrator/components/*</exclude-pattern>
+  	<exclude-pattern type="relative">components/*</exclude-pattern>
+  	<exclude-pattern type="relative">modules/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+</rule>
 <rule ref="Generic.Formatting.DisallowMultipleStatements">
 	<exclude-pattern type="relative">*/tmpl/*</exclude-pattern>
 	<exclude-pattern type="relative">templates/*</exclude-pattern>
