@@ -153,6 +153,7 @@
   	<exclude-pattern type="relative">components/*</exclude-pattern>
   	<exclude-pattern type="relative">modules/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+  	<exclude-pattern type="relative">installation/*</exclude-pattern>
 </rule>
 <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
 
