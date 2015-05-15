@@ -44,7 +44,13 @@
 <rule ref="Generic.PHP.DeprecatedFunctions" />
 <rule ref="Generic.PHP.ForbiddenFunctions"/>
 <rule ref="Generic.PHP.LowerCaseConstant" />
-<rule ref="Generic.WhiteSpace.DisallowSpaceIndent"/>
+<rule ref="Generic.WhiteSpace.DisallowSpaceIndent">
+	<!-- These exceptions are temporary for now -->
+  	<exclude-pattern type="relative">administrator/components/*</exclude-pattern>
+  	<exclude-pattern type="relative">components/*</exclude-pattern>
+  	<exclude-pattern type="relative">modules/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+</rule>
 
 <rule ref="Generic.Files.LineLength">
 	<!-- These exceptions are temporary -->
@@ -86,7 +92,13 @@
 	<!-- These exceptions are temporary for now -->
 	<exclude-pattern type="relative">installation/controller/install/database_*</exclude-pattern>
 </rule>
-<rule ref="PEAR.WhiteSpace.ObjectOperatorIndent"/>
+<rule ref="PEAR.WhiteSpace.ObjectOperatorIndent">
+	<!-- These exceptions are temporary for now -->
+  	<exclude-pattern type="relative">administrator/components/*</exclude-pattern>
+  	<exclude-pattern type="relative">components/*</exclude-pattern>
+  	<exclude-pattern type="relative">modules/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+</rule>
 
 <!-- Include some additional sniffs from the Squiz standard -->
 <rule ref="Squiz.CSS.ColonSpacing" />
