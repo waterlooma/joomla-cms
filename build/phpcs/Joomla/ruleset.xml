@@ -115,8 +115,20 @@
 	<exclude-pattern type="relative">layouts/*</exclude-pattern>
 	<exclude-pattern type="relative">*/tmpl/*</exclude-pattern>
 </rule>
-<rule ref="Squiz.WhiteSpace.CastSpacing"/>
-<rule ref="Squiz.WhiteSpace.MemberVarSpacing"/>
+<rule ref="Squiz.WhiteSpace.CastSpacing">
+	<!-- These exceptions are temporary for now -->
+  	<exclude-pattern type="relative">administrator/components/*</exclude-pattern>
+  	<exclude-pattern type="relative">components/*</exclude-pattern>
+  	<exclude-pattern type="relative">modules/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+</rule>
+<rule ref="Squiz.WhiteSpace.MemberVarSpacing">
+	<!-- These exceptions are temporary for now -->
+  	<exclude-pattern type="relative">administrator/components/*</exclude-pattern>
+  	<exclude-pattern type="relative">components/*</exclude-pattern>
+  	<exclude-pattern type="relative">modules/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/cms/*</exclude-pattern>
+</rule>
 <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
 
 <!-- Include some additional sniffs from the PSR2 standard -->
