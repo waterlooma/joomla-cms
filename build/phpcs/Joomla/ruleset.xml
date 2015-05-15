@@ -118,6 +118,8 @@
   	<exclude-pattern type="relative">libraries/joomla/*</exclude-pattern>
   	<exclude-pattern type="relative">cli/*</exclude-pattern>
   	<exclude-pattern type="relative">installation/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/legacy/*</exclude-pattern>
+  	<exclude-pattern type="relative">plugins/*</exclude-pattern>
 </rule>
 
 <!-- Include some additional sniffs from the Squiz standard -->
@@ -166,6 +168,8 @@
   	<exclude-pattern type="relative">installation/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/joomla/*</exclude-pattern>
   	<exclude-pattern type="relative">cli/*</exclude-pattern>
+  	<exclude-pattern type="relative">libraries/legacy/*</exclude-pattern>
+  	<exclude-pattern type="relative">plugins/*</exclude-pattern>
 </rule>
 <rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
 
