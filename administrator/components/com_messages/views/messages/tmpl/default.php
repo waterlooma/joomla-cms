@@ -19,14 +19,25 @@ JHtml::_('formbehavior.chosen', 'select');
 $user		= JFactory::getUser();
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
-?>
-<script type="text/javascript">
+
+JFactory::getDocument()->addStyleDeclaration(
+	"
+	div.modal {
+	left: none;
+	width: 500px;
+	margin-left: -250px;
+	}
+	"
+);
+JFactory::getDocument()->addScriptDeclaration(
+	"
 	Joomla.closeModalDialog = function()
 	{
 		jQuery('#modal-cog').modal('hide');
-	}
-</script>
-
+	};
+	"
+);
+?>
 <form action="<?php echo JRoute::_('index.php?option=com_messages&view=messages'); ?>" method="post" name="adminForm" id="adminForm">
 <?php if (!empty( $this->sidebar)) : ?>
 	<div id="j-sidebar-container" class="span2">
