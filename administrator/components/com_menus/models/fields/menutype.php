@@ -83,8 +83,7 @@ class JFormFieldMenutype extends JFormFieldList
 		$link = JRoute::_('index.php?option=com_menus&view=menutypes&tmpl=component&recordId=' . $recordId);
 		$html[] = '<span class="input-append"><input type="text" ' . $required . ' readonly="readonly" id="' . $this->id . '" value="' . $value . '"' . $size . $class . ' />';
 		$html[] = '<a href="#menuTypeModal" role="button" class="btn btn-primary" data-toggle="modal" title="' . JText::_('JSELECT') . '"><i class="icon-list icon-white"></i> ' . JText::_('JSELECT') . '</a></span>';
-		$html[] = JHtmlBootstrap::renderModal(
-						'menuTypeModal', array(
+		$html[] = JHtml::_('bootstrap.renderModal', 'menuTypeModal', array(
 							'url' => $link,
 							'title' => JText::_('COM_MENUS_ITEM_FIELD_TYPE_LABEL'),
 							'width' => '800px',

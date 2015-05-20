@@ -146,8 +146,7 @@ class JFormFieldModal_Contact extends JFormField
 			. '<i class="icon-file"></i> ' . JText::_('JSELECT')
 			. '</a>';
 
-		$html[] = JHtmlBootstrap::renderModal(
-							'modalContact', array(
+		$html[] = JHtml::_('bootstrap.renderModal', 'modalContact', array(
 							'url' => $link . '&amp;' . JSession::getFormToken() . '=1"',
 							'title' => JText::_('COM_CONTACT_CHANGE_CONTACT'),
 							'width' => '800px',
