@@ -17,14 +17,6 @@ JHtml::_('behavior.multiselect');
 $user		= JFactory::getUser();
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
-
-JFactory::getDocument()->addStyleDeclaration(
-	'
-	.icon-32-cog {
-		background-image: url(' . JUri::root(true) . '/administrator/templates/hathor/images/toolbar/icon-32-cog.png);
-	}
-	'
-);
 ?>
 
 <form action="<?php echo JRoute::_('index.php?option=com_messages&view=messages'); ?>" method="post" name="adminForm" id="adminForm">
