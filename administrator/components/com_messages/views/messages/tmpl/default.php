@@ -22,10 +22,12 @@ $listDirn	= $this->escape($this->state->get('list.direction'));
 
 JFactory::getDocument()->addStyleDeclaration(
 	"
-	div.modal {
-	left: none;
-	width: 500px;
-	margin-left: -250px;
+	@media (min-width: 768px) {
+		div.modal {
+			left: none;
+			width: 500px;
+			margin-left: -250px;
+		}
 	}
 	"
 );
