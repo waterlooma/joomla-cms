@@ -29,14 +29,6 @@ JFactory::getDocument()->addStyleDeclaration(
 	}
 	"
 );
-JFactory::getDocument()->addScriptDeclaration(
-	"
-	Joomla.closeModalDialog = function()
-	{
-		jQuery('#modal-cog').modal('hide');
-	};
-	"
-);
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_messages&view=messages'); ?>" method="post" name="adminForm" id="adminForm">
 <?php if (!empty( $this->sidebar)) : ?>
