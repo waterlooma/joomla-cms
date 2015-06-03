@@ -81,22 +81,28 @@ if ($showPreview)
 }
 
 // The url for the modal
-$url = ($readonly ? ''
+$url    = ($readonly ? ''
 		: ($link ? $link
 			: 'index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset='
 			. $asset . '&amp;author=' . $authorId)
 			. '&amp;fieldid=' . $id . '&amp;folder=' . $folder) . '"';
+$footer = '<button class="btn" data-dismiss="modal" aria-hidden="true">'
+	. JText::_("JLIB_HTML_BEHAVIOR_CLOSE")
+	. '</button><button id="btn_' . $id
+	. '" class="btn btn-success" data-dismiss="modal" aria-hidden="true">'
+	. JText::_("JLIB_FORM_CHANGE_IMAGE") . '</button>';
 
 // Render the modal
-echo JHtmlBootstrap::renderModal(
-						'imageModal_'. $id, array(
-							'url' => $url,
-							'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
-							'width' => '800px',
-							'height' => '565px',
-							'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">' . JText::_("JLIB_HTML_BEHAVIOR_CLOSE") . '</button>
-    <button id="btn_' . $id . '" class="btn btn-success" data-dismiss="modal" aria-hidden="true">' . JText::_("JLIB_FORM_CHANGE_IMAGE") . '</button>')
-						);
+echo JHtml::_('bootstrap.renderModal',
+	'imageModal_'. $id,
+	array(
+		'url' => $url,
+		'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
+		'width' => '800px',
+		'height' => '565px',
+		'footer' => $footer
+	)
+);
 
 /*
  * Pass values to javascript
