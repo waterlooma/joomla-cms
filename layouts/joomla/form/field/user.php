@@ -52,7 +52,7 @@ $script = "
 			document.getElementById('" . $id . "_name').value = title;
 			" . $onchange . "
 		}
-		SqueezeBox.close();
+		jModalClose();
 	}
 ";
 
