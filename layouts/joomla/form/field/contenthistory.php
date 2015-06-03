@@ -9,13 +9,18 @@
 
 defined('_JEXEC') or die;
 
+/**
+ * Layout variables
+ * ---------------------
+ *
+ * @var  string   $item The item id number
+ * @var  string   $link The link text
+ * @var  string   $label The label text
+ */
 extract($displayData);
 
-JHtml::_('bootstrap.modal');
-
-echo JHtmlBootstrap::renderModal('versionsModal', array( 'url' => $link, 'title' => $displayData['label'], 'height' => '500px', 'width' => '800px'), '');
-
+JHtml::_('behavior.modal', 'button.modal_' . $item);
 ?>
-<button onclick="jQuery('#versionsModal').modal('show')" class="btn" data-toggle="modal" title="<?php echo $displayData['label']; ?>">
-	<span class="icon-archive"></span><?php echo $displayData['label']; ?>
+<button class="btn modal_<?php echo $item; ?>" title="<?php echo $label; ?>" href="<?php echo $link; ?>" rel="{handler: 'iframe', size: {x: 800, y: 500}}">
+	<span class="icon-archive"></span><?php echo $label; ?>
 </button>

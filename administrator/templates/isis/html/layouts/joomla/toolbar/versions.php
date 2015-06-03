@@ -9,13 +9,24 @@
 
 defined('_JEXEC') or die;
 
-JHtml::_('bootstrap.modal');
+/**
+ * Layout variables
+ * ---------------------
+ *
+ * @var  string   $itemId The type id number
+ * @var  string   $title The link text
+ * @var  string   $height The height of the iframe
+ * @var  string   $width The width of the iframe
+ * @var  string   $typeAlias The component type
+ */
+extract($displayData);
 
 $link = 'index.php?option=com_contenthistory&amp;view=history&amp;layout=modal&amp;tmpl=component&amp;item_id='
-	. (int) $displayData['itemId'] . '&amp;type_id=' . $displayData['typeId'] . '&amp;type_alias='
-	. $displayData['typeAlias'] . '&amp;' . JSession::getFormToken() . '=1';
+	. (int) $itemId . '&amp;type_id=' . $typeId . '&amp;type_alias='
+	. $typeAlias . '&amp;' . JSession::getFormToken() . '=1';
 
-echo JHtmlBootstrap::renderModal(
+echo JHtml::_(
+	'bootstrap.renderModal',
 	'versionsModal',
 	array(
 		'url' => $link,
@@ -23,10 +34,11 @@ echo JHtmlBootstrap::renderModal(
 		'height' => '300px',
 		'width' => '800px',
 		'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'
-			. JText::_("JLIB_HTML_BEHAVIOR_CLOSE") . '</button>'
-		)
-	);
+			. JText::_("JTOOLBAR_CLOSE") . '</button>'
+	)
+);
 ?>
-<button onclick="jQuery('#versionsModal').modal('show')" class="btn btn-small" data-toggle="modal" title="<?php echo $displayData['title']; ?>">
-	<span class="icon-archive"></span><?php echo $displayData['title']; ?>
+<button onclick="jQuery('#versionsModal').modal('show')" class="btn btn-small" data-toggle="modal" title="<?php echo $title; ?>">
+	<span class="icon-archive"></span><?php echo $title; ?>
 </button>
+

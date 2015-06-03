@@ -49,10 +49,10 @@ class JFormFieldContenthistory extends JFormField
 			. $this->element['data-typeAlias'] . '&amp;' . JSession::getFormToken() . '=1';
 
 		$displayData = array(
-			'type'  => $typeId,
-			'item'  => $itemId,
+			'type' => $typeId,
+			'item' => $itemId,
 			'label' => $label,
-			'link'  => $link
+			'link' => $link
 		);
 
 		return JLayoutHelper::render($this->renderLayout, $displayData);
