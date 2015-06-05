@@ -44,6 +44,7 @@ var image_base_path = '" . $params->get('image_path', 'images') . "/';
 			</div>
 		</div>
 	</div>
+	<a id="imgBtn" onclick="ImageManager.onok();" class="hidden"></a>
 
 	<iframe id="imageframe" name="imageframe" src="index.php?option=com_media&amp;view=imagesList&amp;tmpl=component&amp;folder=<?php echo $this->state->folder?>&amp;asset=<?php echo $input->getCmd('asset');?>&amp;author=<?php echo $input->getCmd('author');?>"></iframe>
 
