@@ -99,7 +99,7 @@ echo JHtml::_('Bootstrap.renderModal',
 		'url' => $url,
 		'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
 		'width' => '800px',
-		'height' => '565px',
+		'height' => '300px',
 		'footer' => $footer
 	)
 );
