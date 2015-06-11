@@ -431,6 +431,7 @@ class PlgEditorTinymce extends JPlugin
 		}
 
 		$toolbar4_add[] = '|';
+		$toolbar4_add[] = 'joomlabreak';
 
 		// Visualchars
 		$visualchars = $this->params->get('visualchars', 1);
@@ -667,6 +668,8 @@ class PlgEditorTinymce extends JPlugin
 						$content_css
 						document_base_url : \"" . JUri::root() . "\"
 					});
+					var hrExists = \"" .
+					JText::_('PLG_TINY_READMORE_ALREADY_EXISTS') . "\";
 				</script>";
 				break;
 
@@ -714,6 +717,8 @@ class PlgEditorTinymce extends JPlugin
 					width : \"$html_width\",
 
 				});
+				var hrExists = \"" .
+					JText::_('PLG_TINY_READMORE_ALREADY_EXISTS') . "\";
 				</script>";
 				break;
 
@@ -778,6 +783,8 @@ class PlgEditorTinymce extends JPlugin
 					width : \"$html_width\",
 
 				});
+				var hrExists = \"" .
+					JText::_('PLG_TINY_READMORE_ALREADY_EXISTS') . "\";
 				</script>";
 				break;
 		}
