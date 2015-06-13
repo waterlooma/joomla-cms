@@ -665,7 +665,12 @@ class PlgEditorTinymce extends JPlugin
 						remove_script_host : false,
 						// Layout
 						$content_css
-						document_base_url : \"" . JUri::root() . "\"
+						document_base_url : \"" . JUri::root() . "\",
+						setup: function (ed) {
+							ed.on('init', function(args) {
+							window.tinyDone = 'done';
+							});
+						}
 					});
 				</script>";
 				break;
@@ -712,7 +717,11 @@ class PlgEditorTinymce extends JPlugin
 					$resizing
 					height : \"$html_height\",
 					width : \"$html_width\",
-
+											setup: function (ed) {
+							ed.on('init', function(args) {
+							window.tinyDone = 'done';
+							});
+						}
 				});
 				</script>";
 				break;
@@ -776,7 +785,11 @@ class PlgEditorTinymce extends JPlugin
 					image_advtab: $image_advtab,
 					height : \"$html_height\",
 					width : \"$html_width\",
-
+					setup: function (ed) {
+						ed.on('init', function(args) {
+						window.tinyDone = 'done';
+						});
+					}
 				});
 				</script>";
 				break;
@@ -892,6 +905,28 @@ class PlgEditorTinymce extends JPlugin
 		$editor .= $this->_displayButtons($id, $buttons, $asset, $author);
 		$editor .= $this->_toogleButton($id);
 		$editor .= '</div>';
+
+		JFactory::getDocument()->addScriptDeclaration(
+			"
+		jQuery(document).ready(function($) {
+				function check(){
+					if (window.tinyDone) {
+					$('#editor-xtd-buttons').appendTo('.mce-toolbar-grp');
+					//$('.toggle-editor.btn-toolbar.pull-right.clearfix').appendTo('.mce-toolbar-grp');
+					console.log('done')
+
+					}
+					else {
+					console.log('not ready yet');
+						setTimeout(check, 1000); // check again in a second
+					}
+				}
+				if ($('#editor-xtd-buttons')) {
+					check();
+				}
+		});
+			"
+		);
 
 		return $editor;
 	}
