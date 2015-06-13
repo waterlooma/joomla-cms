@@ -795,6 +795,12 @@ class PlgEditorTinymce extends JPlugin
 				break;
 		}
 
+		Jfactory::getDocument()->addStyleDeclaration(
+			"
+	div#editor-xtd-buttons.btn-toolbar.pull-left { padding:10px 10px 8px 6px; }
+			"
+		);
+
 		return $return;
 	}
 
@@ -921,7 +927,7 @@ class PlgEditorTinymce extends JPlugin
 						setTimeout(check, 1000); // check again in a second
 					}
 				}
-				if ($('#editor-xtd-buttons')) {
+				if ($('#editor-xtd-buttons').length) {
 					check();
 				}
 		});
