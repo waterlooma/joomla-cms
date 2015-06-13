@@ -795,6 +795,12 @@ class PlgEditorTinymce extends JPlugin
 				break;
 		}
 
+		Jfactory::getDocument()->addStyleDeclaration(
+			"
+	div#editor-xtd-buttons.btn-toolbar.pull-left { padding:10px 10px 8px 6px; }
+			"
+		);
+
 		return $return;
 	}
 
@@ -909,21 +915,20 @@ class PlgEditorTinymce extends JPlugin
 		JFactory::getDocument()->addScriptDeclaration(
 			"
 		jQuery(document).ready(function($) {
-				function check(){
-					if (window.tinyDone) {
+			function check(){
+				if (window.tinyDone) {
 					$('#editor-xtd-buttons').appendTo('.mce-toolbar-grp');
 					//$('.toggle-editor.btn-toolbar.pull-right.clearfix').appendTo('.mce-toolbar-grp');
 					console.log('done')
-
-					}
-					else {
+				}
+				else {
 					console.log('not ready yet');
-						setTimeout(check, 1000); // check again in a second
-					}
+					setTimeout(check, 1000); // check again in a second
 				}
-				if ($('#editor-xtd-buttons')) {
-					check();
-				}
+			}
+			if ($('#editor-xtd-buttons').length) {
+				check();
+			}
 		});
 			"
 		);
