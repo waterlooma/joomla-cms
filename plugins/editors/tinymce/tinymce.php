@@ -606,7 +606,7 @@ class PlgEditorTinymce extends JPlugin
 		$buttons = $this->_subject->getButtons($this->_name, true);
 
 		// Init some vars
-		$tempConstructorPlug ="";
+		$tempConstructorPlug = "";
 		$tinyBtns = array();
 
 		// Build the script
@@ -645,23 +645,24 @@ class PlgEditorTinymce extends JPlugin
 		";
 					if ($onclick && ($button->get('modal') || $href))
 					{
-						$tempConstructor .=",
+						$tempConstructor .= ",
 		\"" . $onclick . "\"
 				";
 					}
 				}
 				else
 				{
-					$tempConstructor .="
+					$tempConstructor .= "
 					" . $onclick . "
 				";
 				}
-				$tempConstructor .="
+				$tempConstructor .= "
 		}
 	})";
 			}
 			// The array with the toolbar buttons
 			$toolbar5[] = $name;
+
 			// The array with code for each button
 			$tinyBtns[] = $tempConstructor;
 		}
