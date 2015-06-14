@@ -615,9 +615,10 @@ class PlgEditorTinymce extends JPlugin
 			if ($button->get('name'))
 			{
 				// Set some vars
-				$name = str_replace(" ", "", $button->get('text'));
-				$title = $button->get('text');
+				$name     = str_replace(" ", "", $button->get('text'));
+				$title    = $button->get('text');
 				$onclick  = ($button->get('onclick')) ? $button->get('onclick') : null;
+				$options  = $button->get('options');
 
 				if ($button->get('link') != "#")
 				{
@@ -628,19 +629,36 @@ class PlgEditorTinymce extends JPlugin
 					$href = null;
 				}
 
+				//"{handler: 'iframe', size: {x: 500, y: 300}}"
+
+				if ($options)
+				{
+					preg_match('/x:\s*+\d{2,4}/', $options, $modalWidth);
+					$modalWidth = implode("", $modalWidth);
+					$modalWidth = str_replace("x: ", "", $modalWidth);
+					preg_match('/y:\s*+\d{2,4}/', $options, $modalHeight);
+					$modalHeight = implode("", $modalHeight);
+					$modalHeight = str_replace("y: ", "", $modalHeight);
+				}
 				$tempConstructor = "
 	editor.addButton(\"" . $name . "\", {
 		text: \"" . $name . "\",
 		title: \"" . $name . "\",
-		onclick: function () {";
+		onclick: function () {
+				jModalClose = (function(){
+			return function() {
+				tinyMCE.activeEditor.windowManager.close();
+				SqueezeBox.close();
+			}
+		})();";
 				if ($button->get('modal') || $href)
 				{
 					$tempConstructor .= "
 			editor.windowManager.open({
 						title  : \"" . $title . "\",
 						url : '" . $href . "',
-						width  : 900,
-						height : 600
+						width  : $modalWidth,
+						height : $modalHeight
 			});
 		";
 					if ($onclick && ($button->get('modal') || $href))
@@ -860,6 +878,32 @@ class PlgEditorTinymce extends JPlugin
 				break;
 		}
 
+		// Javasript replace JModalClose
+//		JFactory::getDocument()->addScriptDeclaration('
+//		if (typeof jModalClose == "function"){
+//		var fnCode = jModalClose.toString();
+//			fnCode = fnCode.replace(/\}$/, "tinyMCE.activeEditor.windowManager.close();");
+//			window.eval(fnCode);
+//		}
+//		else
+//		{
+//			function jModalClose() {
+//			tinyMCE.activeEditor.windowManager.close();
+//		}
+//		');
+
+//		function a() { return 1; }
+//
+//// redefine
+//jModalClose = (function(){
+//	var _jModalClose = jModalClose;
+//	return function() {
+//		tinyMCE.activeEditor.windowManager.close();
+//		SqueezeBox.close();
+//	}
+//})();
+//a()
+
 		return $return;
 	}
 
@@ -969,6 +1013,22 @@ class PlgEditorTinymce extends JPlugin
 		$editor .= JLayoutHelper::render('joomla.tinymce.textarea', $textarea);
 		$editor .= $this->_displayButtons($id, $buttons, $asset, $author);
 		$editor .= '</div>';
+
+//		JFactory::getDocument()->addScriptDeclaration("
+//		jQuery(document).ready(function($) {
+//			if (typeof jModalClose == 'function'){
+//				console.log('exists');
+//				var fnCode = jModalClose.toString();
+//					fnCode = fnCode.replace(/\}$/, \"tinyMCE.activeEditor.windowManager.close(); }\");
+//					window.eval(fnCode);
+//			}
+//			else
+//			{
+//				function jModalClose() {
+//				tinyMCE.activeEditor.windowManager.close();
+//			};
+//			});
+//			");
 
 		return $editor;
 	}
