@@ -619,6 +619,7 @@ class PlgEditorTinymce extends JPlugin
 				$title    = $button->get('text');
 				$onclick  = ($button->get('onclick')) ? $button->get('onclick') : null;
 				$options  = $button->get('options');
+				$icon     = $button->get('name');
 
 				if ($button->get('link') != "#")
 				{
@@ -629,8 +630,29 @@ class PlgEditorTinymce extends JPlugin
 					$href = null;
 				}
 
-				//"{handler: 'iframe', size: {x: 500, y: 300}}"
+				// Get some icons
+				switch ($icon) {
+					case 'copy':
+						// Page break
+						break;
+					case 'file-add':
+						// Articles
+						$icon = 'newdocument';
+						break;
+					case 'picture':
+						// Images
+						$icon = 'image';
+						break;
+					case 'arrow-down':
+						// Read more
+						$icon = 'pagebreak';
+						break;
+					default:
+						// All others
+						$icon = 'browse';
+				}
 
+				// Get the modal width/height
 				if ($options)
 				{
 					preg_match('/x:\s*+\d{2,4}/', $options, $modalWidth);
@@ -640,17 +662,20 @@ class PlgEditorTinymce extends JPlugin
 					$modalHeight = implode("", $modalHeight);
 					$modalHeight = str_replace("y: ", "", $modalHeight);
 				}
+
+				// Now we can built the script
 				$tempConstructor = "
 	editor.addButton(\"" . $name . "\", {
 		text: \"" . $name . "\",
 		title: \"" . $name . "\",
+		icon: \"" . $icon . "\",
 		onclick: function () {
 				jModalClose = (function(){
-			return function() {
-				tinyMCE.activeEditor.windowManager.close();
-				SqueezeBox.close();
-			}
-		})();";
+					return function() {
+						tinyMCE.activeEditor.windowManager.close();
+						SqueezeBox.close();
+					}
+				})();";
 				if ($button->get('modal') || $href)
 				{
 					$tempConstructor .= "
@@ -678,6 +703,7 @@ class PlgEditorTinymce extends JPlugin
 		}
 	})";
 			}
+
 			// The array with the toolbar buttons
 			$toolbar5[] = $name;
 
@@ -695,6 +721,8 @@ class PlgEditorTinymce extends JPlugin
 		$toolbar3 = implode(' ', $toolbar3_add);
 		$toolbar4 = implode(' ', $toolbar4_add);
 		$toolbar5 = implode(" | ", $toolbar5);
+
+		// The buttons script
 		$tinyBtns = implode("; ", $tinyBtns);
 
 		// See if mobileVersion is activated
@@ -878,32 +906,6 @@ class PlgEditorTinymce extends JPlugin
 				break;
 		}
 
-		// Javasript replace JModalClose
-//		JFactory::getDocument()->addScriptDeclaration('
-//		if (typeof jModalClose == "function"){
-//		var fnCode = jModalClose.toString();
-//			fnCode = fnCode.replace(/\}$/, "tinyMCE.activeEditor.windowManager.close();");
-//			window.eval(fnCode);
-//		}
-//		else
-//		{
-//			function jModalClose() {
-//			tinyMCE.activeEditor.windowManager.close();
-//		}
-//		');
-
-//		function a() { return 1; }
-//
-//// redefine
-//jModalClose = (function(){
-//	var _jModalClose = jModalClose;
-//	return function() {
-//		tinyMCE.activeEditor.windowManager.close();
-//		SqueezeBox.close();
-//	}
-//})();
-//a()
-
 		return $return;
 	}
 
@@ -1013,22 +1015,6 @@ class PlgEditorTinymce extends JPlugin
 		$editor .= JLayoutHelper::render('joomla.tinymce.textarea', $textarea);
 		$editor .= $this->_displayButtons($id, $buttons, $asset, $author);
 		$editor .= '</div>';
-
-//		JFactory::getDocument()->addScriptDeclaration("
-//		jQuery(document).ready(function($) {
-//			if (typeof jModalClose == 'function'){
-//				console.log('exists');
-//				var fnCode = jModalClose.toString();
-//					fnCode = fnCode.replace(/\}$/, \"tinyMCE.activeEditor.windowManager.close(); }\");
-//					window.eval(fnCode);
-//			}
-//			else
-//			{
-//				function jModalClose() {
-//				tinyMCE.activeEditor.windowManager.close();
-//			};
-//			});
-//			");
 
 		return $editor;
 	}
