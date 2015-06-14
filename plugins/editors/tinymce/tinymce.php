@@ -602,6 +602,70 @@ class PlgEditorTinymce extends JPlugin
 			$toolbar4_add[] = $custom_button;
 		}
 
+		// Get the available buttons
+		$buttons = $this->_subject->getButtons($this->_name, true);
+
+		// Init some vars
+		$tempConstructorPlug ="";
+		$tinyBtns = array();
+
+		// Build the script
+		foreach ($buttons as $button)
+		{
+			if ($button->get('name'))
+			{
+				// Set some vars
+				$name = str_replace(" ", "", $button->get('text'));
+				$title = $button->get('text');
+				$onclick  = ($button->get('onclick')) ? $button->get('onclick') : null;
+
+				if ($button->get('link') != "#")
+				{
+					$href = JUri::base() . $button->get('link');
+				}
+				else
+				{
+					$href = null;
+				}
+
+				$tempConstructor = "
+	editor.addButton(\"" . $name . "\", {
+		text: \"" . $name . "\",
+		title: \"" . $name . "\",
+		onclick: function () {";
+				if ($button->get('modal') || $href)
+				{
+					$tempConstructor .= "
+			editor.windowManager.open({
+						title  : \"" . $title . "\",
+						url : '" . $href . "',
+						width  : 900,
+						height : 600
+			});
+		";
+					if ($onclick && ($button->get('modal') || $href))
+					{
+						$tempConstructor .=",
+		\"" . $onclick . "\"
+				";
+					}
+				}
+				else
+				{
+					$tempConstructor .="
+					" . $onclick . "
+				";
+				}
+				$tempConstructor .="
+		}
+	})";
+			}
+			// The array with the toolbar buttons
+			$toolbar5[] = $name;
+			// The array with code for each button
+			$tinyBtns[] = $tempConstructor;
+		}
+
 		// Prepare config variables
 		$plugins  = implode(',', $plugins);
 		$elements = implode(',', $elements);
@@ -611,6 +675,8 @@ class PlgEditorTinymce extends JPlugin
 		$toolbar2 = implode(' ', $toolbar2_add);
 		$toolbar3 = implode(' ', $toolbar3_add);
 		$toolbar4 = implode(' ', $toolbar4_add);
+		$toolbar5 = implode(" | ", $toolbar5);
+		$tinyBtns = implode("; ", $tinyBtns);
 
 		// See if mobileVersion is activated
 		$mobileVersion = $this->params->get('mobile', 0);
@@ -654,6 +720,8 @@ class PlgEditorTinymce extends JPlugin
 						schema: \"html5\",
 						menubar: false,
 						toolbar1: \"bold italics underline strikethrough | undo redo | bullist numlist\",
+						toolbar2: \"$toolbar5 | code\",
+						plugins: \"code\",
 						// Cleanup/Output
 						inline_styles : true,
 						gecko_spellcheck : true,
@@ -666,10 +734,8 @@ class PlgEditorTinymce extends JPlugin
 						// Layout
 						$content_css
 						document_base_url : \"" . JUri::root() . "\",
-						setup: function (ed) {
-							ed.on('init', function(args) {
-							window.tinyDone = 'done';
-							});
+						setup: function (editor) {
+							$tinyBtns
 						}
 					});
 				</script>";
@@ -705,6 +771,7 @@ class PlgEditorTinymce extends JPlugin
 					// Toolbar
 					toolbar1: \"$toolbar1\",
 					toolbar2: \"$toolbar2\",
+					toolbar3: \"$toolbar5 | code\",
 					removed_menuitems: \"newdocument\",
 					// URL
 					relative_urls : $relative_urls,
@@ -717,11 +784,9 @@ class PlgEditorTinymce extends JPlugin
 					$resizing
 					height : \"$html_height\",
 					width : \"$html_width\",
-											setup: function (ed) {
-							ed.on('init', function(args) {
-							window.tinyDone = 'done';
-							});
-						}
+					setup: function (editor) {
+						$tinyBtns
+					}
 				});
 				</script>";
 				break;
@@ -755,6 +820,7 @@ class PlgEditorTinymce extends JPlugin
 					toolbar2: \"$toolbar2\",
 					toolbar3: \"$toolbar3\",
 					toolbar4: \"$toolbar4\",
+					toolbar5: \"$toolbar5 | code\",
 					removed_menuitems: \"newdocument\",
 					// URL
 					relative_urls : $relative_urls,
@@ -785,21 +851,13 @@ class PlgEditorTinymce extends JPlugin
 					image_advtab: $image_advtab,
 					height : \"$html_height\",
 					width : \"$html_width\",
-					setup: function (ed) {
-						ed.on('init', function(args) {
-						window.tinyDone = 'done';
-						});
+					setup: function (editor) {
+						$tinyBtns
 					}
 				});
 				</script>";
 				break;
 		}
-
-		Jfactory::getDocument()->addStyleDeclaration(
-			"
-	div#editor-xtd-buttons.btn-toolbar.pull-left { padding:10px 10px 8px 6px; }
-			"
-		);
 
 		return $return;
 	}
@@ -909,29 +967,7 @@ class PlgEditorTinymce extends JPlugin
 		$editor = '<div class="editor">';
 		$editor .= JLayoutHelper::render('joomla.tinymce.textarea', $textarea);
 		$editor .= $this->_displayButtons($id, $buttons, $asset, $author);
-		$editor .= $this->_toogleButton($id);
 		$editor .= '</div>';
-
-		JFactory::getDocument()->addScriptDeclaration(
-			"
-		jQuery(document).ready(function($) {
-			function check(){
-				if (window.tinyDone) {
-					$('#editor-xtd-buttons').appendTo('.mce-toolbar-grp');
-					//$('.toggle-editor.btn-toolbar.pull-right.clearfix').appendTo('.mce-toolbar-grp');
-					console.log('done')
-				}
-				else {
-					console.log('not ready yet');
-					setTimeout(check, 1000); // check again in a second
-				}
-			}
-			if ($('#editor-xtd-buttons').length) {
-				check();
-			}
-		});
-			"
-		);
 
 		return $editor;
 	}
@@ -972,7 +1008,7 @@ class PlgEditorTinymce extends JPlugin
 		{
 			$buttons = $this->_subject->getButtons($name, $buttons, $asset, $author);
 
-			$return .= JLayoutHelper::render('joomla.editors.buttons', $buttons);
+			$return .= JLayoutHelper::render('joomla.tinymce.buttons', $buttons);
 		}
 
 		return $return;
@@ -984,9 +1020,11 @@ class PlgEditorTinymce extends JPlugin
 	 * @param   string  $name  Editor name
 	 *
 	 * @return  string
+	 *
+	 * @deprecated 3.5
 	 */
 	private function _toogleButton($name)
 	{
-		return JLayoutHelper::render('joomla.tinymce.togglebutton', $name);
+		return;
 	}
 }
