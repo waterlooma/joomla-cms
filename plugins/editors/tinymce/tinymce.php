@@ -619,6 +619,7 @@ class PlgEditorTinymce extends JPlugin
 				$title    = $button->get('text');
 				$onclick  = ($button->get('onclick')) ? $button->get('onclick') : null;
 				$options  = $button->get('options');
+				$icon     = $button->get('name');
 
 				if ($button->get('link') != "#")
 				{
@@ -629,8 +630,29 @@ class PlgEditorTinymce extends JPlugin
 					$href = null;
 				}
 
-				//"{handler: 'iframe', size: {x: 500, y: 300}}"
+				// Get some icons
+				switch ($icon) {
+					case 'copy':
+						// Page break
+						break;
+					case 'file-add':
+						// Articles
+						$icon = 'newdocument';
+						break;
+					case 'picture':
+						// Images
+						$icon = 'image';
+						break;
+					case 'arrow-down':
+						// Read more
+						$icon = 'pagebreak';
+						break;
+					default:
+						// All others
+						$icon = 'browse';
+				}
 
+				// Get the modal width/height
 				if ($options)
 				{
 					preg_match('/x:\s*+\d{2,4}/', $options, $modalWidth);
@@ -644,6 +666,7 @@ class PlgEditorTinymce extends JPlugin
 	editor.addButton(\"" . $name . "\", {
 		text: \"" . $name . "\",
 		title: \"" . $name . "\",
+		icon: \"" . $icon . "\",
 		onclick: function () {
 				jModalClose = (function(){
 			return function() {
@@ -877,32 +900,6 @@ class PlgEditorTinymce extends JPlugin
 				</script>";
 				break;
 		}
-
-		// Javasript replace JModalClose
-//		JFactory::getDocument()->addScriptDeclaration('
-//		if (typeof jModalClose == "function"){
-//		var fnCode = jModalClose.toString();
-//			fnCode = fnCode.replace(/\}$/, "tinyMCE.activeEditor.windowManager.close();");
-//			window.eval(fnCode);
-//		}
-//		else
-//		{
-//			function jModalClose() {
-//			tinyMCE.activeEditor.windowManager.close();
-//		}
-//		');
-
-//		function a() { return 1; }
-//
-//// redefine
-//jModalClose = (function(){
-//	var _jModalClose = jModalClose;
-//	return function() {
-//		tinyMCE.activeEditor.windowManager.close();
-//		SqueezeBox.close();
-//	}
-//})();
-//a()
 
 		return $return;
 	}
