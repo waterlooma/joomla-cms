@@ -631,7 +631,8 @@ class PlgEditorTinymce extends JPlugin
 				}
 
 				// Get some icons
-				switch ($icon) {
+				switch ($icon)
+				{
 					case 'copy':
 						// Page break
 						break;
