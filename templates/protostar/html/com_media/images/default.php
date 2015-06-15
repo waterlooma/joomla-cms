@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Site
+ * @package     Joomla.Administrator
  * @subpackage  com_media
  *
  * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
@@ -18,14 +18,15 @@ $user   = JFactory::getUser();
 $input  = JFactory::getApplication()->input;
 $params = JComponentHelper::getParams('com_media');
 
-// fieldid refers to input and e_name refers to editor image button
-JFactory::getDocument()->addScriptDeclaration("
-var image_base_path = '" . $params->get('image_path', 'images') . "/';
-	function bsMediaModalClose(){
-		parent.jQuery('#imageModal_" . $input->getCmd('fieldid') . "', parent.document).modal('hide');
-		parent.jQuery('#imageModal_" . $input->getCmd('e_name') . "', parent.document).modal('hide');
-	};
+if ($this->state->get('field.id'))
+{
+	JFactory::getDocument()->addScriptDeclaration("
+		var image_base_path = '" . $params->get('image_path', 'images') . "/';
+			function bsMediaModalClose(){
+				parent.jQuery('#imageModal_" . $input->getCmd('fieldid') . "', parent.document).modal('hide');
+			};
 ");
+}
 ?>
 <form action="index.php?option=com_media&amp;asset=<?php echo $input->getCmd('asset');?>&amp;author=<?php echo $input->getCmd('author'); ?>" class="form-vertical" id="imageForm" method="post" enctype="multipart/form-data">
 	<div id="messages" style="display: none;">
@@ -33,7 +34,7 @@ var image_base_path = '" . $params->get('image_path', 'images') . "/';
 	</div>
 	<div class="well">
 		<div class="row">
-			<div class="control-group">
+			<div class="span12 control-group">
 				<div class="control-label">
 					<label class="control-label" for="folder"><?php echo JText::_('COM_MEDIA_DIRECTORY') ?></label>
 				</div>
@@ -42,8 +43,14 @@ var image_base_path = '" . $params->get('image_path', 'images') . "/';
 					<button class="btn" type="button" id="upbutton" title="<?php echo JText::_('COM_MEDIA_DIRECTORY_UP') ?>"><?php echo JText::_('COM_MEDIA_UP') ?></button>
 				</div>
 			</div>
+			<div class="pull-right">
+				<button class="btn btn-primary" type="button" onclick="<?php if ($this->state->get('field.id')):?>parent.jQuery('#btn_<?php echo $input->getCmd('fieldid'); ?>').click();<?php else:?>ImageManager.onok(); jModalClose();<?php endif;?>"><?php echo JText::_('COM_MEDIA_INSERT') ?></button>
+				<button class="btn" type="button" onclick="
+				<?php if ($this->state->get('field.id')):?>bsMediaModalClose();<?php else:?>jModalClose();<?php endif;?>"><?php echo JText::_('JCANCEL') ?></button>
+			</div>
 		</div>
 	</div>
+	<a id="imgBtn" onclick="ImageManager.onok();" class="hidden"></a>
 
 	<iframe id="imageframe" name="imageframe" src="index.php?option=com_media&amp;view=imagesList&amp;tmpl=component&amp;folder=<?php echo $this->state->folder?>&amp;asset=<?php echo $input->getCmd('asset');?>&amp;author=<?php echo $input->getCmd('author');?>"></iframe>
 
