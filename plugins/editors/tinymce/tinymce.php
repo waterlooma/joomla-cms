@@ -602,6 +602,10 @@ class PlgEditorTinymce extends JPlugin
 			$toolbar4_add[] = $custom_button;
 		}
 
+		// We don't want to add css/scripts right now
+		$scriptOnHead      = JFactory::getDocument()->_script;
+		$styleOnHead       = JFactory::getDocument()->_style;
+
 		// Get the available buttons
 		$buttons = $this->_subject->getButtons($this->_name, true);
 
@@ -685,6 +689,13 @@ class PlgEditorTinymce extends JPlugin
 		}
 	})";
 			}
+
+			// Reset inline css/scripts.
+			// We will load them properly on the onDisplay event
+			unset(JFactory::getDocument()->_script);
+			unset(JFactory::getDocument()->_style);
+			JFactory::getDocument()->_script = $scriptOnHead;
+			JFactory::getDocument()->_style = $styleOnHead;
 
 			// The array with the toolbar buttons
 			$toolbar5[] = $name;
@@ -1012,7 +1023,7 @@ class PlgEditorTinymce extends JPlugin
 	 * @param   string  $asset    The object asset
 	 * @param   object  $author   The author.
 	 *
-	 * @return  string HTML
+	 * @return  void
 	 */
 	private function _displayButtons($name, $buttons, $asset, $author)
 	{
@@ -1038,12 +1049,10 @@ class PlgEditorTinymce extends JPlugin
 
 		if (is_array($buttons) || (is_bool($buttons) && $buttons))
 		{
-			$buttons = $this->_subject->getButtons($name, $buttons, $asset, $author);
-
-			$return .= JLayoutHelper::render('joomla.tinymce.buttons', $buttons);
+			$this->_subject->getButtons($name, $buttons, $asset, $author);
 		}
 
-		return $return;
+		return;
 	}
 
 	/**
