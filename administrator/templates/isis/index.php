@@ -16,6 +16,8 @@ $this->language  = $doc->language;
 $this->direction = $doc->direction;
 $input           = $app->input;
 $user            = JFactory::getUser();
+$browser         = JBrowser::getInstance();
+$browserType     = $browser->getBrowser();
 
 // Add JavaScript Frameworks
 JHtml::_('bootstrap.framework');
@@ -296,6 +298,17 @@ function colorIsLight($color)
 			$("#second-nav").affix();
 			$("#j-sidebar-container").affix();
 		});
+		<?php if($browserType == 'safari') : ?>
+			var scroll = function(e) {
+				if (stopScrollX || stopScrollY) {
+					e.preventDefault();
+					e.stopPropagation();
+					window.scroll(scrollToX, scrollToY);
+				}
+			};
+
+			document.addEventListener('mousewheel', scroll, false);
+		<?php endif; ?>
 	</script>
 <?php endif; ?>
 </body>
