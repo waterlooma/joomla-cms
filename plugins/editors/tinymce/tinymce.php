@@ -713,7 +713,7 @@ class PlgEditorTinymce extends JPlugin
 							$tempConstructor .= "
 					}
 				})";
-				}
+			}
 
 			// Reset inline css/scripts.
 			// We will load them properly on the onDisplay event
