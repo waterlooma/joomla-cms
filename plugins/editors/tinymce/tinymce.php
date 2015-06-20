@@ -960,7 +960,7 @@ class PlgEditorTinymce extends JPlugin
 	 */
 	public function onSave($editor)
 	{
-		return 'tinyMCE.get("' . $editor . '").save();';
+		return 'for (var i = 0; i < tinymce.editors.length; i++) { tinymce.editors[i].save(); }';
 	}
 
 	/**
@@ -980,12 +980,12 @@ class PlgEditorTinymce extends JPlugin
 	/**
 	 * Display the editor area.
 	 *
-	 * @param   string   $name     The name of the editor area.
-	 * @param   string   $content  The content of the field.
-	 * @param   string   $width    The width of the editor area.
-	 * @param   string   $height   The height of the editor area.
-	 * @param   int      $col      The number of columns for the editor area.
-	 * @param   int      $row      The number of rows for the editor area.
+	 * @param   string  $name     The name of the editor area.
+	 * @param   string  $content  The content of the field.
+	 * @param   string  $width    The width of the editor area.
+	 * @param   string  $height   The height of the editor area.
+	 * @param   int     $col      The number of columns for the editor area.
+	 * @param   int     $row      The number of rows for the editor area.
 	 *
 	 * @return  string
 	 */
