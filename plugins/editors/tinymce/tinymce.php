@@ -960,7 +960,7 @@ class PlgEditorTinymce extends JPlugin
 	 */
 	public function onSave($editor)
 	{
-		return 'tinyMCE.get("' . $editor . '").save();';
+		return 'for (var i = 0; i < tinymce.editors.length; i++) { tinymce.editors[i].save(); }';
 	}
 
 	/**
