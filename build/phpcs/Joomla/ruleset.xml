@@ -173,8 +173,9 @@
   	<exclude-pattern type="relative">plugins/*</exclude-pattern>
   	<exclude-pattern type="relative">libraries/loader.php</exclude-pattern>
 </rule>
-<rule ref="Squiz.WhiteSpace.OperatorSpacingSniff" />
-<rule ref="Squiz.WhiteSpace.SemicolonSpacing"/>
+<rule ref="Squiz.WhiteSpace.OperatorSpacing" />
+<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace" />
+<rule ref="Squiz.WhiteSpace.SemicolonSpacing" />
 
 <!-- Include some additional sniffs from the PSR2 standard -->
 <rule ref="PSR2.ControlStructures.ElseIfDeclaration"/>
