@@ -736,8 +736,9 @@ class PlgEditorTinymce extends JPlugin
 		$mobileVersion = $this->params->get('mobile', 0);
 
 		JFactory::getDocument()->addScript(
-			'/'.$this->_basePath .
-			"/tinymce.min.js");
+			'/' . $this->_basePath .
+			"/tinymce.min.js")
+		;
 
 		/**
 		 * Shrink the buttons if not on a mobile or if mobile view is off.
@@ -792,7 +793,8 @@ class PlgEditorTinymce extends JPlugin
 				$tinyBtns
 			}
 		});
-");
+		"
+				);
 				break;
 
 			case 1:
@@ -842,7 +844,8 @@ class PlgEditorTinymce extends JPlugin
 				$tinyBtns
 			}
 		});
-");
+			"
+				);
 				break;
 
 			case 2: /* Extended mode*/
@@ -909,7 +912,8 @@ class PlgEditorTinymce extends JPlugin
 				$tinyBtns
 			}
 		});
-");
+		"
+				);
 				break;
 		}
 
@@ -931,8 +935,6 @@ class PlgEditorTinymce extends JPlugin
 	/**
 	 * TinyMCE WYSIWYG Editor - get the editor content
 	 *
-	 * @param   string  $editor  The name of the editor
-	 *
 	 * @return  string
 	 */
 	public function onGetContent()
@@ -943,7 +945,6 @@ class PlgEditorTinymce extends JPlugin
 	/**
 	 * TinyMCE WYSIWYG Editor - set the editor content
 	 *
-	 * @param   string  $editor  The name of the editor
 	 * @param   string  $html    The html to place in the editor
 	 *
 	 * @return  string
@@ -971,6 +972,7 @@ class PlgEditorTinymce extends JPlugin
 	 * @param   string  $name  The name of the editor
 	 *
 	 * @return  void
+	 *
 	 * @deprecated 3.5
 	 */
 	public function onGetInsertMethod($name)
