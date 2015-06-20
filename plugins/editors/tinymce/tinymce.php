@@ -960,7 +960,7 @@ class PlgEditorTinymce extends JPlugin
 	 */
 	public function onSave($editor)
 	{
-		return 'tinyMCE.get("' . $editor . '").save();';
+		return 'for (var i = 0; i < tinymce.editors.length; i++) { tinymce.editors[i].save(); }';
 	}
 
 	/**
@@ -986,10 +986,14 @@ class PlgEditorTinymce extends JPlugin
 	 * @param   string   $height   The height of the editor area.
 	 * @param   int      $col      The number of columns for the editor area.
 	 * @param   int      $row      The number of rows for the editor area.
+	 * @param   boolean  $buttons  True and the editor buttons will be displayed.
+	 * @param   string   $id       An optional ID for the textarea. If not supplied the name is used.
+	 * @param   string   $asset    The object asset
+	 * @param   object   $author   The author.
 	 *
 	 * @return  string
 	 */
-	public function onDisplay($name, $content, $width, $height, $col, $row)
+	public function onDisplay($name, $content, $width, $height, $col, $row, $buttons = true, $id = null, $asset = null, $author = null)
 	{
 		if (empty($id))
 		{
