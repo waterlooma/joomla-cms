@@ -715,19 +715,19 @@ class PlgEditorTinymce extends JPlugin
 				})";
 			}
 
-			// Reset inline css/scripts.
-			// We will load them properly on the onDisplay event
-			unset(JFactory::getDocument()->_script);
-			unset(JFactory::getDocument()->_style);
-			JFactory::getDocument()->_script = $scriptOnHead;
-			JFactory::getDocument()->_style = $styleOnHead;
-
 			// The array with the toolbar buttons
 			$toolbar5[] = $name;
 
 			// The array with code for each button
 			$tinyBtns[] = $tempConstructor;
 		}
+
+		// Reset inline css/scripts.
+		// We will load them properly on the onDisplay event
+		unset(JFactory::getDocument()->_script);
+		unset(JFactory::getDocument()->_style);
+		JFactory::getDocument()->_script = $scriptOnHead;
+		JFactory::getDocument()->_style = $styleOnHead;
 
 		// Prepare config variables
 		$plugins  = implode(',', $plugins);
@@ -961,7 +961,7 @@ class PlgEditorTinymce extends JPlugin
 	 */
 	public function onSave($editor)
 	{
-		return 'if (tinyMCE.get("' . $editor . '").isHidden()) {tinyMCE.get("' . $editor . '").show()}; tinyMCE.get("' . $editor . '").save();';
+		return 'tinyMCE.get("' . $editor . '").save();';
 	}
 
 	/**
@@ -1082,7 +1082,7 @@ class PlgEditorTinymce extends JPlugin
 	 *
 	 * @param   string  $name  Editor name
 	 *
-	 * @return  string
+	 * @return  void
 	 *
 	 * @deprecated 3.5
 	 */
