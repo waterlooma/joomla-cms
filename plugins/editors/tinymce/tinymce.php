@@ -959,11 +959,13 @@ class PlgEditorTinymce extends JPlugin
 	 *
 	 * @param   string  $editor  The name of the editor
 	 *
-	 * @return  string
+	 * @return  void
+	 *
+	 * @deprecated 3.5 tinyMCE (API v4) will trigger save automatically on form submit
 	 */
 	public function onSave($editor)
 	{
-		return 'for (var i = 0; i < tinymce.editors.length; i++) { tinymce.editors[i].save(); }';
+		return;
 	}
 
 	/**
@@ -973,7 +975,7 @@ class PlgEditorTinymce extends JPlugin
 	 *
 	 * @return  void
 	 *
-	 * @deprecated 3.5
+	 * @deprecated 3.5 tinyMCE (API v4) will get the content automatically from the text area
 	 */
 	public function onGetInsertMethod($name)
 	{
@@ -1041,7 +1043,7 @@ class PlgEditorTinymce extends JPlugin
 	 *
 	 * @return  void
 	 *
-	 * @deprecated 3.5
+	 * @deprecated 3.5 buttons render as native tinymce buttons
 	 */
 	private function _displayButtons($name, $buttons, $asset, $author)
 	{
@@ -1080,7 +1082,7 @@ class PlgEditorTinymce extends JPlugin
 	 *
 	 * @return  void
 	 *
-	 * @deprecated 3.5
+	 * @deprecated 3.5 replaced by the native tinymce code plugin
 	 */
 	private function _toogleButton($name)
 	{
