@@ -1013,14 +1013,9 @@ class PlgEditorTinymce extends JPlugin
 				if ($options)
 				{
 					preg_match('/x:\s*+\d{2,4}/', $options, $modalWidth);
-					preg_match('/x:\s*+\d{2,4}/', $options, $modalWidth);
-					$modalWidth = implode("", $modalWidth);
-					$modalWidth = str_replace(' ', '', $modalWidth);
-					$modalWidth = str_replace("x:", "", $modalWidth);
 					preg_match('/y:\s*+\d{2,4}/', $options, $modalHeight);
-					$modalHeight = implode("", $modalHeight);
-					$modalHeight = str_replace(' ', '', $modalHeight);
-					$modalHeight = str_replace("y:", "", $modalHeight);
+					$modalWidth  = filter_var(implode("", $modalWidth), FILTER_SANITIZE_NUMBER_INT);
+					$modalHeight = filter_var(implode("", $modalHeight), FILTER_SANITIZE_NUMBER_INT);
 				}
 
 				// Now we can built the script
