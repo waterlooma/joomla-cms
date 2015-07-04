@@ -325,6 +325,9 @@ function colorIsLight($color)
 					if (scrollTop >= navTop && !isFixed) {
 						isFixed = true;
 						$('.subhead').addClass('subhead-fixed');
+
+						// Fix the container top
+						$(".container-main").css("top", $('.subhead').offset().top + $('nav.navbar').height());
 					} else if (scrollTop <= navTop && isFixed) {
 						isFixed = false;
 						$('.subhead').removeClass('subhead-fixed');
