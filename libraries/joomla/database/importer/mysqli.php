@@ -42,6 +42,46 @@ class JDatabaseImporterMysqli extends JDatabaseImporter
 	}
 
 	/**
+	 * Get the SQL syntax to add a table.
+	 *
+	 * @param   SimpleXMLElement  $table  The table information.
+	 *
+	 * @return  string
+	 *
+	 * @since   11.1
+	 * @throws  RuntimeException
+	 */
+	protected function xmlToCreate(SimpleXMLElement $table)
+	{
+		$existingTables = $this->db->getTableList();
+		$tableName = (string) $table['name'];
+
+		if (in_array($tableName, $existingTables))
+		{
+			throw new RuntimeException('The table you are trying to create already exists');
+		}
+
+		$createTableStatement = 'CREATE TABLE ' . $this->db->quoteName($tableName) . ' (';
+
+		foreach ($table->xpath('field') as $field)
+		{
+			$createTableStatement .= $this->getColumnSQL($field) . ', ';
+		}
+
+		foreach ($table->xpath('key') as $key)
+		{
+			$createTableStatement .= $this->getKeySQL(array($key)) . ', ';
+		}
+
+		// Remove the comma after the last key
+		$createTableStatement = rtrim($createTableStatement, ', ');
+
+		$createTableStatement .= ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+
+		return $createTableStatement;
+	}
+
+	/**
 	 * Get the SQL syntax to add a column.
 	 *
 	 * @param   string            $table  The table name.
