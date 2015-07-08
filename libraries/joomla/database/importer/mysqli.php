@@ -76,7 +76,7 @@ class JDatabaseImporterMysqli extends JDatabaseImporter
 		// Remove the comma after the last key
 		$createTableStatement = rtrim($createTableStatement, ', ');
 
-		$createTableStatement .= ') ENGINE=InnoDB DEFAULT CHARSET=utf8';
+		$createTableStatement .= ') DEFAULT CHARSET=utf8';
 
 		return $createTableStatement;
 	}
