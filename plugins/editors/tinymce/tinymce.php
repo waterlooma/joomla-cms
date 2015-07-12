@@ -749,7 +749,7 @@ class PlgEditorTinymce extends JPlugin
 					$smallButtons
 					invalid_elements : \"$invalid_elements\",
 					// Plugins
-					plugins : \"$plugins\",
+					plugins : \"$plugins, imagetools\",
 					// Toolbar
 					toolbar1: \"$toolbar1\",
 					toolbar2: \"$toolbar2\",
@@ -786,7 +786,44 @@ class PlgEditorTinymce extends JPlugin
 					height : \"$html_height\",
 					width : \"$html_width\",
 
+
+					////////////// Drag and Drop
+					paste_data_images: true,
+					setup : function(ed) {
+						ed.on('drop', function(e) {
+//							console.log(e);
+//							console.log(e.dataTransfer.files);
+//							console.log('the content '+ed.getContent());
+//							alert(\"dragdrop\" + e.dataTransfer.files);
+							var names= [];
+							for (var i = 0, f; f = e.dataTransfer.files[i]; i++) {
+							names.push(e.dataTransfer.files[i].name); ;
+								UploadFile(f);
+							}
+							e.preventDefault();
+							setTimeout(function(){
+								for (var i = 0, f; f = names[i]; i++) {
+										var newNode = ed.getDoc().createElement ( \"img\" );  // create img node
+										newNode.src='http://localhost/images/' + names[i];  // add src attribute
+										ed.execCommand('mceInsertContent', false, newNode.outerHTML);
+										tinyMCE.execCommand('mceRepaint');
+								}
+							}, 2000);
+
+							return;
+						});
+					}
 				});
+
+				////// AJAX upload
+				function UploadFile(file) {
+					var xhr = new XMLHttpRequest();
+					if (xhr.upload && file.type == \"image/jpeg\") {
+						xhr.open(\"POST\", \"http://localhost/administrator/components/com_media/controllers/tiny.php\", true);
+						xhr.setRequestHeader(\"X_FILENAME\", file.name);
+						xhr.send(file);
+					}
+				}
 				</script>";
 				break;
 		}
@@ -846,6 +883,14 @@ class PlgEditorTinymce extends JPlugin
 			{
 				tinyMCE.execCommand('mceInsertContent', false, text);
 			}
+			jQuery( document ).ready(function() {
+			jQuery(tinyMCE.activeEditor).on('change', 'input', function($) {
+				$('img')
+					.each(function(){
+						alert($(this).attr('src'))
+				});
+			});
+			});
 			"
 		);
 
