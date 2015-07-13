@@ -1024,7 +1024,6 @@ class PlgEditorTinymce extends JPlugin
 
 							for (var i = 0, f; f = e.dataTransfer.files[i]; i++) {
 								names.push(e.dataTransfer.files[i].name);
-								console.log(f);
 								UploadFile(f);
 							}
 							e.preventDefault();
