@@ -987,6 +987,7 @@ class PlgEditorTinymce extends JPlugin
 
 		$user  = JFactory::getUser();
 		$session = JFactory::getSession();
+		$url = JUri::base() . 'index.php?option=com_media&task=tiny.upload&' . JSession::getFormToken() . '=1';
 
 		// Authorize the user
 		if (!$user->authorise('core.create', 'com_media'))
@@ -998,7 +999,13 @@ class PlgEditorTinymce extends JPlugin
 			);
 		}
 
-		// tinyMCE Drag and Drop
+		// Get specific path
+		if (!empty($this->params->get('path')))
+		{
+			$path = $this->params->get('path');
+		}
+
+		// Enable Drag and Drop
 		$scriptInit = "
 					paste_data_images: true,
 					setup : function(ed) {
@@ -1026,8 +1033,6 @@ class PlgEditorTinymce extends JPlugin
 					}
 			";
 
-		$path = 'banners';
-		$url = JUri::base() . 'index.php?option=com_media&task=tiny.upload&' . JSession::getFormToken() . '=1';
 		// AJAX upload code
 		$scriptFunc = "
 				function UploadFile(file) {
