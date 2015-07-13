@@ -984,10 +984,10 @@ class PlgEditorTinymce extends JPlugin
 	{
 		$scriptInit = '';
 		$scriptFunc = '';
-
-		$user  = JFactory::getUser();
-		$session = JFactory::getSession();
-		$url = JUri::base() . 'index.php?option=com_media&task=tiny.upload&' . JSession::getFormToken() . '=1';
+		$path       = '';
+		$user       = JFactory::getUser();
+		$session    = JFactory::getSession();
+		$url        = JUri::base() . 'index.php?option=com_media&task=tiny.upload&' . JSession::getFormToken() . '=1';
 
 		// Authorize the user
 		if (!$user->authorise('core.create', 'com_media'))
