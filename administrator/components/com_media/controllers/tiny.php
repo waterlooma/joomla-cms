@@ -17,14 +17,6 @@ jimport('joomla.filesystem.folder');
 class MediaControllerTiny extends JControllerLegacy
 {
 	/**
-	 * Application object - Redeclared for proper typehinting
-	 *
-	 * @var    JApplicationCms
-	 * @since  3.5
-	 */
-	protected $app;
-
-	/**
 	 * Prefix for the view and model classes
 	 *
 	 * @var    string
@@ -41,11 +33,13 @@ class MediaControllerTiny extends JControllerLegacy
 	 */
 	public function upload()
 	{
+		$app = JFactory::getApplication();
+
 		// Check for request forgeries
 		if (!JSession::checkToken('request'))
 		{
 			echo new JResponseJson(new Exception(JText::_('JINVALID_TOKEN')));
-			$this->app->close();
+			$app->close();
 		}
 
 		// Check for session id forgery
@@ -70,7 +64,7 @@ class MediaControllerTiny extends JControllerLegacy
 		{
 			// User is not authorised to create
 			echo new JResponseJson(new Exception(JText::_('JLIB_APPLICATION_ERROR_CREATE_NOT_PERMITTED')));
-			$this->app->close();
+			$app->close();
 		}
 
 		// Total length of post back data in bytes.
@@ -84,7 +78,7 @@ class MediaControllerTiny extends JControllerLegacy
 			|| ($memoryLimit != -1 && $contentLength > $memoryLimit * 1024 * 1024))
 		{
 			echo new JResponseJson(new Exception(JText::_('COM_MEDIA_ERROR_WARNFILETOOLARGE')));
-			$this->app->close();
+			$app->close();
 		}
 		$uploadMaxSize = $params->get('upload_maxsize', 0) * 1024 * 1024;
 		$uploadMaxFileSize = (int) ini_get('upload_max_filesize') * 1024 * 1024;
@@ -99,7 +93,7 @@ class MediaControllerTiny extends JControllerLegacy
 		{
 			// File size exceed either 'upload_max_filesize' or 'upload_maxsize'.
 			echo new JResponseJson(new Exception(JText::_('COM_MEDIA_ERROR_WARNFILETOOLARGE')));
-			$this->app->close();
+			$app->close();
 		}
 		if (JFile::exists($files['filepath']))
 		{
@@ -114,7 +108,7 @@ class MediaControllerTiny extends JControllerLegacy
 				*/
 				JFile::delete($files['filepath']);
 				echo new JResponseJson(new Exception(JText::_('COM_MEDIA_ERROR_FILE_EXISTS_OVERWRITE')));
-				$this->app->close();
+				$app->close();
 			}
 			else
 			{
@@ -124,14 +118,14 @@ class MediaControllerTiny extends JControllerLegacy
 				* or the user is not authorised to delete files.
 				*/
 				echo new JResponseJson(new Exception(JText::_('COM_MEDIA_ERROR_FILE_EXISTS')));
-				$this->app->close();
+				$app->close();
 			}
 		}
 		if (!isset($files['name']))
 		{
 			// No filename (after the name was cleaned by JFile::makeSafe)
 			echo new JResponseJson(new Exception(JText::_('COM_MEDIA_INVALID_REQUEST')));
-			$this->app->close();
+			$app->close();
 		}
 		// Enable uploading filenames with alphanumeric and spaces
 		$fileparts = pathinfo($files['filepath']);
@@ -157,6 +151,6 @@ class MediaControllerTiny extends JControllerLegacy
 		);
 
 		echo $json;
-		JFactory::getApplication()->close();
+		$app->close();
 	}
 }
