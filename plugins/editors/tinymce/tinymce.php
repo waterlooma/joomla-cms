@@ -998,15 +998,11 @@ class PlgEditorTinymce extends JPlugin
 			);
 		}
 
+		// tinyMCE Drag and Drop
 		$scriptInit = "
-							////////////// Drag and Drop
 					paste_data_images: true,
 					setup : function(ed) {
 						ed.on('drop', function(e) {
-//							console.log(e);
-//							console.log(e.dataTransfer.files);
-//							console.log('the content '+ed.getContent());
-//							alert('dragdrop' + e.dataTransfer.files);
 							var names= [];
 							jQuery('<div id=\"jloader\" />').css({
 								position: 'absolute',
@@ -1032,8 +1028,8 @@ class PlgEditorTinymce extends JPlugin
 
 		$path = 'banners';
 		$url = JUri::base() . 'index.php?option=com_media&task=tiny.upload&' . JSession::getFormToken() . '=1';
+		// AJAX upload code
 		$scriptFunc = "
-				////// AJAX upload
 				function UploadFile(file) {
 					var fd = new FormData();
 					fd.append('tinyFiles', file);
@@ -1048,14 +1044,10 @@ class PlgEditorTinymce extends JPlugin
 					xhr.onload = function() {
 						if (this.status == 200) {
 							var resp = JSON.parse(this.response);
-
-							console.log('Server got:', resp);
-
 							var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
 							newNode.src= resp.dataUrl;  // add src attribute
 							tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
 							tinyMCE.execCommand('mceRepaint');
-
 							jQuery('#jloader').remove();
 						};
 					};
