@@ -1052,6 +1052,12 @@ class PlgEditorTinymce extends JPlugin
 						if (this.status == 200) {
 							var resp = JSON.parse(this.response);
 							if (resp.status == 0) {
+								if (resp.dataUrl) {
+									var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
+									newNode.src= resp.dataUrl;  // add src attribute
+									tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
+									tinyMCE.execCommand('mceRepaint');
+								}
 								jQuery('#jloader').remove();
 								jQuery('<div id=\"error\" />').css({
 									position: 'absolute',
@@ -1072,10 +1078,10 @@ class PlgEditorTinymce extends JPlugin
 								newNode.src= resp.dataUrl;  // add src attribute
 								tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
 								tinyMCE.execCommand('mceRepaint');
-								setTimeout(function(){ jQuery('#jloader').remove(); }, 1000);
+								setTimeout(function(){ jQuery('#jloader').remove(); }, 500);
 							}
 						} else {
-							setTimeout(function(){ jQuery('#jloader').remove(); }, 1000);
+							setTimeout(function(){ jQuery('#jloader').remove(); }, 500);
 						}
 					};
 					xhr.send(fd);
