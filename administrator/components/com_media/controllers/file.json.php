@@ -95,7 +95,7 @@ class MediaControllerFile extends JControllerLegacy
 
 			$filepath = ($returnUrl == 1) ? JPath::clean($files['final']) : JPath::clean($file['name']);
 
-			if (!JHelperMedia::canUpload($file, 'com_media'))
+			if (!$mediaHelper->canUpload($file, 'com_media'))
 			{
 				JLog::add(JText::_('JLIB_APPLICATION_ERROR_CREATE_NOT_PERMITTED'), JLog::INFO, 'upload');
 
