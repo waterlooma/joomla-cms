@@ -1000,9 +1000,11 @@ class PlgEditorTinymce extends JPlugin
 		}
 
 		// Get specific path
-		if (!empty($this->params->get('path')))
+		$tempPath = $this->params->get('path', 1);
+
+		if (!empty($tempPath))
 		{
-			$path = $this->params->get('path');
+			$path = $tempPath;
 		}
 
 		// Enable Drag and Drop
