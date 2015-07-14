@@ -987,7 +987,7 @@ class PlgEditorTinymce extends JPlugin
 		$path       = '';
 		$user       = JFactory::getUser();
 		$session    = JFactory::getSession();
-		$url        = JUri::base() . 'index.php?option=com_media&task=tiny.upload&' . JSession::getFormToken() . '=1';
+		$url        = JUri::base() . 'index.php?option=com_media&task=file.upload&' . JSession::getFormToken() . '=1&format=json';
 
 		// Authorize the user
 		if (!$user->authorise('core.create', 'com_media'))
@@ -1038,11 +1038,12 @@ class PlgEditorTinymce extends JPlugin
 		$scriptFunc = "
 				function UploadFile(file) {
 					var fd = new FormData();
-					fd.append('tinyFiles', file);
+					fd.append('Filedata', file);
 					fd.append('sessionName', '" . $session->getName() . "');
 					fd.append('sessionId', '" . $session->getId() . "');
 					fd.append('author', '" . $user->id . "');
-					fd.append('path', '" . $path . "');
+					fd.append('folder', '" . $path . "');
+					fd.append('relPath', 1);
 
 					var xhr = new XMLHttpRequest();
 					xhr.open('POST', '$url', true);
