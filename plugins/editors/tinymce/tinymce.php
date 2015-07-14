@@ -1043,7 +1043,7 @@ class PlgEditorTinymce extends JPlugin
 					fd.append('sessionId', '" . $session->getId() . "');
 					fd.append('author', '" . $user->id . "');
 					fd.append('folder', '" . $path . "');
-					fd.append('relPath', 1);
+					fd.append('returnUrl', 1);
 
 					var xhr = new XMLHttpRequest();
 					xhr.open('POST', '$url', true);
