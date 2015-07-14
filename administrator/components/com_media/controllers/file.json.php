@@ -91,6 +91,7 @@ class MediaControllerFile extends JControllerLegacy
 				$safeFileName = preg_replace(array("/[\\s]/", "/[^a-zA-Z0-9_]/"), array("_", ""), $fileparts['filename']) . '.' . strtolower($fileparts['extension']);
 				// Create filepath with safe-filename
 				$files['final'] = $fileparts['dirname'] . DIRECTORY_SEPARATOR . $safeFileName;
+				$file['name'] = $safeFileName;
 			}
 
 			$filepath = ($returnUrl == 1) ? JPath::clean($files['final']) : JPath::clean($file['name']);
@@ -135,6 +136,20 @@ class MediaControllerFile extends JControllerLegacy
 			{
 				// File exists
 				JLog::add('File exists: ' . $object_file->filepath . ' by user_id ' . $user->id, JLog::INFO, 'upload');
+
+				// We require the relative path of the image to be returned
+				if ($returnUrl)
+				{
+					$response = array(
+						'status' => '0',
+						'error' => JText::_('COM_MEDIA_ERROR_FILE_EXISTS'),
+						'dataUrl' => str_replace(JPATH_ROOT, '',  $filepath)
+					);
+
+					echo json_encode($response);
+
+					return;
+				}
 
 				$response = array(
 					'status' => '0',
