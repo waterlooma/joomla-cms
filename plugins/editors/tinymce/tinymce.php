@@ -1000,7 +1000,7 @@ class PlgEditorTinymce extends JPlugin
 		}
 
 		// Get specific path
-		$tempPath = $this->params->get('path', 1);
+		$tempPath = $this->params->get('path', '');
 
 		if (!empty($tempPath))
 		{
@@ -1051,12 +1051,32 @@ class PlgEditorTinymce extends JPlugin
 					xhr.onload = function() {
 						if (this.status == 200) {
 							var resp = JSON.parse(this.response);
-							var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
-							newNode.src= resp.dataUrl;  // add src attribute
-							tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
-							tinyMCE.execCommand('mceRepaint');
-							jQuery('#jloader').remove();
-						};
+							if (resp.status == 0) {
+								jQuery('#jloader').remove();
+								jQuery('<div id=\"error\" />').css({
+									position: 'absolute',
+									width: '100%',
+									height: '100%',
+									left: 0,
+									top: 0,
+									opacity: 0.55,
+									zIndex: 1000000,
+									background: 'darkred 50% 50%'
+								}).appendTo(jQuery('.editor').css('position', 'relative'));
+								jQuery('#error').html('<p style=\"margin-top: 30%;margin-left:15%; color:#fff;font-size:3em;\">' + resp.error + '</p>');
+								setTimeout(function(){ jQuery('#error').remove(); }, 2500);
+							}
+							if (resp.status == 1) {
+								jQuery('#jloader').css({background: 'green'});
+								var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
+								newNode.src= resp.dataUrl;  // add src attribute
+								tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
+								tinyMCE.execCommand('mceRepaint');
+								setTimeout(function(){ jQuery('#jloader').remove(); }, 1000);
+							}
+						} else {
+							setTimeout(function(){ jQuery('#jloader').remove(); }, 1000);
+						}
 					};
 					xhr.send(fd);
 				}
