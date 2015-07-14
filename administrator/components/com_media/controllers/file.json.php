@@ -82,7 +82,7 @@ class MediaControllerFile extends JControllerLegacy
 			$err = null;
 
 			// We need a URL safe name
-			if($returnUrl)
+			if ($returnUrl)
 			{
 				$fileparts = pathinfo(COM_MEDIA_BASE . '/' . $folder . '/' . $file['name']);
 				// Transform filename to punycode
@@ -95,7 +95,7 @@ class MediaControllerFile extends JControllerLegacy
 
 			$filepath = ($returnUrl == 1) ? JPath::clean($files['final']) : JPath::clean($file['name']);
 
-			if (!$user->authorise('core.create', 'com_media'))
+			if (!JHelperMedia::canUpload($file, 'com_media'))
 			{
 				JLog::add(JText::_('JLIB_APPLICATION_ERROR_CREATE_NOT_PERMITTED'), JLog::INFO, 'upload');
 
@@ -181,7 +181,7 @@ class MediaControllerFile extends JControllerLegacy
 				JLog::add($folder, JLog::INFO, 'upload');
 
 				// We require the relative path of the image to be returned
-				if($returnUrl)
+				if ($returnUrl)
 				{
 					$response = array(
 						'status' => '1',
