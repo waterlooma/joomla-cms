@@ -146,7 +146,7 @@ class MediaControllerTiny extends JControllerLegacy
 
 		$json = json_encode(
 			array(
-			'dataUrl' => $fileparts['relative'] . '/' . $files['name']
+			'dataUrl' => $fileparts['relative'] . '/' . $safeFileName
 			)
 		);
 
