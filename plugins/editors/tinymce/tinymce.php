@@ -987,10 +987,9 @@ class PlgEditorTinymce extends JPlugin
 		$path       = '';
 		$user       = JFactory::getUser();
 		$session    = JFactory::getSession();
-		$url        = JUri::base() . 'index.php?option=com_media&task=file.upload&' . JSession::getFormToken() . '=1&format=json';
+		$url        = JUri::base() . 'index.php?option=com_media&amp;task=file.upload&amp;' . $session->getName() . '=' . $session->getId() . '&amp;' . JSession::getFormToken() . '=1&amp;view=images&amp;format=json';
 
-		// Authorize the user
-		if (!$user->authorise('core.create', 'com_media'))
+		if (!$user->authorise('core.create', 'com_media') && !$user->authorise('core.manage', 'com_media'))
 		{
 			// User is not authorised so no drag and drop
 			return array(
@@ -1039,11 +1038,7 @@ class PlgEditorTinymce extends JPlugin
 				function UploadFile(file) {
 					var fd = new FormData();
 					fd.append('Filedata', file);
-					fd.append('sessionName', '" . $session->getName() . "');
-					fd.append('sessionId', '" . $session->getId() . "');
-					fd.append('author', '" . $user->id . "');
 					fd.append('folder', '" . $path . "');
-					fd.append('returnUrl', 1);
 
 					jQuery.ajax({
 						url: '$url',

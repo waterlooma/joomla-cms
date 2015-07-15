@@ -46,9 +46,6 @@ class MediaControllerFile extends JControllerLegacy
 		$user  = JFactory::getUser();
 		JLog::addLogger(array('text_file' => 'upload.error.php'), JLog::ALL, array('upload'));
 
-		// Do we need to return the relative path?
-		$returnUrl = (int) $this->input->get('returnUrl');
-
 		// Get some data from the request
 		$file   = $this->input->files->get('Filedata', '', 'array');
 		$folder = $this->input->get('folder', '', 'path');
@@ -79,20 +76,17 @@ class MediaControllerFile extends JControllerLegacy
 		if (isset($file['name']))
 		{
 			// We need a URL safe name
-			if ($returnUrl)
-			{
-				$fileparts = pathinfo(COM_MEDIA_BASE . '/' . $folder . '/' . $file['name']);
-				// Transform filename to punycode
-				$fileparts['filename'] = JStringPunycode::toPunycode($fileparts['filename']);
-				$tempExt = (!empty($fileparts['extension'])) ? strtolower($fileparts['extension']) : '';
-				// Transform filename to punycode, then neglect otherthan non-alphanumeric characters & underscores. Also transform extension to lowercase
-				$safeFileName = preg_replace(array("/[\\s]/", "/[^a-zA-Z0-9_]/"), array("_", ""), $fileparts['filename']) . '.' . $tempExt;
-				// Create filepath with safe-filename
-				$files['final'] = $fileparts['dirname'] . DIRECTORY_SEPARATOR . $safeFileName;
-				$file['name'] = $safeFileName;
-			}
+			$fileparts = pathinfo(COM_MEDIA_BASE . '/' . $folder . '/' . $file['name']);
+			// Transform filename to punycode
+			$fileparts['filename'] = JStringPunycode::toPunycode($fileparts['filename']);
+			$tempExt = (!empty($fileparts['extension'])) ? strtolower($fileparts['extension']) : '';
+			// Transform filename to punycode, then neglect otherthan non-alphanumeric characters & underscores. Also transform extension to lowercase
+			$safeFileName = preg_replace(array("/[\\s]/", "/[^a-zA-Z0-9_]/"), array("_", ""), $fileparts['filename']) . '.' . $tempExt;
+			// Create filepath with safe-filename
+			$files['final'] = $fileparts['dirname'] . DIRECTORY_SEPARATOR . $safeFileName;
+			$file['name'] = $safeFileName;
 
-			$filepath = ($returnUrl == 1) ? JPath::clean($files['final']) : JPath::clean($file['name']);
+			$filepath = JPath::clean($files['final']);
 
 			if (!$mediaHelper->canUpload($file, 'com_media'))
 			{
@@ -100,7 +94,7 @@ class MediaControllerFile extends JControllerLegacy
 
 				$response = array(
 					'status' => '0',
-					'error' => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
+					'error'  => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
 				);
 
 				echo json_encode($response);
@@ -122,7 +116,7 @@ class MediaControllerFile extends JControllerLegacy
 
 				$response = array(
 					'status' => '0',
-					'error' => JText::plural('COM_MEDIA_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors))
+					'error'  => JText::plural('COM_MEDIA_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors))
 				);
 
 				echo json_encode($response);
@@ -135,23 +129,10 @@ class MediaControllerFile extends JControllerLegacy
 				// File exists
 				JLog::add('File exists: ' . $object_file->filepath . ' by user_id ' . $user->id, JLog::INFO, 'upload');
 
-				// We require the relative path of the image to be returned
-				if ($returnUrl)
-				{
-					$response = array(
-						'status' => '0',
-						'error' => JText::_('COM_MEDIA_ERROR_FILE_EXISTS'),
-						'dataUrl' => str_replace(JPATH_ROOT, '',  $filepath)
-					);
-
-					echo json_encode($response);
-
-					return;
-				}
-
 				$response = array(
-					'status' => '0',
-					'error' => JText::_('COM_MEDIA_ERROR_FILE_EXISTS')
+					'status'  => '0',
+					'error'   => JText::_('COM_MEDIA_ERROR_FILE_EXISTS'),
+					'dataUrl' => str_replace(JPATH_ROOT, '',  $filepath)
 				);
 
 				echo json_encode($response);
@@ -165,7 +146,7 @@ class MediaControllerFile extends JControllerLegacy
 
 				$response = array(
 					'status' => '0',
-					'error' => JText::_('COM_MEDIA_ERROR_CREATE_NOT_PERMITTED')
+					'error'  => JText::_('COM_MEDIA_ERROR_CREATE_NOT_PERMITTED')
 				);
 
 				echo json_encode($response);
@@ -180,7 +161,7 @@ class MediaControllerFile extends JControllerLegacy
 
 				$response = array(
 					'status' => '0',
-					'error' => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
+					'error'  => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
 				);
 
 				echo json_encode($response);
@@ -193,23 +174,10 @@ class MediaControllerFile extends JControllerLegacy
 				$dispatcher->trigger('onContentAfterSave', array('com_media.file', &$object_file, true));
 				JLog::add($folder, JLog::INFO, 'upload');
 
-				// We require the relative path of the image to be returned
-				if ($returnUrl)
-				{
-					$response = array(
-						'status' => '1',
-						'error' => JText::_('COM_MEDIA_UPLOAD_COMPLETE'),
-						'dataUrl' => str_replace(JPATH_ROOT, '',  $filepath)
-					);
-
-					echo json_encode($response);
-
-					return;
-				}
-
 				$response = array(
-					'status' => '1',
-					'error' => JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', substr($object_file->filepath, strlen(COM_MEDIA_BASE)))
+					'status'  => '1',
+					'error'   => JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', substr($object_file->filepath, strlen(COM_MEDIA_BASE))),
+					'dataUrl' => str_replace(JPATH_ROOT, '',  $filepath)
 				);
 
 				echo json_encode($response);
