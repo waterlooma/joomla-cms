@@ -1013,17 +1013,20 @@ class PlgEditorTinymce extends JPlugin
 					setup : function(ed) {
 						ed.on('drop', function(e) {
 							for (var i = 0, f; f = e.dataTransfer.files[i]; i++) {
-								jQuery('<div id=\"jloader\" />').css({
-									position: 'absolute',
-									width: '100%',
-									height: '100%',
-									left: 0,
-									top: 0,
-									opacity: 0.55,
-									zIndex: 1000000,
-									background: 'url(/media/jui/img/ajax-loader.gif) #fff no-repeat 50% 50%'
-								}).appendTo(jQuery('.editor').css('position', 'relative'));
-								UploadFile(f);
+								var ext = f.name.split('.').pop().toLowerCase();
+								if (jQuery.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) != -1) {
+									jQuery('<div id=\"jloader\" />').css({
+										position: 'absolute',
+										width: '100%',
+										height: '100%',
+										left: 0,
+										top: 0,
+										opacity: 0.55,
+										zIndex: 1000000,
+										background: 'url(/media/jui/img/ajax-loader.gif) #fff no-repeat 50% 50%'
+									}).appendTo(jQuery('.editor').css('position', 'relative'));
+									UploadFile(f);
+								}
 							}
 							e.preventDefault();
 							return;
@@ -1042,16 +1045,25 @@ class PlgEditorTinymce extends JPlugin
 					fd.append('folder', '" . $path . "');
 					fd.append('returnUrl', 1);
 
-					var xhr = new XMLHttpRequest();
-					xhr.open('POST', '$url', true);
-
-					xhr.onload = function() {
-						if (this.status == 200) {
-							var resp = JSON.parse(this.response);
-							if (resp.status == 0) {
-								if (resp.dataUrl) {
+					jQuery.ajax({
+						url: '$url',
+						dataType: 'json',
+						type: 'post',
+						contentType: 'application/json',
+						enctype: 'multipart/form-data',
+						data: fd,
+						cache: false,
+						contentType: false,
+						processData: false,
+						xhr: function() {
+							var myXhr = jQuery.ajaxSettings.xhr();
+							return myXhr;
+						},
+						success: function(data, myXhr){
+							if (data.status == 0) {
+								if (data.dataUrl) {
 									var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
-									newNode.src= resp.dataUrl;  // add src attribute
+									newNode.src= data.dataUrl;  // add src attribute
 									tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
 									tinyMCE.execCommand('mceRepaint');
 								}
@@ -1066,22 +1078,22 @@ class PlgEditorTinymce extends JPlugin
 									zIndex: 1000000,
 									background: 'darkred 50% 50%'
 								}).appendTo(jQuery('.editor').css('position', 'relative'));
-								jQuery('#error').html('<p style=\"margin-top: 30%;margin-left:15%; color:#fff;font-size:3em;\">' + resp.error + '</p>');
+								jQuery('#error').html('<p style=\"margin-top: 30%;margin-left:15%; color:#fff;font-size:3em;\">' + data.error + '</p>');
 								setTimeout(function(){ jQuery('#error').remove(); }, 500);
 							}
-							if (resp.status == 1) {
+							if (data.status == 1) {
 								jQuery('#jloader').css({background: 'green'});
 								var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
-								newNode.src= resp.dataUrl;  // add src attribute
+								newNode.src= data.dataUrl;  // add src attribute
 								tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
 								tinyMCE.execCommand('mceRepaint');
 								setTimeout(function(){ jQuery('#jloader').remove(); }, 1500);
 							}
-						} else {
+						},
+						error: function( myXhr, errorThrown ){
 							setTimeout(function(){ jQuery('#jloader').remove(); }, 500);
 						}
-					};
-					xhr.send(fd);
+					});
 				}
 		";
 
