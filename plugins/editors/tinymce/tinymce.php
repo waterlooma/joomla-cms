@@ -987,9 +987,12 @@ class PlgEditorTinymce extends JPlugin
 		$path       = '';
 		$user       = JFactory::getUser();
 		$session    = JFactory::getSession();
-		$url        = JUri::base() . 'index.php?option=com_media&amp;task=file.upload&amp;' . $session->getName() . '=' . $session->getId() . '&amp;' . JSession::getFormToken() . '=1&amp;view=images&amp;format=json';
+		$url        = JUri::base() . 'index.php?option=com_media&amp;task=file.upload&amp;tmpl=component&amp;'
+			. $session->getName() . '=' . $session->getId()
+			. '&amp;' . JSession::getFormToken() . '=1'
+			. '&amp;asset=image&amp;format=json';
 
-		if (!$user->authorise('core.create', 'com_media') && !$user->authorise('core.manage', 'com_media'))
+		if (!$user->authorise('core.create', 'com_media'))
 		{
 			// User is not authorised so no drag and drop
 			return array(
