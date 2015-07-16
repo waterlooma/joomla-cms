@@ -985,6 +985,7 @@ class PlgEditorTinymce extends JPlugin
 		$scriptInit = '';
 		$scriptFunc = '';
 		$path       = '';
+		$isSubDir    = '';
 		$user       = JFactory::getUser();
 		$session    = JFactory::getSession();
 		$url        = JUri::base() . 'index.php?option=com_media&task=file.upload&tmpl=component&'
@@ -992,18 +993,24 @@ class PlgEditorTinymce extends JPlugin
 			. '&' . JSession::getFormToken() . '=1'
 			. '&asset=image&format=json';
 
+		// Check if user is authorised for uploads
+		if (!$user->authorise('core.create', 'com_media'))
+		{
+			return array(
+				'scriptInit' => $scriptInit,
+				'scriptFunc' => $scriptFunc,
+			);
+		}
+
 		if (JFactory::getApplication()->isSite())
 		{
 			$url = htmlentities($url, null, 'UTF-8', null);
 		}
 
-		if (!$user->authorise('core.create', 'com_media'))
+		// Is Joomla installed in subdirectory
+		if (JUri::root(true) != '/')
 		{
-			// User is not authorised so no drag and drop
-			return array(
-				'scriptInit' => $scriptInit,
-				'scriptFunc' => $scriptFunc,
-			);
+			$isSubDir = JUri::root(true);
 		}
 
 		// Get specific path
@@ -1046,6 +1053,7 @@ class PlgEditorTinymce extends JPlugin
 		// AJAX upload code
 		$scriptFunc = "
 				function UploadFile(file) {
+					var isSubDir = '" . $isSubDir ."';
 					var fd = new FormData();
 					fd.append('Filedata', file);
 					fd.append('folder', '" . $path . "');
@@ -1068,7 +1076,7 @@ class PlgEditorTinymce extends JPlugin
 							if (data.status == 0) {
 								if (data.dataUrl) {
 									var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
-									newNode.src= data.dataUrl;  // add src attribute
+									newNode.src= isSubDir + data.dataUrl;  // add src attribute
 									tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
 									tinyMCE.execCommand('mceRepaint');
 								}
@@ -1089,7 +1097,7 @@ class PlgEditorTinymce extends JPlugin
 							if (data.status == 1) {
 								jQuery('#jloader').css({background: 'green'});
 								var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
-								newNode.src= data.dataUrl;  // add src attribute
+								newNode.src= isSubDir + data.dataUrl;  // add src attribute
 								tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
 								tinyMCE.execCommand('mceRepaint');
 								setTimeout(function(){ jQuery('#jloader').remove(); }, 1500);
