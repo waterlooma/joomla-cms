@@ -987,10 +987,15 @@ class PlgEditorTinymce extends JPlugin
 		$path       = '';
 		$user       = JFactory::getUser();
 		$session    = JFactory::getSession();
-		$url        = JUri::base() . 'index.php?option=com_media&amp;task=file.upload&amp;tmpl=component&amp;'
+		$url        = JUri::base() . 'index.php?option=com_media&task=file.upload&tmpl=component&'
 			. $session->getName() . '=' . $session->getId()
-			. '&amp;' . JSession::getFormToken() . '=1'
-			. '&amp;asset=image&amp;format=json';
+			. '&' . JSession::getFormToken() . '=1'
+			. '&asset=image&format=json';
+
+		if (JFactory::getApplication()->isSite())
+		{
+			$url = htmlentities($url, null, 'UTF-8', null);
+		}
 
 		if (!$user->authorise('core.create', 'com_media'))
 		{
