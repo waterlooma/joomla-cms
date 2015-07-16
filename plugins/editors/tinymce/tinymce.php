@@ -997,9 +997,9 @@ class PlgEditorTinymce extends JPlugin
 			$url = htmlentities($url, null, 'UTF-8', null);
 		}
 
+		// Check if user is authorised for uploads
 		if (!$user->authorise('core.create', 'com_media'))
 		{
-			// User is not authorised so no drag and drop
 			return array(
 				'scriptInit' => $scriptInit,
 				'scriptFunc' => $scriptFunc,

@@ -174,10 +174,18 @@ class MediaControllerFile extends JControllerLegacy
 				$dispatcher->trigger('onContentAfterSave', array('com_media.file', &$object_file, true));
 				JLog::add($folder, JLog::INFO, 'upload');
 
+				$returnUrl = substr($object_file->filepath, strlen(COM_MEDIA_BASE));
+
+				// Is Joomla installed in subdirectory
+				if (JUri::root(true) != '/')
+				{
+					$returnUrl = JUri::root(true) . $returnUrl;
+				}
+
 				$response = array(
 					'status'  => '1',
-					'error'   => JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', substr($object_file->filepath, strlen(COM_MEDIA_BASE))),
-					'dataUrl' => str_replace(JPATH_ROOT, '',  $filepath)
+					'error'   => JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', $returnUrl),
+					'dataUrl' => $returnUrl
 				);
 
 				echo json_encode($response);
