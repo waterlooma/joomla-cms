@@ -1053,7 +1053,7 @@ class PlgEditorTinymce extends JPlugin
 		// AJAX upload code
 		$scriptFunc = "
 				function UploadFile(file) {
-					var isSubDir = '" . $isSubDir ."';
+					var isSubDir = '" . $isSubDir . "';
 					var fd = new FormData();
 					fd.append('Filedata', file);
 					fd.append('folder', '" . $path . "');
