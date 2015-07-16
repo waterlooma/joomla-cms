@@ -35,7 +35,7 @@ class MediaControllerFile extends JControllerLegacy
 		{
 			$response = array(
 				'status' => '0',
-				'error' => JText::_('JINVALID_TOKEN')
+				'error'  => JText::_('JINVALID_TOKEN')
 			);
 			echo json_encode($response);
 
@@ -60,7 +60,7 @@ class MediaControllerFile extends JControllerLegacy
 		{
 			$response = array(
 				'status' => '0',
-				'error' => JText::_('COM_MEDIA_ERROR_WARNFILETOOLARGE')
+				'error'  => JText::_('COM_MEDIA_ERROR_WARNFILETOOLARGE')
 			);
 			echo json_encode($response);
 
@@ -84,7 +84,7 @@ class MediaControllerFile extends JControllerLegacy
 			$safeFileName = preg_replace(array("/[\\s]/", "/[^a-zA-Z0-9_]/"), array("_", ""), $fileparts['filename']) . '.' . $tempExt;
 			// Create filepath with safe-filename
 			$files['final'] = $fileparts['dirname'] . DIRECTORY_SEPARATOR . $safeFileName;
-			$file['name'] = $safeFileName;
+			$file['name']   = $safeFileName;
 
 			$filepath = JPath::clean($files['final']);
 
@@ -189,7 +189,7 @@ class MediaControllerFile extends JControllerLegacy
 		{
 			$response = array(
 				'status' => '0',
-				'error' => JText::_('COM_MEDIA_ERROR_BAD_REQUEST')
+				'error'  => JText::_('COM_MEDIA_ERROR_BAD_REQUEST')
 			);
 
 			echo json_encode($response);

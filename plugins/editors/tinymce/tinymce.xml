@@ -71,7 +71,7 @@
 					showon="drag_drop:1"
 					description="PLG_TINY_FIELD_CUSTOM_PATH_DESC"
 					label="PLG_TINY_FIELD_CUSTOM_PATH_LABEL"
-						/>
+				/>
 
 				<field name="entity_encoding" type="list"
 					default="raw"
