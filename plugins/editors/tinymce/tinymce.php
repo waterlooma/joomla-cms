@@ -1011,6 +1011,8 @@ class PlgEditorTinymce extends JPlugin
 
 		if (!empty($tempPath))
 		{
+			$tempPath = rtrim($tempPath, '/');
+			$tempPath = ltrim($tempPath, '/');
 			$path = $tempPath;
 		}
 
