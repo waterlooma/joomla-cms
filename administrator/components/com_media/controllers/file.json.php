@@ -174,7 +174,7 @@ class MediaControllerFile extends JControllerLegacy
 				$dispatcher->trigger('onContentAfterSave', array('com_media.file', &$object_file, true));
 				JLog::add($folder, JLog::INFO, 'upload');
 
-				$returnUrl = substr($object_file->filepath, strlen(COM_MEDIA_BASE));
+				$returnUrl = str_replace(JPATH_ROOT, '',  $filepath);
 
 				$response = array(
 					'status'  => '1',

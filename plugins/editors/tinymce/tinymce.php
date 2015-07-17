@@ -687,7 +687,7 @@ class PlgEditorTinymce extends JPlugin
 						// Layout
 						$content_css
 						document_base_url : \"" . JUri::root() . "\",
-					$scriptInit
+						$scriptInit
 				});
 				$scriptFunc
 				</script>";
