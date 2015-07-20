@@ -1029,6 +1029,7 @@ class PlgEditorTinymce extends JPlugin
 					setup : function(ed) {
 						if (typeof FormData != 'undefined'){
 							ed.on('dreagenter', function(e) {
+								e.stopPropagation();
 								return false;
 							});
 							ed.on('dragover', function(e) {
@@ -1063,6 +1064,11 @@ class PlgEditorTinymce extends JPlugin
 
 		// AJAX upload code
 		$scriptFunc = "
+				tinyMCE.DOM.bind(document, 'dragleave', function(e) {
+					e.stopPropagation();
+					e.preventDefault();
+					tinyMCE.activeEditor.contentAreaContainer.style.borderWidth='1px';
+				});
 				function UploadFile(file) {
 					var isSubDir = '" . $isSubDir . "';
 					var fd = new FormData();
