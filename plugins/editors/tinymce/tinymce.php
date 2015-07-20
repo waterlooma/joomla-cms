@@ -1027,26 +1027,37 @@ class PlgEditorTinymce extends JPlugin
 		$scriptInit = "
 					paste_data_images: true,
 					setup : function(ed) {
-						ed.on('drop', function(e) {
-							for (var i = 0, f; f = e.dataTransfer.files[i]; i++) {
-								var ext = f.name.split('.').pop().toLowerCase();
-								if (jQuery.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) != -1) {
-									jQuery('<div id=\"jloader\" />').css({
-										position: 'absolute',
-										width: '100%',
-										height: '100%',
-										left: 0,
-										top: 0,
-										opacity: 0.55,
-										zIndex: 1000000,
-										background: 'url(/media/jui/img/ajax-loader.gif) #fff no-repeat 50% 50%'
-									}).appendTo(jQuery('.editor').css('position', 'relative'));
-									UploadFile(f);
+						if (typeof FormData != 'undefined'){
+							ed.on('dreagenter', function(e) {
+								return false;
+							});
+							ed.on('dragover', function(e) {
+								e.preventDefault();
+								ed.contentAreaContainer.style.borderWidth='15px';
+								return false;
+							});
+							ed.on('drop', function(e) {
+								for (var i = 0, f; f = e.dataTransfer.files[i]; i++) {
+									var ext = f.name.split('.').pop().toLowerCase();
+									if (jQuery.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) != -1) {
+										jQuery('<div id=\"jloader\" />').css({
+											position: 'absolute',
+											width: '100%',
+											height: '100%',
+											left: 0,
+											top: 0,
+											opacity: 0.55,
+											zIndex: 1000000,
+											background: 'url(/media/jui/img/ajax-loader.gif) #fff no-repeat 50% 50%'
+										}).appendTo(jQuery('.editor').css('position', 'relative'));
+										UploadFile(f);
+									}
 								}
-							}
-							e.preventDefault();
-							return;
-						});
+								e.preventDefault();
+								ed.contentAreaContainer.style.borderWidth='1px';
+								return;
+							});
+						}
 					}
 			";
 
@@ -1060,9 +1071,7 @@ class PlgEditorTinymce extends JPlugin
 
 					jQuery.ajax({
 						url: '$url',
-						dataType: 'json',
 						type: 'post',
-						contentType: 'application/json',
 						enctype: 'multipart/form-data',
 						data: fd,
 						cache: false,
