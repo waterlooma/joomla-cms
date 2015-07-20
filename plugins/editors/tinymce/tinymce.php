@@ -1055,7 +1055,7 @@ class PlgEditorTinymce extends JPlugin
 									}
 								}
 								e.preventDefault();
-								ed.contentAreaContainer.style.borderWidth='1px';
+								ed.contentAreaContainer.style.borderWidth='';
 								return;
 							});
 						}
@@ -1067,9 +1067,10 @@ class PlgEditorTinymce extends JPlugin
 				tinyMCE.DOM.bind(document, 'dragleave', function(e) {
 					e.stopPropagation();
 					e.preventDefault();
-					tinyMCE.activeEditor.contentAreaContainer.style.borderWidth='1px';
+					tinyMCE.activeEditor.contentAreaContainer.style.borderWidth='';
 				});
 				function UploadFile(file) {
+					var errorMsgs = [];
 					var isSubDir = '" . $isSubDir . "';
 					var fd = new FormData();
 					fd.append('Filedata', file);
@@ -1083,44 +1084,33 @@ class PlgEditorTinymce extends JPlugin
 						cache: false,
 						contentType: false,
 						processData: false,
-						xhr: function() {
-							var myXhr = jQuery.ajaxSettings.xhr();
-							return myXhr;
-						},
 						success: function(data, myXhr){
 							if (data.status == 0) {
 								if (data.dataUrl) {
-									var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
-									newNode.src= isSubDir + data.dataUrl;  // add src attribute
-									tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
-									tinyMCE.execCommand('mceRepaint');
+									errorMsgs.push(data.error + ': ' + data.dataUrl);
 								}
-								jQuery('#jloader').remove();
-								jQuery('<div id=\"error\" />').css({
-									position: 'absolute',
-									width: '100%',
-									height: '100%',
-									left: 0,
-									top: 0,
-									opacity: 0.55,
-									zIndex: 1000000,
-									background: 'darkred 50% 50%'
-								}).appendTo(jQuery('.editor').css('position', 'relative'));
-								jQuery('#error').html('<p style=\"margin-top: 30%;margin-left:15%; color:#fff;font-size:3em;\">' + data.error + '</p>');
-								setTimeout(function(){ jQuery('#error').remove(); }, 500);
+								setTimeout(function(){ jQuery('#jloader').remove(); }, 500);
 							}
 							if (data.status == 1) {
-								jQuery('#jloader').css({background: 'green'});
 								var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
 								newNode.src= isSubDir + data.dataUrl;  // add src attribute
 								tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
 								tinyMCE.execCommand('mceRepaint');
-								setTimeout(function(){ jQuery('#jloader').remove(); }, 1500);
+								setTimeout(function(){ jQuery('#jloader').remove(); }, 500);
 							}
 						},
 						error: function( myXhr, errorThrown ){
 							setTimeout(function(){ jQuery('#jloader').remove(); }, 500);
 						}
+					});
+
+					jQuery(document).ajaxStop(function($) {
+						errorMsgs.reduce(function(prev, cur) {
+							return (prev.indexOf(cur) < 0) ? prev.concat([cur]) : prev;
+						 }, []);
+
+						Joomla.renderMessages({'error': errorMsgs});
+						setTimeout(function(){ Joomla.removeMessages(); }, 4000);
 					});
 				}
 		";
