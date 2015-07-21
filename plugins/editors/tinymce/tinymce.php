@@ -1109,8 +1109,10 @@ class PlgEditorTinymce extends JPlugin
 							return (prev.indexOf(cur) < 0) ? prev.concat([cur]) : prev;
 						 }, []);
 
-						Joomla.renderMessages({'error': errorMsgs});
-						setTimeout(function(){ Joomla.removeMessages(); }, 4000);
+						if (errorMsgs.length > 0) {
+							Joomla.renderMessages({'error': errorMsgs});
+							setTimeout(function(){ Joomla.removeMessages(); }, 4000);
+						}
 					});
 				}
 		";
