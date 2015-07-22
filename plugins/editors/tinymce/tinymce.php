@@ -1058,6 +1058,13 @@ class PlgEditorTinymce extends JPlugin
 								ed.contentAreaContainer.style.borderWidth='';
 								return;
 							});
+						} else {
+							Joomla.renderMessages({'error': ['" . JText::_('PLG_TINY_ERR_UNSUPPORTEDBROWSER') . "']});
+							setTimeout(function(){ Joomla.removeMessages(); }, 4000);
+							ed.on('drop', function(e) {
+								e.preventDefault();
+								return;
+							});
 						}
 					}
 			";
