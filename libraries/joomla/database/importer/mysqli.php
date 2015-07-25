@@ -68,9 +68,12 @@ class JDatabaseImporterMysqli extends JDatabaseImporter
 			$createTableStatement .= $this->getColumnSQL($field) . ', ';
 		}
 
-		foreach ($table->xpath('key') as $key)
+		$newLookup = $this->getKeyLookup($table->xpath('key'));
+
+		// Loop through each key in the new structure.
+		foreach ($newLookup as $key)
 		{
-			$createTableStatement .= $this->getKeySQL(array($key)) . ', ';
+			$createTableStatement .= $this->getKeySQL($key) . ', ';
 		}
 
 		// Remove the comma after the last key
