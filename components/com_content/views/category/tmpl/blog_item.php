@@ -44,8 +44,8 @@ $info    = $params->get('info_block_position', 0);
 <?php if (!$params->get('show_intro')) :
 	echo $this->item->event->afterDisplayTitle;
 else :
-    echo $this->item->event->beforeDisplayContent;
-    echo $this->item->introtext;
+	echo $this->item->event->beforeDisplayContent;
+	echo $this->item->introtext;
 endif; ?>
 
 <?php if ($useDefList && ($info == 1 || $info == 2)) : ?>
