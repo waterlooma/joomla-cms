@@ -16,6 +16,21 @@ $options = array(
 );
 $published = $this->state->get('filter.published');
 $extension = $this->escape($this->state->get('filter.extension'));
+
+JFactory::getDocument()->addScriptDeclaration(
+	'
+		jQuery(document).ready(function($){
+			$("#batch-copy-move").css("display", "none");
+			$("#batch-category-id").on("change", function(){
+				if ($("#batch-category-id").val() != 0 || $("#batch-category-id").val() != "") {
+					$("#batch-copy-move").css("display", "block");
+				} else {
+					$("#batch-copy-move").css("display", "none");
+				}
+			});
+		});
+			'
+);
 ?>
 
 <p><?php echo JText::_('COM_CATEGORIES_BATCH_TIP'); ?></p>
@@ -45,7 +60,7 @@ $extension = $this->escape($this->state->get('filter.extension'));
 					</select>
 				</div>
 			</div>
-			<div class="control-group radio">
+			<div id="batch-copy-move" class="control-group radio">
 				<?php echo JHtml::_('select.radiolist', $options, 'batch[move_copy]', '', 'value', 'text', 'm'); ?>
 			</div>
 		</div>
