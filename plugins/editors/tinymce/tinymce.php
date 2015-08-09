@@ -532,7 +532,7 @@ class PlgEditorTinymce extends JPlugin
 						}
 
 						$templates .= '{title: \'' . $title . '\', description: \'' . $description . '\', url:\''
-									. JUri::root() . 'media/editors/tinymce/templates/' . $filename . '.html\'},';
+							. JUri::root() . 'media/editors/tinymce/templates/' . $filename . '.html\'},';
 					}
 				}
 
@@ -612,15 +612,51 @@ class PlgEditorTinymce extends JPlugin
 		}
 
 		// Drag and drop Images
+		$allowImgPaste = "false";
+		$dragDropPlg = '';
 		$dragdrop   = $this->params->get('drag_drop', 1);
-		$scriptFunc = '';
-		$scriptInit = '';
+		$user       = JFactory::getUser();
 
-		if ($dragdrop)
+		if ($dragdrop && $user->authorise('core.create', 'com_media'))
 		{
-			$ddTemp = $this->dragAndDrop();
-			$scriptFunc = $ddTemp['scriptFunc'];
-			$scriptInit = $ddTemp['scriptInit'];
+			$allowImgPaste = "true";
+			$isSubDir    = '';
+			$session    = JFactory::getSession();
+			$uploadUrl        = JUri::base() . 'index.php?option=com_media&task=file.upload&tmpl=component&'
+				. $session->getName() . '=' . $session->getId()
+				. '&' . JSession::getFormToken() . '=1'
+				. '&asset=image&format=json';
+
+			if (JFactory::getApplication()->isSite())
+			{
+				$uploadUrl = htmlentities($uploadUrl, null, 'UTF-8', null);
+			}
+
+			// Is Joomla installed in subdirectory
+			if (JUri::root(true) != '/')
+			{
+				$isSubDir = JUri::root(true);
+			}
+
+			// Get specific path
+			$tempPath = $this->params->get('path', '');
+
+			if (!empty($tempPath))
+			{
+				$tempPath = rtrim($tempPath, '/');
+				$tempPath = ltrim($tempPath, '/');
+			}
+
+			$dragDropPlg = 'jdragdrop';
+			JFactory::getDocument()->addScriptDeclaration(
+				"
+		var setCustomDir    = '" . $isSubDir . "';
+		var mediaUploadPath = '" . $tempPath . "';
+		var uploadUri       = '" . $uploadUrl . "';
+				"
+			);
+
+			JText::script('PLG_TINY_ERR_UNSUPPORTEDBROWSER');
 		}
 
 		// Prepare config variables
@@ -636,9 +672,7 @@ class PlgEditorTinymce extends JPlugin
 		// See if mobileVersion is activated
 		$mobileVersion = $this->params->get('mobile', 0);
 
-		$load = "\t<script type=\"text/javascript\" src=\"" .
-			JUri::root() . $this->_basePath .
-			"/tinymce.min.js\"></script>\n";
+		JHtml::script($this->_basePath . '/tinymce.min.js', false, false, false, false, false);
 
 		/**
 		 * Shrink the buttons if not on a mobile or if mobile view is off.
@@ -661,153 +695,154 @@ class PlgEditorTinymce extends JPlugin
 		switch ($mode)
 		{
 			case 0: /* Simple mode*/
-				$return = $load .
-					"\t<script type=\"text/javascript\">
-					tinymce.init({
-						// General
-						directionality: \"$text_direction\",
-						selector: \"textarea.mce_editable\",
-						language : \"$langPrefix\",
-						mode : \"specific_textareas\",
-						autosave_restore_when_empty: false,
-						$skin
-						theme : \"$theme\",
-						schema: \"html5\",
-						menubar: false,
-						toolbar1: \"bold italics underline strikethrough | undo redo | bullist numlist\",
-						// Cleanup/Output
-						inline_styles : true,
-						gecko_spellcheck : true,
-						entity_encoding : \"$entity_encoding\",
-						$forcenewline
-						$smallButtons
-						// URL
-						relative_urls : $relative_urls,
-						remove_script_host : false,
-						// Layout
-						$content_css
-						document_base_url : \"" . JUri::root() . "\",
-						$scriptInit
-				});
-				$scriptFunc
-				</script>";
+				JFactory::getDocument()->addScriptDeclaration(
+					"
+		tinymce.init({
+			// General
+			directionality: \"$text_direction\",
+			selector: \"textarea.mce_editable\",
+			language : \"$langPrefix\",
+			mode : \"specific_textareas\",
+			autosave_restore_when_empty: false,
+			$skin
+			theme : \"$theme\",
+			schema: \"html5\",
+			menubar: false,
+			toolbar1: \"bold italics underline strikethrough | undo redo | bullist numlist\",
+			plugins: \"$dragDropPlg code\",
+			// Cleanup/Output
+			inline_styles : true,
+			gecko_spellcheck : true,
+			entity_encoding : \"$entity_encoding\",
+			$forcenewline
+			$smallButtons
+			// URL
+			relative_urls : $relative_urls,
+			remove_script_host : false,
+			// Layout
+			$content_css
+			document_base_url : \"" . JUri::root() . "\",
+			paste_data_images: $allowImgPaste
+		});
+		"
+				);
 				break;
 
 			case 1:
 			default: /* Advanced mode*/
 				$toolbar1 = "bold italic underline strikethrough | alignleft aligncenter alignright alignjustify | formatselect | bullist numlist";
-				$toolbar2 = "outdent indent | undo redo | link unlink anchor image code | hr table | subscript superscript | charmap";
-				$return = $load .
-					"\t<script type=\"text/javascript\">
-				tinyMCE.init({
-					// General
-					directionality: \"$text_direction\",
-					language : \"$langPrefix\",
-					mode : \"specific_textareas\",
-					autosave_restore_when_empty: false,
-					$skin
-					theme : \"$theme\",
-					schema: \"html5\",
-					selector: \"textarea.mce_editable\",
-					// Cleanup/Output
-					inline_styles : true,
-					gecko_spellcheck : true,
-					entity_encoding : \"$entity_encoding\",
-					valid_elements : \"$valid_elements\",
-					extended_valid_elements : \"$elements\",
-					$forcenewline
-					$smallButtons
-					invalid_elements : \"$invalid_elements\",
-					// Plugins
-					plugins : \"table link image code hr charmap autolink lists importcss\",
-					// Toolbar
-					toolbar1: \"$toolbar1\",
-					toolbar2: \"$toolbar2\",
-					removed_menuitems: \"newdocument\",
-					// URL
-					relative_urls : $relative_urls,
-					remove_script_host : false,
-					document_base_url : \"" . JUri::root() . "\",
-					// Layout
-					$content_css
-					importcss_append: true,
-					// Advanced Options
-					$resizing
-					height : \"$html_height\",
-					width : \"$html_width\",
-					$scriptInit
-				});
-				$scriptFunc
-				</script>";
+				$toolbar2 = "outdent indent | undo redo | link unlink anchor image | hr table | subscript superscript | charmap";
+				JFactory::getDocument()->addScriptDeclaration(
+					"
+		tinyMCE.init({
+			// General
+			directionality: \"$text_direction\",
+			language : \"$langPrefix\",
+			mode : \"specific_textareas\",
+			autosave_restore_when_empty: false,
+			$skin
+			theme : \"$theme\",
+			schema: \"html5\",
+			selector: \"textarea.mce_editable\",
+			// Cleanup/Output
+			inline_styles : true,
+			gecko_spellcheck : true,
+			entity_encoding : \"$entity_encoding\",
+			valid_elements : \"$valid_elements\",
+			extended_valid_elements : \"$elements\",
+			$forcenewline
+			$smallButtons
+			invalid_elements : \"$invalid_elements\",
+			// Plugins
+			plugins : \"table link image code hr charmap autolink lists importcss $dragDropPlg\",
+			// Toolbar
+			toolbar1: \"$toolbar1\",
+			toolbar2: \"$toolbar2\",
+			removed_menuitems: \"newdocument\",
+			// URL
+			relative_urls : $relative_urls,
+			remove_script_host : false,
+			document_base_url : \"" . JUri::root() . "\",
+			// Layout
+			$content_css
+			importcss_append: true,
+			// Advanced Options
+			$resizing
+			height : \"$html_height\",
+			width : \"$html_width\",
+			paste_data_images: $allowImgPaste
+		});
+			"
+				);
 				break;
 
 			case 2: /* Extended mode*/
-				$return = $load .
-					"\t<script type=\"text/javascript\">
-				tinyMCE.init({
-					// General
-					directionality: \"$text_direction\",
-					language : \"$langPrefix\",
-					mode : \"specific_textareas\",
-					autosave_restore_when_empty: false,
-					$skin
-					theme : \"$theme\",
-					schema: \"html5\",
-					selector: \"textarea.mce_editable\",
-					// Cleanup/Output
-					inline_styles : true,
-					gecko_spellcheck : true,
-					entity_encoding : \"$entity_encoding\",
-					valid_elements : \"$valid_elements\",
-					extended_valid_elements : \"$elements\",
-					$forcenewline
-					$smallButtons
-					invalid_elements : \"$invalid_elements\",
-					// Plugins
-					plugins : \"$plugins\",
-					// Toolbar
-					toolbar1: \"$toolbar1\",
-					toolbar2: \"$toolbar2\",
-					toolbar3: \"$toolbar3\",
-					toolbar4: \"$toolbar4\",
-					removed_menuitems: \"newdocument\",
-					// URL
-					relative_urls : $relative_urls,
-					remove_script_host : false,
-					document_base_url : \"" . JUri::root() . "\",
-					rel_list : [
-						{title: 'Alternate', value: 'alternate'},
-						{title: 'Author', value: 'author'},
-						{title: 'Bookmark', value: 'bookmark'},
-						{title: 'Help', value: 'help'},
-						{title: 'License', value: 'license'},
-						{title: 'Lightbox', value: 'lightbox'},
-						{title: 'Next', value: 'next'},
-						{title: 'No Follow', value: 'nofollow'},
-						{title: 'No Referrer', value: 'noreferrer'},
-						{title: 'Prefetch', value: 'prefetch'},
-						{title: 'Prev', value: 'prev'},
-						{title: 'Search', value: 'search'},
-						{title: 'Tag', value: 'tag'}
-					],
-					//Templates
-					" . $templates . "
-					// Layout
-					$content_css
-					importcss_append: true,
-					// Advanced Options
-					$resizing
-					image_advtab: $image_advtab,
-					height : \"$html_height\",
-					width : \"$html_width\",
-					$scriptInit
-				});
-				$scriptFunc
-				</script>";
+				JFactory::getDocument()->addScriptDeclaration(
+					"
+		tinyMCE.init({
+			// General
+			directionality: \"$text_direction\",
+			language : \"$langPrefix\",
+			mode : \"specific_textareas\",
+			autosave_restore_when_empty: false,
+			$skin
+			theme : \"$theme\",
+			schema: \"html5\",
+			selector: \"textarea.mce_editable\",
+			// Cleanup/Output
+			inline_styles : true,
+			gecko_spellcheck : true,
+			entity_encoding : \"$entity_encoding\",
+			valid_elements : \"$valid_elements\",
+			extended_valid_elements : \"$elements\",
+			$forcenewline
+			$smallButtons
+			invalid_elements : \"$invalid_elements\",
+			// Plugins
+			plugins : \"$plugins $dragDropPlg\",
+			// Toolbar
+			toolbar1: \"$toolbar1\",
+			toolbar2: \"$toolbar2\",
+			toolbar3: \"$toolbar3\",
+			toolbar4: \"$toolbar4\",
+			removed_menuitems: \"newdocument\",
+			// URL
+			relative_urls : $relative_urls,
+			remove_script_host : false,
+			document_base_url : \"" . JUri::root() . "\",
+			rel_list : [
+				{title: 'Alternate', value: 'alternate'},
+				{title: 'Author', value: 'author'},
+				{title: 'Bookmark', value: 'bookmark'},
+				{title: 'Help', value: 'help'},
+				{title: 'License', value: 'license'},
+				{title: 'Lightbox', value: 'lightbox'},
+				{title: 'Next', value: 'next'},
+				{title: 'No Follow', value: 'nofollow'},
+				{title: 'No Referrer', value: 'noreferrer'},
+				{title: 'Prefetch', value: 'prefetch'},
+				{title: 'Prev', value: 'prev'},
+				{title: 'Search', value: 'search'},
+				{title: 'Tag', value: 'tag'}
+			],
+			//Templates
+			" . $templates . "
+			// Layout
+			$content_css
+			importcss_append: true,
+			// Advanced Options
+			$resizing
+			image_advtab: $image_advtab,
+			height : \"$html_height\",
+			width : \"$html_width\",
+			paste_data_images: $allowImgPaste
+		});
+		"
+				);
 				break;
 		}
 
-		return $return;
+		return;
 	}
 
 	/**
@@ -852,20 +887,22 @@ class PlgEditorTinymce extends JPlugin
 	 *
 	 * @param   string  $name  The name of the editor
 	 *
-	 * @return  boolean
+	 * @return  void
+	 *
+	 * @deprecated 3.5 tinyMCE (API v4) will get the content automatically from the text area
 	 */
 	public function onGetInsertMethod($name)
 	{
 		JFactory::getDocument()->addScriptDeclaration(
 			"
-			function jInsertEditorText( text, editor )
-			{
-				tinyMCE.execCommand('mceInsertContent', false, text);
-			}
+		function jInsertEditorText( text, editor )
+		{
+			tinyMCE.activeEditor.execCommand('mceInsertContent', false, text);
+		}
 			"
 		);
 
-		return true;
+		return;
 	}
 
 	/**
@@ -973,160 +1010,5 @@ class PlgEditorTinymce extends JPlugin
 	private function _toogleButton($name)
 	{
 		return JLayoutHelper::render('joomla.tinymce.togglebutton', $name);
-	}
-
-	/**
-	 * Enable drag and drop images
-	 *
-	 * @return  array
-	 */
-	private function dragAndDrop()
-	{
-		$scriptInit = '';
-		$scriptFunc = '';
-		$path       = '';
-		$isSubDir    = '';
-		$user       = JFactory::getUser();
-		$session    = JFactory::getSession();
-		$url        = JUri::base() . 'index.php?option=com_media&task=file.upload&tmpl=component&'
-			. $session->getName() . '=' . $session->getId()
-			. '&' . JSession::getFormToken() . '=1'
-			. '&asset=image&format=json';
-
-		// Check if user is authorised for uploads
-		if (!$user->authorise('core.create', 'com_media'))
-		{
-			return array(
-				'scriptInit' => $scriptInit,
-				'scriptFunc' => $scriptFunc,
-			);
-		}
-
-		if (JFactory::getApplication()->isSite())
-		{
-			$url = htmlentities($url, null, 'UTF-8', null);
-		}
-
-		// Is Joomla installed in subdirectory
-		if (JUri::root(true) != '/')
-		{
-			$isSubDir = JUri::root(true);
-		}
-
-		// Get specific path
-		$tempPath = $this->params->get('path', '');
-
-		if (!empty($tempPath))
-		{
-			$tempPath = rtrim($tempPath, '/');
-			$tempPath = ltrim($tempPath, '/');
-			$path = $tempPath;
-		}
-
-		// Enable Drag and Drop
-		$scriptInit = "
-					paste_data_images: true,
-					setup : function(ed) {
-						if (typeof FormData != 'undefined'){
-							ed.on('dreagenter', function(e) {
-								e.stopPropagation();
-								return false;
-							});
-							ed.on('dragover', function(e) {
-								e.preventDefault();
-								ed.contentAreaContainer.style.borderWidth='15px';
-								return false;
-							});
-							ed.on('drop', function(e) {
-								for (var i = 0, f; f = e.dataTransfer.files[i]; i++) {
-									var ext = f.name.split('.').pop().toLowerCase();
-									if (jQuery.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) != -1) {
-										jQuery('<div id=\"jloader\" />').css({
-											position: 'absolute',
-											width: '100%',
-											height: '100%',
-											left: 0,
-											top: 0,
-											opacity: 0.55,
-											zIndex: 1000000,
-											background: 'url(/media/jui/img/ajax-loader.gif) #fff no-repeat 50% 50%'
-										}).appendTo(jQuery('.editor').css('position', 'relative'));
-										UploadFile(f);
-									}
-								}
-								e.preventDefault();
-								ed.contentAreaContainer.style.borderWidth='';
-								return;
-							});
-						} else {
-							Joomla.renderMessages({'error': ['" . JText::_('PLG_TINY_ERR_UNSUPPORTEDBROWSER') . "']});
-							setTimeout(function(){ Joomla.removeMessages(); }, 4000);
-							ed.on('drop', function(e) {
-								e.preventDefault();
-								return;
-							});
-						}
-					}
-			";
-
-		// AJAX upload code
-		$scriptFunc = "
-				tinyMCE.DOM.bind(document, 'dragleave', function(e) {
-					e.stopPropagation();
-					e.preventDefault();
-					tinyMCE.activeEditor.contentAreaContainer.style.borderWidth='';
-				});
-				function UploadFile(file) {
-					var errorMsgs = [];
-					var isSubDir = '" . $isSubDir . "';
-					var fd = new FormData();
-					fd.append('Filedata', file);
-					fd.append('folder', '" . $path . "');
-
-					jQuery.ajax({
-						url: '$url',
-						type: 'post',
-						enctype: 'multipart/form-data',
-						data: fd,
-						cache: false,
-						contentType: false,
-						processData: false,
-						success: function(data, myXhr){
-							if (data.status == 0) {
-								if (data.dataUrl) {
-									errorMsgs.push(data.error + ': ' + data.dataUrl);
-								}
-								setTimeout(function(){ jQuery('#jloader').remove(); }, 500);
-							}
-							if (data.status == 1) {
-								var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
-								newNode.src= isSubDir + data.dataUrl;  // add src attribute
-								tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
-								tinyMCE.execCommand('mceRepaint');
-								setTimeout(function(){ jQuery('#jloader').remove(); }, 500);
-							}
-						},
-						error: function( myXhr, errorThrown ){
-							setTimeout(function(){ jQuery('#jloader').remove(); }, 500);
-						}
-					});
-
-					jQuery(document).ajaxStop(function($) {
-						errorMsgs.reduce(function(prev, cur) {
-							return (prev.indexOf(cur) < 0) ? prev.concat([cur]) : prev;
-						 }, []);
-
-						if (errorMsgs.length > 0) {
-							Joomla.renderMessages({'error': errorMsgs});
-							setTimeout(function(){ Joomla.removeMessages(); }, 4000);
-						}
-					});
-				}
-		";
-
-		return array(
-			'scriptInit' => $scriptInit,
-			'scriptFunc' => $scriptFunc,
-		);
 	}
 }
