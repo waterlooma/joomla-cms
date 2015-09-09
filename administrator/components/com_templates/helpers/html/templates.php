@@ -83,7 +83,7 @@ class JHtmlTemplates
 					'bootstrap.renderModal',
 					$template . '-Modal',
 					array(
-						'title' => JText::_('COM_TEMPLATES_BUTTON_PREVIEW'),
+						'title'  => htmlspecialchars(JText::_('COM_TEMPLATES_BUTTON_PREVIEW'), ENT_COMPAT, 'UTF-8'),
 						'height' => '500px',
 						'width' => '800px',
 						'footer' => $footer

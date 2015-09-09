@@ -28,7 +28,7 @@ $footer = '<button class="btn" data-dismiss="modal" aria-hidden="true">' . JText
 	'bootstrap.renderModal',
 	'multiLangModal',
 	array(
-		'title' => JText::_('MOD_MULTILANGSTATUS'),
+		'title'  => htmlspecialchars(JText::_('MOD_MULTILANGSTATUS'), ENT_COMPAT, 'UTF-8'),
 		'backdrop' => 'static',
 		'keyboard' => true,
 		'closeButton' => true,

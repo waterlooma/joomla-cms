@@ -129,7 +129,7 @@ class JHtmlUsers
 			'bootstrap.renderModal',
 			'userModal_' . (int) $userId,
 			array(
-				'title' => $title,
+				'title'  => htmlspecialchars($title, ENT_COMPAT, 'UTF-8'),
 				'backdrop' => 'static',
 				'keyboard' => true,
 				'closeButton' => true,

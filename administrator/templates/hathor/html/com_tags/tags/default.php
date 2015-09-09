@@ -151,7 +151,7 @@ $n         = count($this->items);
 			'bootstrap.renderModal',
 			'collapseModal',
 			array(
-				'title' => JText::_('COM_TAGS_BATCH_OPTIONS'),
+				'title'  => htmlspecialchars(JText::_('COM_TAGS_BATCH_OPTIONS'), ENT_COMPAT, 'UTF-8'),
 				'footer' => $this->loadTemplate('batch_footer')
 			),
 			$this->loadTemplate('batch_body')
