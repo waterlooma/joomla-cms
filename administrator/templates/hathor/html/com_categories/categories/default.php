@@ -198,7 +198,7 @@ $saveOrder = ($listOrder == 'a.lft' && $listDirn == 'asc');
 					'bootstrap.renderModal',
 					'collapseModal',
 					array(
-						'title' => JText::_('COM_CATEGORIES_BATCH_OPTIONS'),
+						'title' => JText::_('COM_CATEGORIES_BATCH_OPTIONS', true),
 						'footer' => $this->loadTemplate('batch_footer')
 					),
 					$this->loadTemplate('batch_body')

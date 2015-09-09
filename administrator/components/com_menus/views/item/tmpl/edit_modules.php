@@ -104,7 +104,7 @@ echo JLayoutHelper::render('joomla.edit.global', $this); ?>
 					'module' . $module->id . 'Modal',
 					array(
 						'url' => $link,
-						'title' => JText::_('COM_MENUS_EDIT_MODULE_SETTINGS'),
+						'title' => JText::_('COM_MENUS_EDIT_MODULE_SETTINGS', true),
 						'height' => '300px',
 						'width' => '800px',
 						'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'

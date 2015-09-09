@@ -175,7 +175,7 @@ class JFormFieldModal_Article extends JFormField
 			'modalArticle' . $this->id,
 			array(
 				'url' => $url,
-				'title' => JText::_('COM_CONTENT_CHANGE_ARTICLE'),
+				'title' => JText::_('COM_CONTENT_CHANGE_ARTICLE', true),
 				'width' => '800px',
 				'height' => '300px',
 				'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'

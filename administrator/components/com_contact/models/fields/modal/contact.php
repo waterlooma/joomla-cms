@@ -151,7 +151,7 @@ class JFormFieldModal_Contact extends JFormField
 			'modalContact' . $this->id,
 			array(
 				'url' => $link . '&amp;' . JSession::getFormToken() . '=1"',
-				'title' => JText::_('COM_CONTACT_CHANGE_CONTACT'),
+				'title' => JText::_('COM_CONTACT_CHANGE_CONTACT', true),
 				'width' => '800px',
 				'height' => '300px',
 				'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'

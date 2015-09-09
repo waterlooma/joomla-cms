@@ -163,7 +163,7 @@ JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));
 									'module' . $module->id . 'Modal',
 									array(
 										'url' => $link,
-										'title' => JText::_('COM_MENUS_EDIT_MODULE_SETTINGS'),
+										'title' => JText::_('COM_MENUS_EDIT_MODULE_SETTINGS', true),
 										'height' => '300px',
 										'width' => '800px',
 										'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'
@@ -183,7 +183,7 @@ JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));
 							'moduleModal',
 							array(
 								'url' => $link,
-								'title' => JText::_('COM_MENUS_EDIT_MODULE_SETTINGS'),
+								'title' => JText::_('COM_MENUS_EDIT_MODULE_SETTINGS', true),
 								'height' => '500px',
 								'width' => '800px',
 								'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'

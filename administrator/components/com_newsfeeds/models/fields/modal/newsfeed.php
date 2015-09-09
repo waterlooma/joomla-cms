@@ -152,7 +152,7 @@ class JFormFieldModal_Newsfeed extends JFormField
 			'modalNewsfeed' . $this->id,
 			array(
 				'url' => $link . '&amp;' . JSession::getFormToken() . '=1"',
-				'title' => JText::_('COM_NEWSFEEDS_CHANGE_FEED_BUTTON'),
+				'title' => JText::_('COM_NEWSFEEDS_CHANGE_FEED_BUTTON', true),
 				'width' => '800px',
 				'height' => '300px',
 				'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'

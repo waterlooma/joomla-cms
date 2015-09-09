@@ -91,7 +91,7 @@ class JFormFieldMenutype extends JFormFieldList
 			'menuTypeModal',
 			array(
 				'url'    => $link,
-				'title'  => JText::_('COM_MENUS_ITEM_FIELD_TYPE_LABEL'),
+				'title'  => JText::_('COM_MENUS_ITEM_FIELD_TYPE_LABEL', true),
 				'width'  => '800px',
 				'height' => '300px',
 				'footer' => '<button class="btn" data-dismiss="modal" aria-hidden="true">'
