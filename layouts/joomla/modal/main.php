@@ -70,7 +70,7 @@ if (isset($params['url']))
 	// Script for destroying and reloading the iframe
 	$script[] = "       var modalBody = $(this).find('.modal-body');";
 	$script[] = "       modalBody.find('iframe').remove();";
-	$script[] = "       modalBody.prepend('" . trim($iframeHtml) . "');";
+	$script[] = "       modalBody.prepend('" . trim(str_replace("'", "\'", $iframeHtml)) . "');";
 }
 
 $script[] = "   }).on('hide', function () {";
