@@ -2,8 +2,8 @@
 <extension version="3.2" type="plugin" group="editors" method="upgrade">
 	<name>plg_editors_tinymce</name>
 	<version>4.2.5</version>
-	<creationDate>2005-2014</creationDate>
-	<author>Moxiecode Systems AB</author>
+	<creationDate>2005-2015</creationDate>
+	<author>Ephox Corporation</author>
 	<authorEmail>N/A</authorEmail>
 	<authorUrl>tinymce.com</authorUrl>
 	<copyright>Ephox Corporation</copyright>
