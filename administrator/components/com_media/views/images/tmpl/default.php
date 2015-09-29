@@ -14,13 +14,27 @@ JHtml::_('formbehavior.chosen', 'select');
 // Load tooltip instance without HTML support because we have a HTML tag in the tip
 JHtml::_('bootstrap.tooltip', '.noHtmlTip', array('html' => false));
 
-$user  = JFactory::getUser();
-$input = JFactory::getApplication()->input;
+$user   = JFactory::getUser();
+$input  = JFactory::getApplication()->input;
+$params = JComponentHelper::getParams('com_media');
+$lang   = JFactory::getLanguage();
+
+// Include jQuery
+JHtml::_('jquery.framework');
+JHtml::_('script', 'media/popup-imagemanager.js', false, true);
+JHtml::_('stylesheet', 'media/popup-imagemanager.css', array(), true);
+
+if ($lang->isRtl())
+{
+	JHtml::_('stylesheet', 'media/popup-imagemanager_rtl.css', array(), true);
+}
+
+JFactory::getDocument()->addScriptDeclaration(
+	"
+	var image_base_path = '" . $params->get('image_path', 'images') . "/';
+	"
+);
 ?>
-<script type='text/javascript'>
-var image_base_path = '<?php $params = JComponentHelper::getParams('com_media');
-echo $params->get('image_path', 'images'); ?>/';
-</script>
 <form action="index.php?option=com_media&amp;asset=<?php echo $input->getCmd('asset');?>&amp;author=<?php echo $input->getCmd('author'); ?>" class="form-vertical" id="imageForm" method="post" enctype="multipart/form-data">
 	<div id="messages" style="display: none;">
 		<span id="message"></span><?php echo JHtml::_('image', 'media/dots.gif', '...', array('width' => 22, 'height' => 12), true) ?>
