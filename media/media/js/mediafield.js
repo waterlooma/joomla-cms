@@ -69,9 +69,9 @@ function updateField(fieldId) {
 }
 
 // Clear button
-function clearMediaInput(fieldId, empty){
+function clearMediaInput(fieldId){
 	jQuery("#" + fieldId).val("").tooltip("destroy");
-	jQuery("#media_preview_" + fieldId).data("popover").options.content = empty;
+	jQuery("#media_preview_" + fieldId).data("popover").options.content = window.$empty;
 	return false;
 }
 

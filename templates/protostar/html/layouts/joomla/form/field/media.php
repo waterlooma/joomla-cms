@@ -128,6 +128,6 @@ JHtml::script('media/mediafield.min.js', false, true, false, false, true);
 		data-fieldId="<?php echo $id; ?>"
 		data-url="<?php echo $url; ?>"
 		role="button" class="btn add-on" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
-	<a class="btn icon-remove hasTooltip add-on" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="clearMediaInput('<?php echo $id; ?>', $empty);"></a>
+	<a class="btn icon-remove hasTooltip add-on" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="clearMediaInput(jQuery(this).parent().attr('id').substring(12));"></a>
 <?php endif; ?>
 </div>
