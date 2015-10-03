@@ -62,7 +62,7 @@ function updateField(fieldId) {
 		popover.options.content = empty;
 		jQuery("#" + fieldId).tooltip("destroy");
 	} else {
-		imgPreview.src = window.$path + imgValue;
+		imgPreview.src = path + imgValue;
 		popover.options.content = imgPreview;
 		jQuery("#" + fieldId).tooltip("destroy").tooltip({"placement": "top", "title": imgValue});
 	}
@@ -89,6 +89,6 @@ jQuery(document).ready( function($) {
 		previewWidth = $(this).attr('data-previewWidth');
 		previewHeight = $(this).attr('data-previewHeight');
 
-		initializeMedia(path, $empty, previewWidth, previewHeight, source, fieldId);
+		initializeMedia(path, empty, previewWidth, previewHeight, source, fieldId);
 	});
 });
