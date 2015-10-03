@@ -44,24 +44,28 @@ function initializeMedia(path, empty, previewWidth, previewHeight, source, field
 	// Initialize the tooltip
 	var imgValue = $selector.val();
 	$selector.tooltip('destroy').tooltip({'placement': 'top', 'title': imgValue});
+}
 
-	// Save and close modal
-	jQuery("#btn_" + fieldId).on("click", function () {
-		$selector.val(jQuery("#imageModal_" + fieldId + " iframe").contents().find("#f_url").val()).trigger("change");
+function updateField(fieldId) {
+	var $selector = jQuery("#" + fieldId);
+	$selector.val(jQuery("#imageModal_" + fieldId + " iframe").contents().find("#f_url").val()).trigger("change");
 
-		// Reset tooltip and preview
-		var imgValue = $selector.val();
-		var popover = jQuery("#media_preview_" + fieldId).data("popover");
-		var imgPreview = new Image(previewWidth, previewHeight);
-		if (imgValue == "") {
-			popover.options.content = empty;
-			jQuery("#" + fieldId).tooltip("destroy");
-		} else {
-			imgPreview.src = path + imgValue;
-			popover.options.content = imgPreview;
-			jQuery("#" + fieldId).tooltip("destroy").tooltip({"placement": "top", "title": imgValue});
-		}
-	});
+	// Close the modal
+	parent.jQuery('#imageModal_' + fieldId, parent.document).modal('hide');
+
+	// Reset tooltip and preview
+	var imgValue = $selector.val();
+	var popover = jQuery("#media_preview_" + fieldId).data("popover");
+	var imgPreview = new Image(previewWidth, previewHeight);
+
+	if (imgValue == "") {
+		popover.options.content = empty;
+		jQuery("#" + fieldId).tooltip("destroy");
+	} else {
+		imgPreview.src = window.$path + imgValue;
+		popover.options.content = imgPreview;
+		jQuery("#" + fieldId).tooltip("destroy").tooltip({"placement": "top", "title": imgValue});
+	}
 }
 
 // Clear button
@@ -75,6 +79,7 @@ function clearMediaInput(fieldId, empty){
 jQuery(document).ready( function($) {
 	var fieldTmp = $(document.body).find('a[data-target^="#imageModal_"]').first();
 	window.$empty = fieldTmp.attr('data-emptystring');
+	window.$path = $(this).attr('data-basepath');
 
 	$(document.body).find('a[data-target^="#imageModal_"]').each(function() {
 		path = $(this).attr('data-basepath');
