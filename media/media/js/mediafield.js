@@ -1,7 +1,35 @@
+/**
+ * @copyright	Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ */
+
+/**
+ * initializeMedia behavior for media component
+ *
+ * @package		Joomla.Extensions
+ * @subpackage	Media
+ * @since		3.5
+ */
+
+/**
+ * Helper script for the Form Field Media
+ *
+ * It will initialize the preview image button
+ * and fill the input with the URL of the image
+ *
+ * @param path           The base URL of the site
+ * @param empty          The string for the empty selection
+ * @param previewWidth   The width of the image preview
+ * @param previewHeight  The height of the image preview
+ * @param source         The URL for the image
+ * @param fieldId        The field id
+ */
 function initializeMedia(path, empty, previewWidth, previewHeight, source, fieldId) {
-	// Initialize the preview image button
-	if (source == empty) {
-		imagePreview = empty;
+
+	var $selector = jQuery("#" + fieldId);
+
+	if (source == $empty) {
+		imagePreview = $empty;
 	} else {
 		var imagePreview = new Image(previewWidth, previewHeight);
 		imagePreview.src = source;
@@ -14,16 +42,15 @@ function initializeMedia(path, empty, previewWidth, previewHeight, source, field
 	});
 
 	// Initialize the tooltip
-	jQuery("#" + fieldId).tooltip('destroy');
-	var imgValue = jQuery("#" + fieldId).val();
-	jQuery("#" + fieldId).tooltip({'placement': 'top', 'title': imgValue});
+	var imgValue = $selector.val();
+	$selector.tooltip('destroy').tooltip({'placement': 'top', 'title': imgValue});
 
 	// Save and close modal
 	jQuery("#btn_" + fieldId).on("click", function () {
-		jQuery("#" + fieldId).val(jQuery("#imageModal_" + fieldId + " iframe").contents().find("#f_url").val()).trigger("change");
+		$selector.val(jQuery("#imageModal_" + fieldId + " iframe").contents().find("#f_url").val()).trigger("change");
 
 		// Reset tooltip and preview
-		var imgValue = jQuery("#" + fieldId).val();
+		var imgValue = $selector.val();
 		var popover = jQuery("#media_preview_" + fieldId).data("popover");
 		var imgPreview = new Image(previewWidth, previewHeight);
 		if (imgValue == "") {
@@ -39,8 +66,24 @@ function initializeMedia(path, empty, previewWidth, previewHeight, source, field
 
 // Clear button
 function clearMediaInput(fieldId, empty){
-	jQuery("#" + fieldId).val("");
+	jQuery("#" + fieldId).val("").tooltip("destroy");
 	jQuery("#media_preview_" + fieldId).data("popover").options.content = empty;
-	jQuery("#" + fieldId).tooltip("destroy");
 	return false;
 }
+
+// Initialize the fields on DOM ready
+jQuery(document).ready( function($) {
+	var fieldTmp = $(document.body).find('a[data-target^="#imageModal_"]').first();
+	window.$empty = fieldTmp.attr('data-emptystring');
+
+	$(document.body).find('a[data-target^="#imageModal_"]').each(function() {
+		path = $(this).attr('data-basepath');
+		empty = $(this).attr('data-emptystring');
+		source = $(this).attr('data-source');
+		fieldId = $(this).attr('data-fieldId');
+		previewWidth = $(this).attr('data-previewWidth');
+		previewHeight = $(this).attr('data-previewHeight');
+
+		initializeMedia(path, $empty, previewWidth, previewHeight, source, fieldId);
+	});
+});

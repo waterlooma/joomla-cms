@@ -9,14 +9,25 @@
 
 defined('_JEXEC') or die;
 
+$user   = JFactory::getUser();
+$input  = JFactory::getApplication()->input;
+$params = JComponentHelper::getParams('com_media');
+$lang   = JFactory::getLanguage();
+
 JHtml::_('formbehavior.chosen', 'select');
 
 // Load tooltip instance without HTML support because we have a HTML tag in the tip
 JHtml::_('bootstrap.tooltip', '.noHtmlTip', array('html' => false));
 
-$user   = JFactory::getUser();
-$input  = JFactory::getApplication()->input;
-$params = JComponentHelper::getParams('com_media');
+// Include jQuery
+JHtml::_('jquery.framework');
+JHtml::_('script', 'media/popup-imagemanager.min.js', false, true, false, false, true);
+JHtml::_('stylesheet', 'media/popup-imagemanager.css', array(), true);
+
+if ($lang->isRtl())
+{
+	JHtml::_('stylesheet', 'media/popup-imagemanager_rtl.css', array(), true);
+}
 
 if ($this->state->get('field.id'))
 {
