@@ -104,22 +104,6 @@ echo JHtml::_('bootstrap.renderModal',
 	)
 );
 
-/*
- * Pass values to javascript
- */
-JFactory::getDocument()->addScriptDeclaration(
-	'
-	jQuery(document).ready(function(){
-		var path = "' . JUri::root() . '",
-			empty = "' . JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY') . '",
-			previewWidth = ' . $previewWidth . ',
-			previewHeight = ' .$previewHeight . ',
-			source = "' . $src . '",
-			fieldId = "' . $id . '";
-		initializeMedia(path, empty, previewWidth, previewHeight, source, fieldId);
-		});'
-);
-
 JHtml::script('media/mediafield.min.js', false, true, false, false, true);
 ?>
 <?php if ($showPreview) : ?>
@@ -136,7 +120,15 @@ JHtml::script('media/mediafield.min.js', false, true, false, false, true);
 	<input type="text" name="<?php echo $name; ?>" id="<?php echo $id; ?>" value="<?php echo htmlspecialchars($value, ENT_COMPAT, 'UTF-8'); ?>" readonly="readonly"<?php echo $attr; ?>/>
 
 <?php if ($disabled != true) : ?>
-	<a href="#imageModal_<?php echo $id; ?>" role="button" class="btn add-on" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
-	<a class="btn icon-remove hasTooltip add-on" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="clearMediaInput('<?php echo $id; ?>', '<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY'); ?>');"></a>
+	<a data-target="#imageModal_<?php echo $id; ?>"
+		data-basepath="<?php echo JUri::root(); ?>"
+		data-emptystring="<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY'); ?>"
+		data-previewWidth="<?php echo $previewWidth; ?>"
+		data-previewHeight="<?php echo $previewHeight; ?>"
+		data-source="<?php echo $src; ?>"
+		data-fieldId="<?php echo $id; ?>"
+		data-url="<?php echo $url; ?>"
+		role="button" class="btn add-on" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
+	<a class="btn icon-remove hasTooltip add-on" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="clearMediaInput('<?php echo $id; ?>', $empty);"></a>
 <?php endif; ?>
 </div>

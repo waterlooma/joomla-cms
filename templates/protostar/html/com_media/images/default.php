@@ -1,6 +1,6 @@
 <?php
 /**
- * @package     Joomla.Administrator
+ * @package     Joomla.Site
  * @subpackage  com_media
  *
  * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
@@ -17,15 +17,28 @@ JHtml::_('bootstrap.tooltip', '.noHtmlTip', array('html' => false));
 $user   = JFactory::getUser();
 $input  = JFactory::getApplication()->input;
 $params = JComponentHelper::getParams('com_media');
+$lang   = JFactory::getLanguage();
+
+// Include jQuery
+JHtml::_('jquery.framework');
+JHtml::_('script', 'media/popup-imagemanager.js', false, true, false, false, false);
+JHtml::_('stylesheet', 'media/popup-imagemanager.css', array(), true);
+
+if ($lang->isRtl())
+{
+	JHtml::_('stylesheet', 'media/popup-imagemanager_rtl.css', array(), true);
+}
 
 if ($this->state->get('field.id'))
 {
-	JFactory::getDocument()->addScriptDeclaration("
+	JFactory::getDocument()->addScriptDeclaration(
+		"
 		var image_base_path = '" . $params->get('image_path', 'images') . "/';
 			function bsMediaModalClose(){
 				parent.jQuery('#imageModal_" . $input->getCmd('fieldid') . "', parent.document).modal('hide');
 			};
-");
+		"
+	);
 }
 ?>
 <form action="index.php?option=com_media&amp;asset=<?php echo $input->getCmd('asset');?>&amp;author=<?php echo $input->getCmd('author'); ?>" class="form-vertical" id="imageForm" method="post" enctype="multipart/form-data">
