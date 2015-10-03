@@ -34,9 +34,6 @@ if ($this->state->get('field.id'))
 	JFactory::getDocument()->addScriptDeclaration(
 		"
 		var image_base_path = '" . $params->get('image_path', 'images') . "/';
-			function bsMediaModalClose(){
-				parent.jQuery('#imageModal_" . $input->getCmd('fieldid') . "', parent.document).modal('hide');
-			};
 		"
 	);
 }
@@ -57,7 +54,7 @@ if ($this->state->get('field.id'))
 				</div>
 			</div>
 			<div class="pull-right">
-				<button class="btn btn-primary" type="button" onclick="<?php if ($this->state->get('field.id')):?>parent.jQuery('#btn_<?php echo $input->getCmd('fieldid'); ?>').click();<?php else:?>ImageManager.onok(); jModalClose();<?php endif;?>"><?php echo JText::_('COM_MEDIA_INSERT') ?></button>
+				<button class="btn btn-primary" type="button" onclick="<?php if ($this->state->get('field.id')):?>parent.updateField('<?php echo $input->getCmd('fieldid'); ?>');<?php else:?>ImageManager.onok(); jModalClose();<?php endif;?>"><?php echo JText::_('COM_MEDIA_INSERT') ?></button>
 				<button class="btn" type="button" onclick="
 				<?php if ($this->state->get('field.id')):?>bsMediaModalClose();<?php else:?>jModalClose();<?php endif;?>"><?php echo JText::_('JCANCEL') ?></button>
 			</div>
