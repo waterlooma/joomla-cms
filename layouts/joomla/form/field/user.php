@@ -14,37 +14,32 @@ extract($displayData);
 /**
  * Layout variables
  * ------------------
- * 	- id       : (string) DOM id of the element
- * 	- element  : (SimpleXMLElement) The object of the <field /> XML element that describes the form field.
- * 	- field    : (JFormField) Object to access to the field properties
- * 	- name     : (string) Name of the field to display
- * 	- required : (boolean) Is this field required?
- * 	- value    : (mixed) Value of the field
- * 	- class    : (string) CSS class to apply
- * 	- size     : (integer) Size for the input element
- * 	- groups   : (mixed) filtering groups (null means no filtering)
- * 	- exclude  : (mixed) users to exclude from the list of users
  *
+ * @var string           $id DOM id of the element
+ * @var SimpleXMLElement $element The object of the <field /> XML element that describes the form field.
+ * @var JFormField       $field Object to access to the field properties
+ * @var string           $name Name of the field to display
+ * @var boolean          $required Is this field required?
+ * @var mixed            $value Value of the field (user id)
+ * @var string           $class CSS class to apply
+ * @var integer          $size Size for the input element
+ * @var mixed            $groups filtering groups (null means no filtering)
+ * @var mixed            $exclude users to exclude from the list of users
+ * @var string           $onchange The script for on change event
+ * @var string           $userName The user name
+ * @var boolean          $readOnly Check for field read only attribute
  */
-
-$html = array();
 
 $link = 'index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=' . $id
 	. (isset($groups) ? ('&amp;groups=' . base64_encode(json_encode($groups))) : '')
 	. (isset($excluded) ? ('&amp;excluded=' . base64_encode(json_encode($excluded))) : '');
 
-// Initialize some field attributes.
-$attr = $class ? ' class="' . (string) $class . '"' : '';
-$attr .= $size ? ' size="' . (int) $size . '"' : '';
-
-// Initialize JavaScript field attributes.
-$onchange = (string) $element['onchange'];
-
 // Load the modal behavior script.
 JHtml::_('behavior.modal', 'a.modal_' . $id);
 
-// Build the script.
-$script = "
+// Add the script to the document head.
+JFactory::getDocument()->addScriptDeclaration(
+	"
 	function jSelectUser_" . $id . "(id, title) {
 		var old_id = document.getElementById('" . $id . "_id').value;
 		if (old_id != id) {
@@ -52,42 +47,21 @@ $script = "
 			document.getElementById('" . $id . "_name').value = title;
 			" . $onchange . "
 		}
-		jModalClose();
+		jQuery('#userModal').modal('hide');
 	}
-";
-
-// Add the script to the document head.
-JFactory::getDocument()->addScriptDeclaration($script);
-
-// Load the current username if available.
-$table = JTable::getInstance('user');
-
-if (is_numeric($value))
-{
-	$table->load($value);
-}
-// Handle the special case for "current".
-elseif (strtoupper($value) == 'CURRENT')
-{
-	$table->load(JFactory::getUser()->id);
-}
-else
-{
-	$table->name = JText::_('JLIB_FORM_SELECT_USER');
-}
+	"
+);
 ?>
 <?php // Create a dummy text field with the user name. ?>
 <div class="input-append">
 	<input
 		type="text" id="<?php echo $id; ?>_name"
-		value="<?php echo  htmlspecialchars($table->name, ENT_COMPAT, 'UTF-8'); ?>"
+		value="<?php echo  htmlspecialchars($userName, ENT_COMPAT, 'UTF-8'); ?>"
 		readonly
 		disabled="disabled" <?php echo $attr; ?> />
-	<?php
-	// Create the user select button.
-	if ($field->readonly === false) : ?>
+	<?php if (!$readOnly) : ?>
 		<a class="btn btn-primary modal_<?php echo $id; ?>" title="<?php echo JText::_('JLIB_FORM_CHANGE_USER'); ?>" href="<?php echo $link; ?>" rel="{handler: 'iframe', size: {x: 800, y: 500}}">
-			<i class="icon-user"></i>
+			<span class="icon-user"></span>
 		</a>
 	<?php endif; ?>
 </div>

@@ -25,6 +25,7 @@ extract($displayData);
  * @var integer          $size Size for the input element
  * @var mixed            $groups filtering groups (null means no filtering)
  * @var mixed            $exclude users to exclude from the list of users
+ * @var string           $onchange The script for on change event
  * @var string           $userName The user name
  * @var boolean          $readOnly Check for field read only attribute
  */
@@ -59,7 +60,7 @@ JFactory::getDocument()->addScriptDeclaration(
 		<?php echo $class ? ' class="' . (string) $class . '"' : ''; ?>
 		<?php echo $size ? ' size="' . (int) $size . '"' : ''; ?>/>
 	<?php if (!$readOnly) : ?>
-		<a href="#userModal" role="button" class="btn btn-primary" data-toggle="modal" title="<?php echo JText::_('JLIB_FORM_CHANGE_USER') ?>"><i class="icon-user"></i></a>
+		<a href="#userModal" role="button" class="btn btn-primary" data-toggle="modal" title="<?php echo JText::_('JLIB_FORM_CHANGE_USER') ?>"><span class="icon-user"></span></a>
 		<?php echo JHtml::_(
 			'bootstrap.renderModal',
 			'userModal',
