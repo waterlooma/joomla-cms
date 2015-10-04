@@ -57,25 +57,56 @@ class JFormFieldUser extends JFormField
 		// Ensure field meets the requirements
 		if ($this->layout)
 		{
-			return
-				JLayoutHelper::render(
-					$this->layout,
-					array(
-						'id'        => $this->id,
-						'element'   => $this->element,
-						'field'     => $this,
-						'name'      => $this->name,
-						'required'  => $this->required,
-						'value'     => $this->value,
-						'class'     => $this->class,
-						'size'      => $this->size,
-						'groups'    => $this->getGroups(),
-						'excluded'  => $this->getExcluded()
-					)
-			);
+
+			return JLayoutHelper::render($this->layout, $this->getLayoutData());
 		}
 
 		return null;
+	}
+
+	/**
+	 * Get the data that is going to be passed to the layout
+	 *
+	 * @return  array
+	 */
+	public function getLayoutData()
+	{
+		// Load the current username if available.
+		$table = JTable::getInstance('user');
+
+		if (is_numeric($this->value))
+		{
+			$table->load($this->value);
+		}
+		// Handle the special case for "current".
+		elseif (strtoupper($this->value) == 'CURRENT')
+		{
+			// 'CURRENT' is not a reasonable value to be placed in the html
+			$this->value = JFactory::getUser()->id;
+			$table->load($this->value);
+		}
+		else
+		{
+			$table->name = JText::_('JLIB_FORM_SELECT_USER');
+		}
+
+		// Initialize JavaScript field attributes.
+		$onchange = (string) $this->element['onchange'];
+
+		return array(
+			'id'        => $this->id,
+			'element'   => $this->element,
+			'name'      => $this->name,
+			'required'  => $this->required,
+			'userName'  => $table->name,
+			'value'     => $this->value,
+			'class'     => $this->class,
+			'size'      => $this->size,
+			'onchange'  => $onchange,
+			'groups'    => $this->getGroups(),
+			'excluded'  => $this->getExcluded(),
+			'readOnly'  => $this->readonly
+		);
 	}
 
 	/**
@@ -104,6 +135,6 @@ class JFormFieldUser extends JFormField
 	 */
 	protected function getExcluded()
 	{
-		return $this->excluded;
+		return explode(',', $this->element['exclude']);
 	}
 }
