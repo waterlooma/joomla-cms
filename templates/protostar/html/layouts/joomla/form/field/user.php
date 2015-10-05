@@ -15,16 +15,14 @@ extract($displayData);
  * Layout variables
  * ------------------
  *
- * @var string           $id DOM id of the element
- * @var SimpleXMLElement $element The object of the <field /> XML element that describes the form field.
- * @var JFormField       $field Object to access to the field properties
- * @var string           $name Name of the field to display
- * @var boolean          $required Is this field required?
- * @var mixed            $value Value of the field (user id)
- * @var string           $class CSS class to apply
- * @var integer          $size Size for the input element
- * @var mixed            $groups filtering groups (null means no filtering)
- * @var mixed            $exclude users to exclude from the list of users
+ * @var string           $id The DOM id of the element
+ * @var string           $name The name of the field
+ * @var boolean          $required The required attribute
+ * @var mixed            $value The value of the field (user id)
+ * @var string           $class The CSS class to apply
+ * @var integer          $size The ize for the input element
+ * @var mixed            $groups The filtering groups (null means no filtering)
+ * @var mixed            $exclude The users to exclude from the list of users
  * @var string           $onchange The script for on change event
  * @var string           $userName The user name
  * @var boolean          $readOnly Check for field read only attribute

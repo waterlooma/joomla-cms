@@ -95,7 +95,6 @@ class JFormFieldUser extends JFormField
 
 		return array(
 			'id'        => $this->id,
-			'element'   => $this->element,
 			'name'      => $this->name,
 			'required'  => $this->required,
 			'userName'  => $table->name,
