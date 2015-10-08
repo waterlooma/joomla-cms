@@ -30,9 +30,7 @@ tinymce.PluginManager.add('jdragdrop', function(editor) {
 			},
 			success: function(data, myXhr){
 				if (data.status == 0) {
-					if (data.dataUrl) {
 						tinyMCE.activeEditor.windowManager.alert(data.message + ': ' + setCustomDir + data.dataUrl);
-					}
 				}
 				if (data.status == 1) {
 					// Create the image tag
@@ -76,23 +74,26 @@ tinymce.PluginManager.add('jdragdrop', function(editor) {
 			if (e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
 				for (var i = 0, f; f = e.dataTransfer.files[i]; i++) {
 
-					editor.contentAreaContainer.style.borderWidth = '';
-					jQuery('<div id=\"jloader\" />').css({
-						position  : 'absolute',
-						width     : '100%',
-						height    : '100%',
-						left      : 0,
-						top       : 0,
-						opacity   : 0.55,
-						zIndex    : 1000000,
-						background: 'url(/media/jui/images/ajax-loader.gif) #fff no-repeat 50% 50%'
-					}).appendTo(jQuery('.editor').css('position', 'relative'));
+					if (f.name.match(/\.(jpg|jpeg|png|gif|bmp)$/)) {
 
-					editor.contentAreaContainer.style.borderWidth = '';
+						editor.contentAreaContainer.style.borderWidth = '';
+						jQuery('<div id=\"jloader\" />').css({
+							position  : 'absolute',
+							width     : '100%',
+							height    : '100%',
+							left      : 0,
+							top       : 0,
+							opacity   : 0.55,
+							zIndex    : 1000000,
+							background: 'url(/media/jui/images/ajax-loader.gif) #fff no-repeat 50% 50%'
+						}).appendTo(jQuery('.editor').css('position', 'relative'));
 
-					// Upload the file(s)
-					UploadFile(f);
-					e.preventDefault();
+						editor.contentAreaContainer.style.borderWidth = '';
+
+						// Upload the file(s)
+						UploadFile(f);
+						e.preventDefault();
+					}
 				}
 			}
 			editor.contentAreaContainer.style.borderWidth = '';
