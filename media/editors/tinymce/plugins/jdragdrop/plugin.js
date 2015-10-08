@@ -30,7 +30,7 @@ tinymce.PluginManager.add('jdragdrop', function(editor) {
 			},
 			success: function(data, myXhr){
 				if (data.status == 0) {
-						tinyMCE.activeEditor.windowManager.alert(data.message + ': ' + setCustomDir + data.dataUrl);
+						tinyMCE.activeEditor.windowManager.alert(data.message + ': ' + setCustomDir + data.location);
 				}
 				if (data.status == 1) {
 					// Create the image tag
