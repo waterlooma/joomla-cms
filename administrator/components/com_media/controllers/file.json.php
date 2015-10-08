@@ -34,8 +34,9 @@ class MediaControllerFile extends JControllerLegacy
 		if (!JSession::checkToken('request'))
 		{
 			$response = array(
-				'status' => '0',
-				'error'  => JText::_('JINVALID_TOKEN')
+				'status'  => '0',
+				'message' => JText::_('JINVALID_TOKEN'),
+				'error'   => JText::_('JINVALID_TOKEN')
 			);
 			echo json_encode($response);
 
@@ -59,8 +60,9 @@ class MediaControllerFile extends JControllerLegacy
 			|| $_SERVER['CONTENT_LENGTH'] > $mediaHelper->toBytes(ini_get('memory_limit')))
 		{
 			$response = array(
-				'status' => '0',
-				'error'  => JText::_('COM_MEDIA_ERROR_WARNFILETOOLARGE')
+				'status'  => '0',
+				'message' => JText::_('COM_MEDIA_ERROR_WARNFILETOOLARGE'),
+				'error'   => JText::_('COM_MEDIA_ERROR_WARNFILETOOLARGE')
 			);
 			echo json_encode($response);
 
@@ -96,8 +98,9 @@ class MediaControllerFile extends JControllerLegacy
 				JLog::add('Invalid: ' . $filepath, JLog::INFO, 'upload');
 
 				$response = array(
-					'status' => '0',
-					'error'  => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
+					'status'  => '0',
+					'message' => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE'),
+					'error'   => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
 				);
 
 				echo json_encode($response);
@@ -118,8 +121,9 @@ class MediaControllerFile extends JControllerLegacy
 				JLog::add('Errors before save: ' . $object_file->filepath . ' : ' . implode(', ', $object_file->getErrors()), JLog::INFO, 'upload');
 
 				$response = array(
-					'status' => '0',
-					'error'  => JText::plural('COM_MEDIA_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors))
+					'status'  => '0',
+					'message' => JText::plural('COM_MEDIA_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors)),
+					'error'   => JText::plural('COM_MEDIA_ERROR_BEFORE_SAVE', count($errors = $object_file->getErrors()), implode('<br />', $errors))
 				);
 
 				echo json_encode($response);
@@ -133,9 +137,10 @@ class MediaControllerFile extends JControllerLegacy
 				JLog::add('File exists: ' . $object_file->filepath . ' by user_id ' . $user->id, JLog::INFO, 'upload');
 
 				$response = array(
-					'status'  => '0',
-					'error'   => JText::_('COM_MEDIA_ERROR_FILE_EXISTS'),
-					'dataUrl' => str_replace(JPATH_ROOT, '',  $filepath)
+					'status'   => '0',
+					'message'  => JText::_('COM_MEDIA_ERROR_FILE_EXISTS'),
+					'error'    => JText::_('COM_MEDIA_ERROR_FILE_EXISTS'),
+					'location' => str_replace(JPATH_ROOT, '',  $filepath)
 				);
 
 				echo json_encode($response);
@@ -148,8 +153,9 @@ class MediaControllerFile extends JControllerLegacy
 				JLog::add('Create not permitted: ' . $object_file->filepath . ' by user_id ' . $user->id, JLog::INFO, 'upload');
 
 				$response = array(
-					'status' => '0',
-					'error'  => JText::_('COM_MEDIA_ERROR_CREATE_NOT_PERMITTED')
+					'status'  => '0',
+					'error'   => JText::_('COM_MEDIA_ERROR_CREATE_NOT_PERMITTED'),
+					'message' => JText::_('COM_MEDIA_ERROR_CREATE_NOT_PERMITTED')
 				);
 
 				echo json_encode($response);
@@ -163,8 +169,9 @@ class MediaControllerFile extends JControllerLegacy
 				JLog::add('Error on upload: ' . $object_file->filepath, JLog::INFO, 'upload');
 
 				$response = array(
-					'status' => '0',
-					'error'  => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
+					'status'  => '0',
+					'message' => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE'),
+					'error'   => JText::_('COM_MEDIA_ERROR_UNABLE_TO_UPLOAD_FILE')
 				);
 
 				echo json_encode($response);
@@ -180,9 +187,10 @@ class MediaControllerFile extends JControllerLegacy
 				$returnUrl = str_replace(JPATH_ROOT, '',  $filepath);
 
 				$response = array(
-					'status'  => '1',
-					'error'   => JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', $returnUrl),
-					'dataUrl' => $returnUrl
+					'status'   => '1',
+					'message'  => JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', $returnUrl),
+					'error'    => JText::sprintf('COM_MEDIA_UPLOAD_COMPLETE', $returnUrl),
+					'location' => $returnUrl
 				);
 
 				echo json_encode($response);
@@ -193,8 +201,9 @@ class MediaControllerFile extends JControllerLegacy
 		else
 		{
 			$response = array(
-				'status' => '0',
-				'error'  => JText::_('COM_MEDIA_ERROR_BAD_REQUEST')
+				'status'  => '0',
+				'error'   => JText::_('COM_MEDIA_ERROR_BAD_REQUEST'),
+				'message' => JText::_('COM_MEDIA_ERROR_BAD_REQUEST')
 			);
 
 			echo json_encode($response);
