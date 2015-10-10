@@ -648,7 +648,7 @@ class JFilterInput
 	 * @return  string  'Cleaned' version of input parameter
 	 *
 	 * @since      11.1
-	 * @deprecated 3.5   This will be removed in 4.0 in favour of the non-prefixed method
+	 * @deprecated 4.0 Use JFilterInput::remove() instead
 	 */
 	protected function _remove($source)
 	{
@@ -686,7 +686,7 @@ class JFilterInput
 	 * @return  string  'Cleaned' version of input parameter
 	 *
 	 * @since      11.1
-	 * @deprecated 3.5   This will be removed in 4.0 in favour of the non-prefixed method
+	 * @deprecated 4.0 Use JFilterInput::cleanTags() instead
 	 */
 	protected function _cleanTags($source)
 	{
@@ -931,7 +931,7 @@ class JFilterInput
 	 * @return  array  Filtered array of attribute pairs
 	 *
 	 * @since      11.1
-	 * @deprecated 3.5   This will be removed in 4.0 in favour of the non-prefixed method
+	 * @deprecated 4.0 Use JFilterInput::cleanAttributes() instead
 	 */
 	protected function _cleanAttributes($attrSet)
 	{
@@ -1049,7 +1049,7 @@ class JFilterInput
 	 * @return  string  Plaintext string
 	 *
 	 * @since      11.1
-	 * @deprecated 3.5   This will be removed in 4.0 in favour of the non-prefixed method
+	 * @deprecated 4.0 Use JFilterInput::decode() instead
 	 */
 	protected function _decode($source)
 	{
@@ -1107,7 +1107,7 @@ class JFilterInput
 	 * @return  string  Filtered string
 	 *
 	 * @since      11.1
-	 * @deprecated 3.5   This will be removed in 4.0 in favour of the non-prefixed method
+	 * @deprecated 4.0 Use JFilterInput::escapeAttributeValues() instead
 	 */
 	protected function _escapeAttributeValues($source)
 	{
@@ -1177,7 +1177,7 @@ class JFilterInput
 	 * @return  string  Filtered string
 	 *
 	 * @since      11.1
-	 * @deprecated 3.5   This will be removed in 4.0 in favour of the non-prefixed method
+	 * @deprecated 4.0 Use JFilterInput::stripCSSExpressions() instead
 	 */
 	protected function _stripCSSExpressions($source)
 	{
