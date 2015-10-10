@@ -187,7 +187,7 @@ class JFilterOutput
 	 */
 	public static function _ampReplaceCallback($m)
 	{
-		static::ampReplaceCallback($m);
+		return static::ampReplaceCallback($m);
 	}
 
 	/**
