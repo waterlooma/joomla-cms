@@ -1111,7 +1111,7 @@ class JFilterInput
 	 */
 	protected function _escapeAttributeValues($source)
 	{
-		$this->escapeAttributeValues($source);
+		return $this->escapeAttributeValues($source);
 	}
 
 	/**
@@ -1181,7 +1181,7 @@ class JFilterInput
 	 */
 	protected function _stripCSSExpressions($source)
 	{
-		$this->stripCSSExpressions($source);
+		return $this->stripCSSExpressions($source);
 	}
 
 	/**
