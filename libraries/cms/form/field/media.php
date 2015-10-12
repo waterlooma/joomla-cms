@@ -26,14 +26,6 @@ class JFormFieldMedia extends JFormField
 	protected $type = 'Media';
 
 	/**
-	 * The initialised state of the document object.
-	 *
-	 * @var    boolean
-	 * @since  1.6
-	 */
-	protected static $initialised = false;
-
-	/**
 	 * The authorField.
 	 *
 	 * @var    string
@@ -197,6 +189,16 @@ class JFormFieldMedia extends JFormField
 	 */
 	protected function getInput()
 	{
+		return JLayoutHelper::render($this->layout, $this->getLayoutData());
+	}
+
+	/**
+	 * Get the data that is going to be passed to the layout
+	 *
+	 * @return  array
+	 */
+	public function getLayoutData()
+	{
 		$asset = $this->asset;
 
 		if ($asset == '')
@@ -220,7 +222,7 @@ class JFormFieldMedia extends JFormField
 			$this->folder = '';
 		}
 
-		$displayData = array(
+		return array(
 			'asset'         => $asset,
 			'authorField'   => $this->authorField,
 			'authorId'      => $this->form->getValue($this->authorField),
@@ -236,8 +238,7 @@ class JFormFieldMedia extends JFormField
 			'onchange'      => $this->onchange,
 			'readonly'      => $this->readonly,
 			'size'          => $this->size,
-			'value'         => $this->value);
-
-			return JLayoutHelper::render($this->layout, $displayData);
+			'value'         => $this->value
+		);
 	}
 }
