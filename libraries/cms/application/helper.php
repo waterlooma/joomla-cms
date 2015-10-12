@@ -14,7 +14,7 @@ defined('JPATH_PLATFORM') or die;
  *
  * @since  1.5
  *
- * @deprecated CMS 4
+ * @deprecated 4.0 Deprecated without replacement
  */
 class JApplicationHelper
 {
