@@ -29,20 +29,16 @@ class MediaController extends JControllerLegacy
 	public function display($cachable = false, $urlparams = false)
 	{
 		JPluginHelper::importPlugin('content');
-		$vName = $this->input->get('view', 'media');
+
+		$vType    = JFactory::getDocument()->getType();
+		$vName    = $this->input->get('view', 'media');
 
 		switch ($vName)
 		{
 			case 'images':
 				$vLayout = $this->input->get('layout', 'default', 'string');
 				$mName = 'manager';
-				// Get/Create the view
-				$view = $this->getView($vName, $vType);
-				if (JFactory::getApplication()->isSite() && !file_exists(JPATH_ROOT . '/templates/' . JFactory::getApplication()->getTemplate() .
-					'/html/com_media/images/default.php'))
-				{
-					$view->addTemplatePath($this->basePath . '/views/' . strtolower($vName) . '/tmpl');
-				}
+
 				break;
 
 			case 'imagesList':
@@ -66,9 +62,6 @@ class MediaController extends JControllerLegacy
 
 				break;
 		}
-
-		$document = JFactory::getDocument();
-		$vType    = $document->getType();
 
 		// Get/Create the view
 		$view = $this->getView($vName, $vType, '', array('base_path' => JPATH_COMPONENT_ADMINISTRATOR));

@@ -88,7 +88,7 @@ $url    = ($readonly ? ''
 			. '&amp;fieldid=' . $id . '&amp;folder=' . $folder) . '"';
 $footer = '<button class="btn" data-dismiss="modal" aria-hidden="true">'
 	. JText::_("JLIB_HTML_BEHAVIOR_CLOSE")
-	. '</button><button onclick="window.updateField(jQuery(this).parent().parent().attr(\'id\').substring(11));" class="btn btn-success" data-dismiss="modal" aria-hidden="true">'
+	. '</button><button onclick="saveAndCloseModal(this)" class="btn btn-success" data-dismiss="modal" aria-hidden="true">'
 	. JText::_("JLIB_FORM_CHANGE_IMAGE") . '</button>';
 
 // Render the modal
@@ -107,7 +107,7 @@ JHtml::script('media/mediafield.min.js', false, true, false, false, true);
 ?>
 <?php if ($showPreview) : ?>
 <div class="input-prepend input-append" id="media_field_<?php echo $id; ?>">
-	<span id="media_preview_<?php echo $id; ?>" rel="popover" class="add-on" title="<?php echo
+	<span id="media_preview_<?php echo $id; ?>" rel="popover" class="add-on pop-helper" title="<?php echo
 	JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-content="" data-original-title="<?php
 	echo JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-trigger="hover">
 	<i class="icon-eye"></i>
@@ -117,7 +117,6 @@ JHtml::script('media/mediafield.min.js', false, true, false, false, true);
 <div class="input-append" id="media_field_<?php echo $id; ?>">
 <?php endif; ?>
 	<input type="text" name="<?php echo $name; ?>" id="<?php echo $id; ?>" value="<?php echo htmlspecialchars($value, ENT_COMPAT, 'UTF-8'); ?>" readonly="readonly"<?php echo $attr; ?>/>
-
 <?php if ($disabled != true) : ?>
 	<a data-target="#imageModal_<?php echo $id; ?>"
 		data-basepath="<?php echo JUri::root(); ?>"
@@ -128,6 +127,10 @@ JHtml::script('media/mediafield.min.js', false, true, false, false, true);
 		data-fieldId="<?php echo $id; ?>"
 		data-url="<?php echo $url; ?>"
 		role="button" class="btn add-on" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
-	<a class="btn icon-remove hasTooltip add-on" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>" href="#" onclick="clearMediaInput(jQuery(this).parent().attr('id').substring(12));"></a>
+	<a class="btn icon-remove hasTooltip add-on"
+		title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>"
+		data-emptystring="<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY'); ?>"
+		href="#"
+		onclick="clearMediaInput(this);"></a>
 <?php endif; ?>
 </div>

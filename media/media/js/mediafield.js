@@ -28,8 +28,8 @@ function initializeMedia(path, empty, previewWidth, previewHeight, source, field
 
 	var $selector = jQuery("#" + fieldId);
 
-	if (source == $empty) {
-		imagePreview = $empty;
+	if (source == empty) {
+		imagePreview = empty;
 	} else {
 		var imagePreview = new Image(previewWidth, previewHeight);
 		imagePreview.src = source;
@@ -46,9 +46,9 @@ function initializeMedia(path, empty, previewWidth, previewHeight, source, field
 	$selector.tooltip('destroy').tooltip({'placement': 'top', 'title': imgValue});
 }
 
-function updateField(fieldId) {
+function jInsertFieldValue(value, fieldId) {
 	var $selector = jQuery("#" + fieldId);
-	$selector.val(jQuery("#imageModal_" + fieldId + " iframe").contents().find("#f_url").val()).trigger("change");
+	$selector.val(value).trigger("change");
 
 	// Close the modal
 	parent.jQuery('#imageModal_' + fieldId, parent.document).modal('hide');
@@ -68,18 +68,23 @@ function updateField(fieldId) {
 	}
 }
 
+function saveAndCloseModal(el) {
+	var fieldId = parent.window.jQuery(el).closest(".controls").find("input").attr("id"),
+		value = parent.window.jQuery('#imageModal_' + fieldId + ' iframe').contents().find('#f_url').val()
+	top.window.jInsertFieldValue(value, fieldId)
+}
+
 // Clear button
-function clearMediaInput(fieldId){
-	jQuery("#" + fieldId).val("").tooltip("destroy");
-	jQuery("#media_preview_" + fieldId).data("popover").options.content = window.$empty;
+function clearMediaInput(el){
+	emptyStr = jQuery(el).data("emptystring");
+	jQuery(el).closest(".input-append").find(".hasTooltip").val("").tooltip("destroy");
+	jQuery(el).closest(".input-append").find(".pop-helper").data("popover").options.content = emptyStr;
 	return false;
 }
 
 // Initialize the fields on DOM ready
 jQuery(document).ready( function($) {
 	var fieldTmp = $(document.body).find('a[data-target^="#imageModal_"]').first();
-	window.$empty = fieldTmp.attr('data-emptystring');
-	window.$path = $(this).attr('data-basepath');
 
 	$(document.body).find('a[data-target^="#imageModal_"]').each(function() {
 		path = $(this).attr('data-basepath');
