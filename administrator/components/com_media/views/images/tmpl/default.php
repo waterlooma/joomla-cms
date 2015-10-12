@@ -59,7 +59,7 @@ JFactory::getDocument()->addScriptDeclaration(
 							</div>
 						</div>
 						<div class="pull-right">
-							<button class="btn btn-primary" type="button" onclick="<?php if ($this->state->get('field.id')):?>parent.updateField('<?php echo $input->getCmd('fieldid'); ?>');<?php else:
+							<button class="btn btn-primary" type="button" onclick="<?php if ($this->state->get('field.id')):?>window.parent.jInsertFieldValue(document.getElementById('f_url').value,'<?php echo $this->state->get('field.id');?>');<?php else:
 								// This is for Mootools compatibility ?>ImageManager.onok(); parent.jModalClose();<?php endif;?>" data-dismiss="modal"><?php echo JText::_('COM_MEDIA_INSERT') ?></button>
 							<button class="btn" type="button" onclick="
 							<?php if (!$this->state->get('field.id')): // This is for Mootools compatibility ?>parent.jModalClose();<?php endif;?>" data-dismiss="modal"><?php echo JText::_('JCANCEL') ?></button>

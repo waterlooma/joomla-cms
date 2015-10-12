@@ -51,6 +51,7 @@ JFactory::getDocument()->addScriptDeclaration(
 				$elem.get(0).onchange();
 			}
 			jMediaRefreshPreview(id);
+			jModalClose();
 		}
 	}
 
