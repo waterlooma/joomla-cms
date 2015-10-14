@@ -36,7 +36,7 @@ $published = $this->state->get('filter.published');
 			<?php if ($published >= 0) : ?>
 				<div class="control-group span6">
 					<div class="controls">
-						<?php echo JLayoutHelper::render('joomla.html.batch.item', $dispalyData = array('extension' => 'com_newsfeeds')); ?>
+						<?php echo JLayoutHelper::render('joomla.html.batch.item', array('extension' => 'com_newsfeeds')); ?>
 					</div>
 				</div>
 			<?php endif; ?>
