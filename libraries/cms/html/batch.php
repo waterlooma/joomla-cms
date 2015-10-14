@@ -12,8 +12,9 @@ defined('JPATH_PLATFORM') or die;
 /**
  * Extended Utility class for batch processing widgets.
  *
- * @since  1.7
- * @deprecated 3.5 To be removed 4.0
+ * @since       1.7
+ *
+ * @deprecated  3.5 To be removed 4.0
  */
 abstract class JHtmlBatch
 {
@@ -22,9 +23,9 @@ abstract class JHtmlBatch
 	 *
 	 * @return  string  The necessary HTML for the widget.
 	 *
-	 * @since   1.7
+	 * @since       1.7
 	 *
-	 * @deprecated 3.5
+	 * @deprecated  3.5
 	 */
 	public static function access()
 	{
@@ -40,9 +41,9 @@ abstract class JHtmlBatch
 	 *
 	 * @return  string  The necessary HTML for the widget.
 	 *
-	 * @since   1.7
+	 * @since       1.7
 	 *
-	 * @deprecated 3.5
+	 * @deprecated  3.5
 	 */
 	public static function item($extension)
 	{
@@ -58,9 +59,9 @@ abstract class JHtmlBatch
 	 *
 	 * @return  string  The necessary HTML for the widget.
 	 *
-	 * @since   2.5
+	 * @since       2.5
 	 *
-	 * @deprecated 3.5
+	 * @deprecated  3.5
 	 */
 	public static function language()
 	{
@@ -76,9 +77,9 @@ abstract class JHtmlBatch
 	 *
 	 * @return  string  The necessary HTML for the widget.
 	 *
-	 * @since   2.5
+	 * @since       2.5
 	 *
-	 * @deprecated 3.5
+	 * @deprecated  3.5
 	 */
 	public static function user($noUser = true)
 	{
@@ -94,9 +95,9 @@ abstract class JHtmlBatch
 	 *
 	 * @return  string  The necessary HTML for the widget.
 	 *
-	 * @since   3.1
+	 * @since       3.1
 	 *
-	 * @deprecated 3.5
+	 * @deprecated  3.5
 	 */
 	public static function tag()
 	{
