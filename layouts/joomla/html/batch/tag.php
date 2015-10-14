@@ -1,11 +1,21 @@
 <?php
+/**
+ * @package     Joomla.Site
+ * @subpackage  Layout
+ *
+ * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
 
-defined('JPATH_PLATFORM') or die;
+defined('_JEXEC') or die;
 
+/**
+ * Layout variables
+ * ---------------------
+ * None
+ */
 
 JHtml::_('bootstrap.tooltip', '.modalTooltip', array('container' => '.modal-body'));
-
-// Create the batch selector to tag items on a selection list.
 ?>
 <label id="batch-tag-lbl" for="batch-tag-id" class="modalTooltip" title="<?php
 echo JHtml::tooltipText('JLIB_HTML_BATCH_TAG_LABEL', 'JLIB_HTML_BATCH_TAG_LABEL_DESC'); ?>">

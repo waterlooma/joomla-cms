@@ -23,6 +23,7 @@ abstract class JHtmlBatch
 	 * @return  string  The necessary HTML for the widget.
 	 *
 	 * @since   1.7
+	 *
 	 * @deprecated 3.5
 	 */
 	public static function access()
@@ -40,6 +41,7 @@ abstract class JHtmlBatch
 	 * @return  string  The necessary HTML for the widget.
 	 *
 	 * @since   1.7
+	 *
 	 * @deprecated 3.5
 	 */
 	public static function item($extension)
@@ -57,6 +59,7 @@ abstract class JHtmlBatch
 	 * @return  string  The necessary HTML for the widget.
 	 *
 	 * @since   2.5
+	 *
 	 * @deprecated 3.5
 	 */
 	public static function language()
@@ -74,6 +77,7 @@ abstract class JHtmlBatch
 	 * @return  string  The necessary HTML for the widget.
 	 *
 	 * @since   2.5
+	 *
 	 * @deprecated 3.5
 	 */
 	public static function user($noUser = true)
@@ -91,6 +95,7 @@ abstract class JHtmlBatch
 	 * @return  string  The necessary HTML for the widget.
 	 *
 	 * @since   3.1
+	 *
 	 * @deprecated 3.5
 	 */
 	public static function tag()

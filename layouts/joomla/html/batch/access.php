@@ -1,8 +1,20 @@
 <?php
+/**
+ * @package     Joomla.Site
+ * @subpackage  Layout
+ *
+ * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
 
-defined('JPATH_PLATFORM') or die;
+defined('_JEXEC') or die;
 
-// Create the batch selector to change an access level on a selection list.
+/**
+ * Layout variables
+ * ---------------------
+ * None
+ */
+
 JHtml::_('bootstrap.tooltip', '.modalTooltip', array('container' => '.modal-body'));
 
 ?>

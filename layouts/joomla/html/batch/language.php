@@ -1,6 +1,19 @@
 <?php
+/**
+ * @package     Joomla.Site
+ * @subpackage  Layout
+ *
+ * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
 
-defined('JPATH_PLATFORM') or die;
+defined('_JEXEC') or die;
+
+/**
+ * Layout variables
+ * ---------------------
+ * None
+ */
 
 JHtml::_('bootstrap.tooltip', '.modalTooltip', array('container' => '.modal-body'));
 
@@ -23,8 +36,6 @@ JFactory::getDocument()->addScriptDeclaration(
 		});
 			'
 );
-
-// Create the batch selector to change the language on a selection list.
 ?>
 <label id="batch-language-lbl" for="batch-language-id" class="modalTooltip" title="<?php echo JHtml::tooltipText('JLIB_HTML_BATCH_LANGUAGE_LABEL', 'JLIB_HTML_BATCH_LANGUAGE_LABEL_DESC'); ?>">
 	<?php echo JText::_('JLIB_HTML_BATCH_LANGUAGE_LABEL'); ?>

@@ -1,6 +1,20 @@
 <?php
+/**
+ * @package     Joomla.Site
+ * @subpackage  Layout
+ *
+ * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ */
 
-defined('JPATH_PLATFORM') or die;
+defined('_JEXEC') or die;
+
+/**
+ * Layout variables
+ * ---------------------
+ *
+ * @var  string   $extension The extension name
+ */
 
 extract($displayData);
 
@@ -9,8 +23,6 @@ $options = array(
 	JHtml::_('select.option', 'c', JText::_('JLIB_HTML_BATCH_COPY')),
 	JHtml::_('select.option', 'm', JText::_('JLIB_HTML_BATCH_MOVE'))
 );
-
-// Create the batch selector to change select the category by which to move or copy.
 ?>
 <label id="batch-choose-action-lbl" for="batch-choose-action"><?php echo JText::_('JLIB_HTML_BATCH_MENU_LABEL'); ?></label>
 <div id="batch-choose-action" class="control-group">
