@@ -52,4 +52,4 @@ JHtml::script('jui/fielduser.min.js', false, true, false, false, true);
 </div>
 
 <?php // Create the real field, hidden, that stored the user id. ?>
-<input type="hidden" id="<?php echo $id; ?>_id" name="<?php echo $name; ?>" value="<?php echo (int) $value; ?>" data-onchange="<?php echo $onchange; ?>"/>
+<input type="hidden" id="<?php echo $id; ?>_id" name="<?php echo $name; ?>" value="<?php echo (int) $value; ?>" data-onchange="<?php echo $this->escape($onchange); ?>"/>
