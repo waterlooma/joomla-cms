@@ -27,26 +27,12 @@ extract($displayData);
  * @var string           $userName The user name
  * @var boolean          $readOnly Check for field read only attribute
  */
-
 // Set the link for the user selection page
 $link = 'index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=' . $id
 	. (isset($groups) ? ('&amp;groups=' . base64_encode(json_encode($groups))) : '')
 	. (isset($excluded) ? ('&amp;excluded=' . base64_encode(json_encode($excluded))) : '');
 
-// Add the script to the document head.
-JFactory::getDocument()->addScriptDeclaration(
-	"
-	function jSelectUser_" . $id . "(id, title) {
-		var old_id = document.getElementById('" . $id . "_id').value;
-		if (old_id != id) {
-			document.getElementById('" . $id . "_id').value = id;
-			document.getElementById('" . $id . "_name').value = title;
-			" . $onchange . "
-		}
-		jQuery('#userModal').modal('hide');
-	}
-	"
-);
+JHtml::script('jui/fielduser.min.js', false, true, false, false, true);
 ?>
 <?php // Create a dummy text field with the user name. ?>
 <div class="input-append">
@@ -58,7 +44,7 @@ JFactory::getDocument()->addScriptDeclaration(
 		<?php echo $class ? ' class="' . (string) $class . '"' : ''; ?>
 		<?php echo $size ? ' size="' . (int) $size . '"' : ''; ?>/>
 	<?php if (!$readOnly) : ?>
-		<a href="#userModal" role="button" class="btn btn-primary" data-toggle="modal" title="<?php echo JText::_('JLIB_FORM_CHANGE_USER') ?>"><span class="icon-user"></span></a>
+		<a href="#userModal" role="button" class="btn btn-primary" data-toggle="modal" title="<?php echo JText::_('JLIB_FORM_CHANGE_USER') ?>"><i class="icon-user"></i></a>
 		<?php echo JHtml::_(
 			'bootstrap.renderModal',
 			'userModal',
@@ -75,4 +61,4 @@ JFactory::getDocument()->addScriptDeclaration(
 </div>
 
 <?php // Create the real field, hidden, that stored the user id. ?>
-<input type="hidden" id="<?php echo $id; ?>_id" name="<?php echo $name; ?>" value="<?php echo (int) $value; ?>" />
+<input type="hidden" id="<?php echo $id; ?>_id" name="<?php echo $name; ?>" value="<?php echo (int) $value; ?>" data-onchange="<?php echo $this->escape($onchange); ?>"/>
