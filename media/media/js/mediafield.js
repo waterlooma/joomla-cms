@@ -1,99 +1,144 @@
 /**
- * @copyright	Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
- * @license		GNU General Public License version 2 or later; see LICENSE.txt
+ * @copyright   Copyright (C) 2005 - 2015 Open Source Matters, Inc. All rights reserved.
+ * @license	    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
 /**
- * initializeMedia behavior for media component
- *
- * @package		Joomla.Extensions
- * @subpackage	Media
- * @since		3.5
+ * Field media
  */
+;(function($){
+	'use strict';
 
-/**
- * Helper script for the Form Field Media
- *
- * It will initialize the preview image button
- * and fill the input with the URL of the image
- *
- * @param path           The base URL of the site
- * @param empty          The string for the empty selection
- * @param previewWidth   The width of the image preview
- * @param previewHeight  The height of the image preview
- * @param source         The URL for the image
- * @param fieldId        The field id
- */
-function initializeMedia(path, empty, previewWidth, previewHeight, source, fieldId) {
+	$.fieldMedia = function(container, options){
+		// Merge options with defaults
+		this.options = $.extend({}, $.fieldMedia.defaults, options);
 
-	var $selector = jQuery("#" + fieldId);
+		// Set up elements
+		this.$container = $(container);
+		this.$modal = this.$container.find(this.options.modal);
+		this.$modalBody = this.$modal.children('.modal-body');
+		this.$input = this.$container.find(this.options.input);
+		this.$containerPreview = this.$container.find(this.options.previewContainer);
+		this.$buttonSelect = this.$container.find(this.options.buttonSelect);
+		this.$buttonClear  = this.$container.find(this.options.buttonClear);
 
-	if (source == empty) {
-		imagePreview = empty;
-	} else {
-		var imagePreview = new Image(previewWidth, previewHeight);
-		imagePreview.src = source;
-	}
-	jQuery("#media_preview_" + fieldId).popover({
-		trigger  : "hover",
-		placement: "right",
-		content  : imagePreview,
-		html     : true
+		// Bind events
+		this.$buttonSelect.on('click', this.modalOpen.bind(this));
+		this.$buttonClear.on('click', this.clearValue.bind(this));
+
+		// Update preview for existing value
+		this.updatePreview();
+	};
+
+	// display modal for select the file
+	$.fieldMedia.prototype.modalOpen = function() {
+		var $iframe = $('<iframe>', {
+			name: 'field-media-modal',
+			src: this.options.url.replace('{field-media-id}', this.$input.attr('id')),
+			width: this.options.modalWidth,
+			height: this.options.modalHeight
+		});
+		this.$modalBody.append($iframe)
+		this.$modal.modal('show');
+
+		var self = this; // save context
+		$iframe.load(function(){
+			var content = $(this).contents();
+
+			// bind insert
+			content.on('click', self.options.buttonSaveSelected, function(){
+				var value = content.find('#f_url').val();
+				if (value) {
+					self.setValue(value);
+				}
+				self.modalClose.call(self);
+			});
+
+			// bind cancel
+			content.on('click', '.button-cancel', self.modalClose.bind(self));
+		});
+	};
+
+	// close modal
+	$.fieldMedia.prototype.modalClose = function() {
+		this.$modal.modal('hide');
+		this.$modalBody.empty();
+	};
+
+	// set the value
+	$.fieldMedia.prototype.setValue = function(value) {
+		this.$input.val(value).trigger('change');
+		this.updatePreview();
+	};
+
+	// clear the value
+	$.fieldMedia.prototype.clearValue = function() {
+		this.setValue('');
+	};
+
+	// update preview
+	$.fieldMedia.prototype.updatePreview = function() {
+		if (!this.options.preview) {
+			return;
+		}
+
+		// Reset tooltip and preview
+		this.$containerPreview.popover('destroy');
+		this.$input.tooltip('destroy');
+
+		var value = this.$input.val();
+
+		if (!value) {
+			this.$containerPreview.popover();
+		} else {
+			var imgPreview = new Image(this.options.previewWidth, this.options.previewHeight);
+			imgPreview.src = this.options.basepath + value;
+
+			this.$containerPreview.popover({content: imgPreview});
+			this.$input.tooltip({placement: 'top', title: value});
+		}
+	};
+
+	// default options
+	$.fieldMedia.defaults = {
+		basepath: '', // base path to file
+		buttonClear: '.button-clear', // selector for button to clear the value
+		buttonSelect: '.button-select', // selector for button to change the value
+		buttonSaveSelected: '.button-save-selected', // selector for button to save the selected value
+		input: '.field-media-input', // selector for the input
+		preview: true, // whether use the preview
+		previewContainer: '.field-media-preview', // selector for the preview container
+		previewWidth: 200, // preview width
+		previewHeight: 200, // preview height
+		url: 'index.php?option=com_media&tmpl=component', // url for load the iframe
+		modal: '.modal', // modal selector
+		modalWidth: '100%', // modal width
+		modalHeight: '300px' // modal height
+	};
+
+	$.fn.fieldMedia = function(options){
+		return this.each(function(){
+			var $el = $(this), instance = $el.data('fieldMedia');
+			if(!instance){
+				var options = options || {},
+					data = $el.data();
+
+				// Check options in the element
+				for (var p in data) {
+					if (data.hasOwnProperty(p)) {
+						options[p] = data[p];
+					}
+				}
+
+				instance = new $.fieldMedia(this, options);
+				$el.data('fieldMedia', instance);
+			}
+		});
+	};
+
+	// Initialise all defaults
+	$(document).ready(function(){
+		$('.field-media-wrapper').fieldMedia();
 	});
 
-	// Initialize the tooltip
-	var imgValue = $selector.val();
-	$selector.tooltip('destroy').tooltip({'placement': 'top', 'title': imgValue});
-}
-
-function jInsertFieldValue(value, fieldId) {
-	var $selector = jQuery("#" + fieldId);
-	$selector.val(value).trigger("change");
-
-	// Close the modal
-	parent.jQuery('#imageModal_' + fieldId, parent.document).modal('hide');
-
-	// Reset tooltip and preview
-	var imgValue = $selector.val();
-	var popover = jQuery("#media_preview_" + fieldId).data("popover");
-	var imgPreview = new Image(previewWidth, previewHeight);
-
-	if (imgValue == "") {
-		popover.options.content = empty;
-		jQuery("#" + fieldId).tooltip("destroy");
-	} else {
-		imgPreview.src = path + imgValue;
-		popover.options.content = imgPreview;
-		jQuery("#" + fieldId).tooltip("destroy").tooltip({"placement": "top", "title": imgValue});
-	}
-}
-
-function saveAndCloseModal(el) {
-	var fieldId = parent.window.jQuery(el).closest(".controls").find("input").attr("id"),
-		value = parent.window.jQuery('#imageModal_' + fieldId + ' iframe').contents().find('#f_url').val()
-	top.window.jInsertFieldValue(value, fieldId)
-}
-
-// Clear button
-function clearMediaInput(el){
-	emptyStr = jQuery(el).data("emptystring");
-	jQuery(el).closest(".input-append").find(".hasTooltip").val("").tooltip("destroy");
-	jQuery(el).closest(".input-append").find(".pop-helper").data("popover").options.content = emptyStr;
-	return false;
-}
-
-// Initialize the fields on DOM ready
-jQuery(document).ready( function($) {
-	var fieldTmp = $(document.body).find('a[data-target^="#imageModal_"]').first();
-
-	$(document.body).find('a[data-target^="#imageModal_"]').each(function() {
-		path = $(this).attr('data-basepath');
-		empty = $(this).attr('data-emptystring');
-		source = $(this).attr('data-source');
-		fieldId = $(this).attr('data-fieldId');
-		previewWidth = $(this).attr('data-previewWidth');
-		previewHeight = $(this).attr('data-previewHeight');
-
-		initializeMedia(path, empty, previewWidth, previewHeight, source, fieldId);
-	});
-});
+})(jQuery);

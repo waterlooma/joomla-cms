@@ -37,7 +37,7 @@ class MediaController extends JControllerLegacy
 		{
 			case 'images':
 				$vLayout = $this->input->get('layout', 'default', 'string');
-				$mName = 'manager';
+				$mName   = 'manager';
 
 				break;
 
