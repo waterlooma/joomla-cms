@@ -42,7 +42,7 @@ if ($disabled != true)
 $attr = '';
 
 // Initialize some field attributes.
-$attr .= !empty($class) ? ' class="input-small hasTooltip ' . $class . '"' : ' class="input-small hasTooltip"';
+$attr .= !empty($class) ? ' class="input-small hasTooltip field-media-input ' . $class . '"' : ' class="input-small hasTooltip field-media-input"';
 $attr .= !empty($size) ? ' size="' . $size . '"' : '';
 
 // Initialize JavaScript field attributes.
@@ -82,55 +82,52 @@ if ($showPreview)
 
 // The url for the modal
 $url    = ($readonly ? ''
-		: ($link ? $link
-			: 'index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset='
-			. $asset . '&amp;author=' . $authorId)
-			. '&amp;fieldid=' . $id . '&amp;folder=' . $folder) . '"';
-$footer = '<button class="btn" data-dismiss="modal" aria-hidden="true">'
-	. JText::_("JLIB_HTML_BEHAVIOR_CLOSE")
-	. '</button><button onclick="saveAndCloseModal(this)" class="btn btn-success" data-dismiss="modal" aria-hidden="true">'
-	. JText::_("JLIB_FORM_CHANGE_IMAGE") . '</button>';
-
-// Render the modal
-echo JHtml::_('bootstrap.renderModal',
-	'imageModal_'. $id,
-	array(
-		'url' => $url,
-		'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
-		'width' => '800px',
-		'height' => '300px',
-		'footer' => $footer
-	)
-);
-
-JHtml::script('media/mediafield.min.js', false, true, false, false, true);
+	: ($link ? $link
+		: 'index.php?option=com_media&amp;view=images&amp;tmpl=component&amp;asset='
+		. $asset . '&amp;author=' . $authorId)
+	. '&amp;fieldid={field-media-id}&amp;folder=' . $folder);
 ?>
-<?php if ($showPreview) : ?>
-<div class="input-prepend input-append" id="media_field_<?php echo $id; ?>">
-	<span id="media_preview_<?php echo $id; ?>" rel="popover" class="add-on pop-helper" title="<?php echo
-	JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-content="" data-original-title="<?php
-	echo JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-trigger="hover">
-	<i class="icon-eye"></i>
+<div class="field-media-wrapper"
+	data-basepath="<?php echo JUri::root(); ?>"
+	data-url="<?php echo $url; ?>"
+	data-modal=".modal"
+	data-modal-width="100%"
+	data-modal-height="400px"
+	data-input=".field-media-input"
+	data-button-select=".button-select"
+	data-button-clear=".button-clear"
+	data-button-save-selected=".button-save-selected"
+	data-preview="<?php echo $showPreview ? 'true' : 'false'; ?>"
+	data-preview-container=".field-media-preview"
+	data-preview-width="<?php echo $previewWidth; ?>"
+	data-preview-height="<?php echo $previewHeight; ?>"
+	>
+	<?php
+	// Render the modal
+	echo JHtml::_('bootstrap.renderModal',
+		'imageModal_'. $id,
+		array(
+			'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
+			'closeButton' => false,
+		)
+	);
+
+	JHtml::_('script', 'media/mediafield.min.js', false, true, false, false, true);
+	?>
+	<?php if ($showPreview) : ?>
+	<div class="input-prepend input-append">
+	<span rel="popover" class="add-on pop-helper field-media-preview"
+		title="<?php echo	JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-content="<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY'); ?>"
+		data-original-title="<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_SELECTED_IMAGE'); ?>" data-trigger="hover">
+		<i class="icon-eye"></i>
 	</span>
-<?php endif; ?>
-<?php if (!$showPreview) : ?>
-<div class="input-append" id="media_field_<?php echo $id; ?>">
-<?php endif; ?>
-	<input type="text" name="<?php echo $name; ?>" id="<?php echo $id; ?>" value="<?php echo htmlspecialchars($value, ENT_COMPAT, 'UTF-8'); ?>" readonly="readonly"<?php echo $attr; ?>/>
-<?php if ($disabled != true) : ?>
-	<a data-target="#imageModal_<?php echo $id; ?>"
-		data-basepath="<?php echo JUri::root(); ?>"
-		data-emptystring="<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY'); ?>"
-		data-previewWidth="<?php echo $previewWidth; ?>"
-		data-previewHeight="<?php echo $previewHeight; ?>"
-		data-source="<?php echo $src; ?>"
-		data-fieldId="<?php echo $id; ?>"
-		data-url="<?php echo $url; ?>"
-		role="button" class="btn add-on" data-toggle="modal"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
-	<a class="btn icon-remove hasTooltip add-on"
-		title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>"
-		data-emptystring="<?php echo JText::_('JLIB_FORM_MEDIA_PREVIEW_EMPTY'); ?>"
-		href="#"
-		onclick="clearMediaInput(this);"></a>
-<?php endif; ?>
+	<?php else: ?>
+		<div class="input-append">
+	<?php endif; ?>
+			<input type="text" name="<?php echo $name; ?>" id="<?php echo $id; ?>" value="<?php echo htmlspecialchars($value, ENT_COMPAT, 'UTF-8'); ?>" readonly="readonly"<?php echo $attr; ?>/>
+			<?php if ($disabled != true) : ?>
+				<a class="btn add-on button-select"><?php echo JText::_("JLIB_FORM_BUTTON_SELECT"); ?></a>
+				<a class="btn icon-remove hasTooltip add-on button-clear" title="<?php echo JText::_("JLIB_FORM_BUTTON_CLEAR"); ?>"></a>
+			<?php endif; ?>
+	</div>
 </div>

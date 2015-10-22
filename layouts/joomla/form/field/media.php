@@ -60,7 +60,7 @@ $attr = '';
 $attr .= ' title="' . htmlspecialchars('<span id="TipImgpath"></span>', ENT_COMPAT, 'UTF-8') . '"';
 
 // Initialize some field attributes.
-$attr .= !empty($class) ? ' class="input-small ' . $class . '"' : ' class="input-small"';
+$attr .= !empty($class) ? ' class="input-small field-media-input ' . $class . '"' : ' class="input-small"';
 $attr .= !empty($size) ? ' size="' . $size . '"' : '';
 
 // Initialize JavaScript field attributes.
