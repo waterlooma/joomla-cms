@@ -33,20 +33,7 @@ $link = 'index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=com
 	. (isset($groups) ? ('&amp;groups=' . base64_encode(json_encode($groups))) : '')
 	. (isset($excluded) ? ('&amp;excluded=' . base64_encode(json_encode($excluded))) : '');
 
-// Add the script to the document head.
-JFactory::getDocument()->addScriptDeclaration(
-	"
-	function jSelectUser_" . $id . "(id, title) {
-		var old_id = document.getElementById('" . $id . "_id').value;
-		if (old_id != id) {
-			document.getElementById('" . $id . "_id').value = id;
-			document.getElementById('" . $id . "_name').value = title;
-			" . $onchange . "
-		}
-		jQuery('#userModal').modal('hide');
-	}
-	"
-);
+JHtml::script('jui/fielduser.min.js', false, true, false, false, true);
 ?>
 <?php // Create a dummy text field with the user name. ?>
 <div class="input-append">
@@ -75,4 +62,4 @@ JFactory::getDocument()->addScriptDeclaration(
 </div>
 
 <?php // Create the real field, hidden, that stored the user id. ?>
-<input type="hidden" id="<?php echo $id; ?>_id" name="<?php echo $name; ?>" value="<?php echo (int) $value; ?>" />
+<input type="hidden" id="<?php echo $id; ?>_id" name="<?php echo $name; ?>" value="<?php echo (int) $value; ?>" data-onchange="<?php echo $onchange; ?>"/>

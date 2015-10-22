@@ -17,7 +17,7 @@ JHtml::_('behavior.multiselect');
 
 $input     = JFactory::getApplication()->input;
 $field     = $input->getCmd('field');
-$function  = 'jSelectUser_' . $field;
+$function  = 'jSelectUser';
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 ?>
@@ -72,7 +72,7 @@ $listDirn  = $this->escape($this->state->get('list.direction'));
 				foreach ($this->items as $item) : ?>
 					<tr class="row<?php echo $i % 2; ?>">
 						<td>
-							<a class="pointer" onclick="if (window.parent) window.parent.<?php echo $this->escape($function);?>('<?php echo $item->id; ?>', '<?php echo $this->escape(addslashes($item->name)); ?>');">
+							<a class="pointer" onclick="if (window.parent) window.parent.<?php echo $this->escape($function);?>('<?php echo $item->id; ?>', '<?php echo $this->escape(addslashes($item->name)); ?>', '<?php echo $this->escape($field); ?>');">
 								<?php echo $item->name; ?>
 							</a>
 						</td>
