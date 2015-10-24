@@ -41,7 +41,21 @@
 		$iframe.load(function(){
 			var content = $(this).contents();
 
-			// we should update the field from here
+			$.prototype.jSelectUser = function(id, title, field) {
+				var old_id = document.getElementById(field + '_id').value;
+				if (old_id != id) {
+					document.getElementById(field + '_id').value = id;
+					document.getElementById(field + '_name').value = title;
+					var el = document.getElementById(field + '_id'),
+						callbackStr =  el.getAttribute('data-onchange'),
+						callback;
+					if(callbackStr) {
+						callback = new Function(callbackStr);
+						callback.call(el);
+					}
+				}
+				self.modalClose.call(self);
+			};
 
 			// bind cancel
 			content.on('click', '.button-cancel', self.modalClose.bind(self));
@@ -91,19 +105,3 @@
 	});
 
 })(jQuery);
-
-function jSelectUser(id, title, field) {
-	var old_id = document.getElementById(field + '_id').value;
-	if (old_id != id) {
-		document.getElementById(field + '_id').value = id;
-		document.getElementById(field + '_name').value = title;
-		var el = document.getElementById(field + '_id'),
-			callbackStr =  el.getAttribute('data-onchange'),
-			callback;
-		if(callbackStr) {
-			callback = new Function(callbackStr);
-			callback.call(el);
-		}
-	}
-	jQuery('#userModal_' + field).modal('hide');
-}
