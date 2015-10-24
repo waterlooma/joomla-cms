@@ -19,9 +19,7 @@
 		this.$modalBody = this.$modal.children('.modal-body');
 		this.$input = this.$container.find(this.options.input);
 		this.$buttonSelect = this.$container.find(this.options.buttonSelect);
-		this.$groups = this.$container.find(this.options.groups);
 
-		//  + '&amp;groups=' + $groups + '&amp;excluded=' + $excluded
 		// Bind events
 		this.$buttonSelect.on('click', this.modalOpen.bind(this));
 	};
@@ -58,7 +56,6 @@
 	$.fieldUser.defaults = {
 		buttonSelect: '.button-select', // selector for button to change the value
 		input: '.field-user-input', // selector for the input
-		linkSaveSelected: '.link-save-selected', // selector for button to save the selected value
 		modal: '.modal', // modal selector
 		url : 'index.php?option=com_users&view=users&layout=modal&tmpl=component',
 		modalWidth: '100%', // modal width
