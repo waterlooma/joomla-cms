@@ -105,5 +105,5 @@ function jSelectUser(id, title, field) {
 			callback.call(el);
 		}
 	}
-	jQuery('#userModal_' + field).modal('hide');
+	jQuery('#userModal_' + field).modal('hide').find('.modal-body').empty();
 }
