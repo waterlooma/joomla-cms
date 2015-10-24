@@ -30,7 +30,7 @@ tinymce.PluginManager.add('jdragdrop', function(editor) {
 			},
 			success: function(data, myXhr){
 				if (data.status == 0) {
-						tinyMCE.activeEditor.windowManager.alert(data.message + ': ' + setCustomDir + data.location);
+					tinyMCE.activeEditor.windowManager.alert(data.message + ': ' + setCustomDir + data.location);
 				}
 				if (data.status == 1) {
 					// Create the image tag
@@ -38,10 +38,22 @@ tinymce.PluginManager.add('jdragdrop', function(editor) {
 					newNode.src= setCustomDir + data.location;
 					tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
 				}
-				setTimeout(function(){ jQuery('#jloader').remove(); }, 200);
+				setTimeout(function(){
+					editor.getBody().style.backgroundRepeat= '';
+					editor.getBody().style.backgroundPositionX= '';
+					editor.getBody().style.backgroundPositionY= '';
+					editor.getBody().style.backgroundImage = '';
+					editor.contentAreaContainer.style.borderWidth = '';
+				}, 200);
 			},
 			error: function(myXhr, errorThrown){
-				setTimeout(function(){ jQuery('#jloader').remove(); }, 100);
+				setTimeout(function(){
+					editor.getBody().style.backgroundRepeat= '';
+					editor.getBody().style.backgroundPositionX= '';
+					editor.getBody().style.backgroundPositionY= '';
+					editor.getBody().style.backgroundImage = '';
+					editor.contentAreaContainer.style.borderWidth = '';
+				}, 100);
 			}
 		});
 	}
@@ -60,8 +72,8 @@ tinymce.PluginManager.add('jdragdrop', function(editor) {
 		// Notify user when file is over the drop area
 		editor.on('dragover', function(e) {
 			e.preventDefault();
-			tinyMCE.activeEditor.contentAreaContainer.style.borderColor = 'green'
-			tinyMCE.activeEditor.contentAreaContainer.style.borderStyle = 'dashed'
+			tinyMCE.activeEditor.contentAreaContainer.style.borderColor = 'green';
+			tinyMCE.activeEditor.contentAreaContainer.style.borderStyle = 'dashed';
 			tinyMCE.activeEditor.contentAreaContainer.style.borderWidth = '5px';
 
 			return false;
@@ -76,18 +88,11 @@ tinymce.PluginManager.add('jdragdrop', function(editor) {
 
 					if (f.name.match(/\.(jpg|jpeg|png|gif|bmp)$/)) {
 
-						editor.contentAreaContainer.style.borderWidth = '';
-						jQuery('<div id=\"jloader\" />').css({
-							position  : 'absolute',
-							width     : '100%',
-							height    : '100%',
-							left      : 0,
-							top       : 0,
-							opacity   : 0.55,
-							zIndex    : 1000000,
-							background: 'url(/media/jui/images/ajax-loader.gif) #fff no-repeat 50% 50%'
-						}).appendTo(jQuery('.editor').css('position', 'relative'));
-
+						// Display a spining Joomla! logo
+						editor.getBody().style.backgroundRepeat = 'no-repeat';
+						editor.getBody().style.backgroundPositionX = '50%';
+						editor.getBody().style.backgroundPositionY = '150px';
+						editor.getBody().style.backgroundImage = 'url(/media/jui/images/ajax-loader.gif)';
 						editor.contentAreaContainer.style.borderWidth = '';
 
 						// Upload the file(s)

@@ -613,16 +613,16 @@ class PlgEditorTinymce extends JPlugin
 
 		// Drag and drop Images
 		$allowImgPaste = "false";
-		$dragDropPlg = '';
-		$dragdrop   = $this->params->get('drag_drop', 1);
-		$user       = JFactory::getUser();
+		$dragDropPlg   = '';
+		$dragdrop      = $this->params->get('drag_drop', 1);
+		$user          = JFactory::getUser();
 
 		if ($dragdrop && $user->authorise('core.create', 'com_media'))
 		{
 			$allowImgPaste = "true";
-			$isSubDir    = '';
-			$session    = JFactory::getSession();
-			$uploadUrl        = JUri::base() . 'index.php?option=com_media&task=file.upload&tmpl=component&'
+			$isSubDir      = '';
+			$session       = JFactory::getSession();
+			$uploadUrl     = JUri::base() . 'index.php?option=com_media&task=file.upload&tmpl=component&'
 				. $session->getName() . '=' . $session->getId()
 				. '&' . JSession::getFormToken() . '=1'
 				. '&asset=image&format=json';
