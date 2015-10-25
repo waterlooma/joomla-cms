@@ -43,7 +43,7 @@ JHtml::script('jui/fielduser.min.js', false, true, false, false, true);
 		type="text" id="<?php echo $id; ?>_name"
 		value="<?php echo  htmlspecialchars($userName, ENT_COMPAT, 'UTF-8'); ?>"
 		readonly
-		disabled="disabled" <?php echo $attr; ?> />
+		disabled="disabled" <?php echo $size ? ' size="' . (int) $size . '"' : ''; ?> />
 	<?php if (!$readOnly) : ?>
 		<a class="btn btn-primary modal_<?php echo $id; ?>" title="<?php echo JText::_('JLIB_FORM_CHANGE_USER'); ?>" href="<?php echo $link; ?>" rel="{handler: 'iframe', size: {x: 800, y: 500}}">
 			<span class="icon-user"></span>
