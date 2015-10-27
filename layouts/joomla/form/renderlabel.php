@@ -39,6 +39,11 @@ if (!empty($desc))
 		$classes[] = 'hasPopover';
 		$title     = ' title="' . htmlspecialchars(trim($text, ':')) . '"'
 			. ' data-content="'. htmlspecialchars($desc) . '"';
+
+		if (JFactory::getLanguage()->isRtl() && !$position)
+		{
+			$position = ' data-placement="left" ';
+		}
 	}
 	else
 	{
