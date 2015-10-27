@@ -38,7 +38,7 @@ if (!empty($desc))
 		JHtml::_('bootstrap.popover');
 		$classes[] = 'hasPopover';
 		$title     = ' title="' . htmlspecialchars(trim($text, ':')) . '"'
-			. 'data-content="'. htmlspecialchars($desc) . '"';
+			. ' data-content="'. htmlspecialchars($desc) . '"';
 	}
 	else
 	{
