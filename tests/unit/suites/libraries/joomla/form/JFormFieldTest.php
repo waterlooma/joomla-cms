@@ -209,7 +209,7 @@ class JFormFieldTest extends TestCaseDatabase
 				'tag'        => 'label',
 				'attributes' => array(
 						'for'   => 'title_id',
-						'class' => 'hasTooltip required',
+						'class' => 'hasPopover required',
 						'title' => '<strong>Title</strong><br />The title.'
 					),
 				'content'    => 'regexp:/Title.*\*/',
