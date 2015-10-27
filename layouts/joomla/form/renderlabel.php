@@ -40,7 +40,8 @@ if (!empty($desc))
 		$title     = ' title="' . htmlspecialchars(trim($text, ':')) . '"'
 			. 'data-content="'. htmlspecialchars($desc) . '"';
 	}
-	else{
+	else
+	{
 		JHtml::_('bootstrap.tooltip');
 		$classes[] = 'hasTooltip';
 		$title     = ' title="' . JHtml::tooltipText(trim($text, ':'), $desc, 0) . '"';
