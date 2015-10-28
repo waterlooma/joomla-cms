@@ -108,7 +108,8 @@ $url    = ($readonly ? ''
 		'imageModal_'. $id,
 		array(
 			'title' => JText::_('JLIB_FORM_CHANGE_IMAGE'),
-			'closeButton' => false,
+			'closeButton' => true,
+			'footer' => '<button class="btn" data-dismiss="modal">' . JText::_('JCANCEL') . '</button>'
 		)
 	);
 
