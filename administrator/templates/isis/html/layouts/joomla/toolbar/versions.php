@@ -38,6 +38,6 @@ echo JHtml::_(
 );
 ?>
 <button onclick="jQuery('#versionsModal').modal('show')" class="btn btn-small" data-toggle="modal" title="<?php echo $title; ?>">
-	<span class="icon-32-restore"></span><?php echo $title; ?>
+	<span class="icon-archive"></span><?php echo $title; ?>
 </button>
 
