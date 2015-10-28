@@ -18,10 +18,19 @@
 		this.$modal = this.$container.find(this.options.modal);
 		this.$modalBody = this.$modal.children('.modal-body');
 		this.$input = this.$container.find(this.options.input);
+		this.$inputName = this.$container.find(this.options.inputName);
 		this.$buttonSelect = this.$container.find(this.options.buttonSelect);
 
 		// Bind events
 		this.$buttonSelect.on('click', this.modalOpen.bind(this));
+
+		// Check for onchange callback,
+		var onchangeStr =  this.$input.attr('data-onchange'), onchangeCallback;
+		if(onchangeStr) {
+			onchangeCallback = new Function(onchangeStr);
+			this.$input.on('change', onchangeCallback.bind(this.$input));
+		}
+
 	};
 
 	// display modal for select the file
@@ -39,10 +48,11 @@
 		$iframe.load(function(){
 			var content = $(this).contents();
 
-			// we should update the field from here
-
-			// bind cancel
-			content.on('click', '.button-cancel', self.modalClose.bind(self));
+			// handle value select
+			content.on('click', '.button-select', function(){
+				self.setValue($(this).data('user-value'), $(this).data('user-name'));
+				self.modalClose();
+			});
 		});
 	};
 
@@ -52,10 +62,17 @@
 		this.$modalBody.empty();
 	};
 
+	// set the value
+	$.fieldUser.prototype.setValue = function(value, name) {
+		this.$input.val(value).trigger('change');
+		this.$inputName.val(name || value).trigger('change');
+	};
+
 	// default options
 	$.fieldUser.defaults = {
 		buttonSelect: '.button-select', // selector for button to change the value
-		input: '.field-user-input', // selector for the input
+		input: '.field-user-input', // selector for the input for the user id
+		inputName: '.field-user-input-name', // selector for the input for the user name
 		modal: '.modal', // modal selector
 		url : 'index.php?option=com_users&view=users&layout=modal&tmpl=component',
 		modalWidth: '100%', // modal width
@@ -89,18 +106,30 @@
 
 })(jQuery);
 
-function jSelectUser(id, title, field) {
-	var old_id = document.getElementById(field + '_id').value;
-	if (old_id != id) {
-		document.getElementById(field + '_id').value = id;
-		document.getElementById(field + '_name').value = title;
-		var el = document.getElementById(field + '_id'),
-			callbackStr =  el.getAttribute('data-onchange'),
-			callback;
-		if(callbackStr) {
-			callback = new Function(callbackStr);
-			callback.call(el);
-		}
+// Compatibility with mootools modal layout
+function jSelectUser(element) {
+	var $el = jQuery(element),
+		value = $el.data('user-value'),
+		name  = $el.data('user-name'),
+		fieldId = $el.data('user-field'),
+		$inputValue = jQuery('#' + fieldId + '_id'),
+		$inputName  = jQuery('#' + fieldId + '_name');
+
+	if (!$inputValue.length) {
+		// The input not found
+		return;
 	}
-	jQuery('#userModal_' + field).modal('hide').find('.modal-body').empty();
+
+	// Update the value
+	$inputValue.val(value).trigger('change');
+	$inputName.val(name || value).trigger('change');
+
+	// Check for onchange callback,
+	var onchangeStr = $inputValue.attr('data-onchange'), onchangeCallback;
+	if(onchangeStr) {
+		onchangeCallback = new Function(onchangeStr);
+		onchangeCallback.call($inputValue[0]);
+	}
+	jModalClose();
 }
+

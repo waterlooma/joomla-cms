@@ -29,7 +29,7 @@ extract($displayData);
  */
 
 // Set the link for the user selection page
-$link = 'index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field=' . $id
+$link = 'index.php?option=com_users&amp;view=users&amp;layout=modal&amp;tmpl=component&amp;field={field-user-id}'
 	. (isset($groups) ? ('&amp;groups=' . base64_encode(json_encode($groups))) : '')
 	. (isset($excluded) ? ('&amp;excluded=' . base64_encode(json_encode($excluded))) : '');
 
@@ -42,6 +42,7 @@ JHtml::script('jui/fielduser.min.js', false, true, false, false, true);
 	data-modal-width="100%"
 	data-modal-height="400px"
 	data-input=".field-user-input"
+	data-input-name=".field-user-input-name"
 	data-button-select=".button-select"
 	>
 	<div class="input-append">
@@ -50,7 +51,7 @@ JHtml::script('jui/fielduser.min.js', false, true, false, false, true);
 			value="<?php echo  htmlspecialchars($userName, ENT_COMPAT, 'UTF-8'); ?>"
 			readonly
 			disabled="disabled"
-			<?php echo $class ? ' class="' . (string) $class . '"' : ''; ?>
+			class="field-user-input-name <?php echo $class ? (string) $class : ''?>"
 			<?php echo $size ? ' size="' . (int) $size . '"' : ''; ?>/>
 		<?php if (!$readOnly) : ?>
 			<a class="btn btn-primary button-select" title="<?php echo JText::_('JLIB_FORM_CHANGE_USER') ?>"><span class="icon-user"></span></a>
@@ -65,5 +66,7 @@ JHtml::script('jui/fielduser.min.js', false, true, false, false, true);
 		<?php endif; ?>
 	</div>
 	<?php // Create the real field, hidden, that stored the user id. ?>
-	<input type="hidden" id="<?php echo $id; ?>_id" name="<?php echo $name; ?>" value="<?php echo (int) $value; ?>" data-onchange="<?php echo $this->escape($onchange); ?>"/>
+	<input type="hidden" id="<?php echo $id; ?>_id" name="<?php echo $name; ?>" value="<?php echo (int) $value; ?>"
+		class="field-user-input <?php echo $class ? (string) $class : ''?>"
+		data-onchange="<?php echo $this->escape($onchange); ?>"/>
 </div>
