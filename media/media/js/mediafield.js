@@ -25,6 +25,7 @@
 		// Bind events
 		this.$buttonSelect.on('click', this.modalOpen.bind(this));
 		this.$buttonClear.on('click', this.clearValue.bind(this));
+		this.$modal.on('hide', this.removeIframe.bind(this));
 
 		// Update preview for existing value
 		this.updatePreview();
@@ -62,6 +63,11 @@
 	// close modal
 	$.fieldMedia.prototype.modalClose = function() {
 		this.$modal.modal('hide');
+		this.$modalBody.empty();
+	};
+
+	// Clear the iframe
+	$.fieldMedia.prototype.removeIframe = function() {
 		this.$modalBody.empty();
 	};
 
