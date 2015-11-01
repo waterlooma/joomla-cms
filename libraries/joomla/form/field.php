@@ -673,7 +673,7 @@ abstract class JFormField
 	 *
 	 * @since   11.1
 	 */
-	abstract protected function getInput();
+	Abstract protected function getInput();
 
 	/**
 	 * Method to get the field title.
