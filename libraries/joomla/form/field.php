@@ -673,7 +673,12 @@ abstract class JFormField
 	 *
 	 * @since   11.1
 	 */
-	abstract protected function getInput();
+	protected function getInput()
+	{
+		$layout = !empty($this->element['layout']) ? (string) $this->element['layout'] : $this->layout;
+
+		return $this->getRenderer()->render($this->getLayoutData());
+	}
 
 	/**
 	 * Method to get the field title.
@@ -918,7 +923,9 @@ abstract class JFormField
 			$options['showonEnabled'] = true;
 		}
 
-		return JLayoutHelper::render($this->renderLayout, array('input' => $this->getInput(), 'label' => $this->getLabel(), 'options' => $options));
+		$layout = !empty($this->element['layout']) ? (string) $this->element['layout'] : $this->layout;
+
+		return new JLayoutFile($layout);
 	}
 
 	/**
