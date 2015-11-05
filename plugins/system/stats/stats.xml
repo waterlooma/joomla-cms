@@ -14,8 +14,8 @@
 		<folder>fields</folder>
 	</files>
 	<languages folder="language">
-		<language tag="en-GB">en-GB/en-GB.plg_system_jstats.ini</language>
-		<language tag="en-GB">en-GB/en-GB.plg_system_jstats.sys.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_system_stats.ini</language>
+		<language tag="en-GB">en-GB/en-GB.plg_system_stats.sys.ini</language>
 	</languages>
 	<config>
 		<fields name="params" addfieldpath="/plugins/system/stats/fields">
