@@ -49,15 +49,24 @@ class JoomlaInstallerScript
 	{
 		$db = JFactory::getDbo();
 
-		// Get the params for the stats plugin 
-		$params = $db->setQuery(
-			$db->getQuery(true)
-				->select($db->quoteName('params'))
-				->from($db->quoteName('#__extensions'))
-				->where($db->quoteName('type') . ' = ' . $db->quote('plugin'))
-				->where($db->quoteName('folder') . ' = ' . $db->quote('system'))
-				->where($db->quoteName('element') . ' = ' . $db->quote('stats'))
-		)->loadResult();
+		try
+		{
+			// Get the params for the stats plugin 
+			$params = $db->setQuery(
+				$db->getQuery(true)
+					->select($db->quoteName('params'))
+					->from($db->quoteName('#__extensions'))
+					->where($db->quoteName('type') . ' = ' . $db->quote('plugin'))
+					->where($db->quoteName('folder') . ' = ' . $db->quote('system'))
+					->where($db->quoteName('element') . ' = ' . $db->quote('stats'))
+			)->loadResult();
+		}
+		catch (Exception $e)
+		{
+			echo JText::sprintf('JLIB_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()) . '<br />';
+
+			return;
+		}
 
 		$params = json_decode($params, true);
 
@@ -74,7 +83,16 @@ class JoomlaInstallerScript
 			->where($db->quoteName('folder') . ' = ' . $db->quote('system'))
 			->where($db->quoteName('element') . ' = ' . $db->quote('stats'));
 
-		$db->setQuery($query)->execute();
+		try
+		{
+			$db->setQuery($query)->execute();
+		}
+		catch (Exception $e)
+		{
+			echo JText::sprintf('JLIB_DATABASE_ERROR_FUNCTION_FAILED', $e->getCode(), $e->getMessage()) . '<br />';
+
+			return;
+		}
 	}
 
 	/**
