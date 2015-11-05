@@ -77,7 +77,7 @@ class PlgSystemStats extends JPlugin
 
 		$query = $this->db->getQuery(true)
 			->update($this->db->quoteName('#__extensions'))
-			->set($this->db->qn('params') . ' = ' . $this->db->quote($this->params->toString('JSON')))
+			->set($this->db->quoteName('params') . ' = ' . $this->db->quote($this->params->toString('JSON')))
 			->where($this->db->quoteName('type') . ' = ' . $this->db->quote('plugin'))
 			->where($this->db->quoteName('folder') . ' = ' . $this->db->quote('system'))
 			->where($this->db->quoteName('element') . ' = ' . $this->db->quote('stats'));

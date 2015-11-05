@@ -9,7 +9,6 @@
 	<authorUrl>www.joomla.org</authorUrl>
 	<version>1.0.0</version>
 	<description>PLG_STATS_XML_DESCRIPTION</description>
-	<scriptfile>script.php</scriptfile>
 	<files>
 		<filename plugin="stats">stats.php</filename>
 		<folder>fields</folder>
