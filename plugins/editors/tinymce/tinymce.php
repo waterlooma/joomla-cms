@@ -1064,14 +1064,14 @@ class PlgEditorTinymce extends JPlugin
 							editor.windowManager.open(modalOptions);";
 					if ($onclick && ($button->get('modal') || $href))
 					{
-						$tempConstructor .= ",
+						$tempConstructor .= "\r\n
 						" . $onclick . "
 							";
 					}
 				}
 				else
 				{
-					$tempConstructor .= "
+					$tempConstructor .= "\r\n
 						" . $onclick . "
 							";
 				}
