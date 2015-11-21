@@ -84,6 +84,7 @@ class JFormFieldPassword extends JFormField
 			case 'maxLength':
 			case 'meter':
 			case 'username':
+			case 'minlength':
 				return $this->$name;
 		}
 
@@ -109,6 +110,7 @@ class JFormFieldPassword extends JFormField
 			case 'maxLength':
 			case 'threshold':
 			case 'username':
+			case 'minlength':
 				$this->$name = $value;
 				break;
 
@@ -144,7 +146,7 @@ class JFormFieldPassword extends JFormField
 			$this->maxLength = $this->element['maxlength'] ? (int) $this->element['maxlength'] : 99;
 			$this->threshold = $this->element['threshold'] ? (int) $this->element['threshold'] : 66;
 			$this->username  = $this->element['username'] ? 'options.common.usernameField = "#jform_' . $this->element['username'] . '";' : '';
-			$this->minLength = 'options.common.minChar = ' . (int) JComponentHelper::getParams('com_users')->get('minimum_length') . ';';
+			$this->minLength = $this->element['minlength'] ? 'options.common.minChar = ' . $this->element['minlength'] . ';' : 'options.common.minChar = 4;';
 			$meter           = (string) $this->element['strengthmeter'];
 			$this->meter     = ($meter == 'true' || $meter == 'on' || $meter == '1');
 		}
@@ -210,7 +212,7 @@ class JFormFieldPassword extends JFormField
 		JHtml::_('jquery.framework');
 		JHtml::_('script', 'system/html5fallback.js', false, true);
 
-		return '<input type="password" name="' . $this->name . '" id="' . $this->id . '"' .
+		return '<span>test<span/><input type="password" name="' . $this->name . '" id="' . $this->id . '"' .
 			' value="' . htmlspecialchars($this->value, ENT_COMPAT, 'UTF-8') . '"' . $hint . $autocomplete .
 			$class . $readonly . $disabled . $size . $maxLength . $required . $autofocus . ' />';
 	}
