@@ -587,9 +587,9 @@ class PlgEditorTinymce extends JPlugin
 		}
 
 		// Codesample
-		$advlist = $this->params->get('code_sample', 1);
+		$codesample = $this->params->get('code_sample', 1);
 
-		if (isset($access[$advlist]))
+		if (isset($access[$codesample]))
 		{
 			$plugins[]      = 'codesample';
 			$toolbar4_add[] = 'codesample';
@@ -804,9 +804,9 @@ class PlgEditorTinymce extends JPlugin
 			extended_valid_elements : \"$elements\",
 			invalid_elements : \"$invalid_elements\",
 			// Plugins
-			plugins : \"$plugins $dragDropPlg codesample\",
+			plugins : \"$plugins $dragDropPlg\",
 			// Toolbar
-			toolbar1: \"$toolbar1 | codesample | code\",
+			toolbar1: \"$toolbar1 | code\",
 			removed_menuitems: \"newdocument\",
 			// URL
 			rel_list : [
