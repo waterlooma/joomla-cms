@@ -131,7 +131,7 @@ class JPathway
 		// Set the new pathway.
 		$this->_pathway = array_values((array) $pathway);
 		$this->_count = count($this->_pathway);
-		
+
 		return array_values($oldPathway);
 	}
 
