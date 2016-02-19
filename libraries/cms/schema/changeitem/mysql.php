@@ -69,7 +69,7 @@ class JSchemaChangeitemMysql extends JSchemaChangeitem
 				$this->queryType = 'ADD_COLUMN';
 				$this->msgElements = array($this->fixQuote($wordArray[2]), $this->fixQuote($wordArray[5]));
 			}
-			elseif ($alterCommand == 'ADD INDEX' || $alterCommand == 'ADD UNIQUE')
+			elseif ($alterCommand == 'ADD INDEX' || $alterCommand == 'ADD UNIQUE' || $alterCommand == 'ADD KEY')
 			{
 				if ($pos = strpos($wordArray[5], '('))
 				{
@@ -84,7 +84,7 @@ class JSchemaChangeitemMysql extends JSchemaChangeitem
 				$this->queryType = 'ADD_INDEX';
 				$this->msgElements = array($this->fixQuote($wordArray[2]), $index);
 			}
-			elseif ($alterCommand == 'DROP INDEX')
+			elseif ($alterCommand == 'DROP INDEX' || $alterCommand == 'DROP KEY')
 			{
 				$index = $this->fixQuote($wordArray[5]);
 				$result = 'SHOW INDEXES IN ' . $wordArray[2] . ' WHERE Key_name = ' . $index;
