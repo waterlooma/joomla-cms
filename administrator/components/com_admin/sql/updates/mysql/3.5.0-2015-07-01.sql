@@ -2,6 +2,7 @@
 
 -- Index and field changes to cater for UTF-8 Multibyte (utf8mb4)
 ALTER TABLE `#__menu` DROP KEY `idx_client_id_parent_id_alias_language`, ADD UNIQUE KEY `idx_client_id_parent_id_alias_language` (`client_id`,`parent_id`,`alias`(100),`language`);
+ALTER TABLE `#__menu` DROP KEY `idx_alias`, ADD KEY `idx_alias` (`alias`(100));
 
 ALTER TABLE `#__redirect_links` DROP KEY `idx_link_old`, ADD UNIQUE KEY `idx_link_old` (`old_url`(100));
 
