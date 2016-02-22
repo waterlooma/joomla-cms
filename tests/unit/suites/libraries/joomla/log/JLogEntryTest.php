@@ -25,6 +25,7 @@ class JLogEntryTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testDefaultValues()
 	{
+		$now = JFactory::getDate('now');
 		$tmp = new JLogEntry('Lorem ipsum dolor sit amet');
 		$date = JFactory::getDate('now');
 
@@ -50,9 +51,9 @@ class JLogEntryTest extends PHPUnit_Framework_TestCase
 		);
 
 		// Date.
-		$this->assertThat(
+		$this->assertContains(
 			$tmp->date->toISO8601(),
-			$this->equalTo($date->toISO8601()),
+			array($now->toISO8601(), $date->toISO8601()),
 			'Line: ' . __LINE__ . '.'
 		);
 	}
