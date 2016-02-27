@@ -199,7 +199,7 @@ class PlgEditorCodemirror extends JPlugin
 	 *
 	 * @return  boolean
 	 */
-	public function onGetInsertMethod($id)
+	public function onGetInsertMethod()
 	{
 		static $done = false;
 
@@ -212,7 +212,7 @@ class PlgEditorCodemirror extends JPlugin
 		$done = true;
 
 		JFactory::getDocument()->addScriptDeclaration("
-		;function jInsertEditorText(text, editor) { Joomla.editors.instances[\"" . $id . "\"].replaceSelection(text); };
+		;function jInsertEditorText(text, editor) { Joomla.editors.instances[editor].replaceSelection(text); };
 		");
 
 		return true;
