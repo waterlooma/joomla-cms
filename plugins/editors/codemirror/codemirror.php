@@ -81,6 +81,8 @@ class PlgEditorCodemirror extends JPlugin
 		"
 		);
 
+		JHtml::_('script', 'media/editors/codemirror/init/init.min.js', false, true, false, false, true);
+
 		$font = $this->params->get('fontFamily', 0);
 		$fontInfo = $this->getFontInfo($font);
 
