@@ -62,9 +62,24 @@ class PlgEditorCodemirror extends JPlugin
 		// At this point, params can be modified by a plugin before going to the layout renderer.
 		$dispatcher->trigger('onCodeMirrorBeforeInit', array(&$this->params));
 
-		$displayData = (object) array('params'  => $this->params);
+		$basePath = $this->params->get('basePath', 'media/editors/codemirror/');
+		$modePath = $this->params->get('modePath', 'media/editors/codemirror/mode/%N/%N');
 
-		JLayoutHelper::render('editors.codemirror.init', $displayData, __DIR__ . '/layouts');
+		JHtml::_('script', $basePath . 'lib/codemirror.min.js', false, false, false, false, true);
+		JHtml::_('script', $basePath . 'lib/addons.min.js', false, false, false, false, true);
+		JHtml::_('stylesheet', $basePath . 'lib/codemirror.min.css', false, false, false, false, true);
+		JHtml::_('stylesheet', $basePath . 'lib/addons.min.css', false, false, false, false, true);
+
+		$fskeys          = $this->params->get('fullScreenMod', array());
+		$fskeys[]        = $this->params->get('fullScreen', 'F10');
+		$fullScreenCombo = implode('-', $fskeys);
+
+		JFactory::getDocument()->addScriptDeclaration(
+		"
+		fsCombo = " . json_encode($fullScreenCombo) . ";
+		modPath = " . json_encode(JUri::root(true) . '/' . $modePath . (JDEBUG ? '.js' : '.min.js')) .";
+		"
+		);
 
 		$font = $this->params->get('fontFamily', 0);
 		$fontInfo = $this->getFontInfo($font);
@@ -78,11 +93,64 @@ class PlgEditorCodemirror extends JPlugin
 
 			if (isset($fontInfo->css))
 			{
-				$displayData->fontFamily = $fontInfo->css . '!important';
+				$fontFamily = $fontInfo->css . '!important';
 			}
 		}
 
-		JLayoutHelper::render('editors.codemirror.styles', $displayData, __DIR__ . '/layouts');
+		$fontFamily = isset($fontFamily) ? $fontFamily : 'monospace';
+		$fontSize   = $this->params->get('fontSize', 13) . 'px;';
+		$lineHeight = $this->params->get('lineHeight', 1.2) . 'em;';
+
+		// Set the active line color.
+		$color           = $this->params->get('activeLineColor', '#a4c2eb');
+		$r               = hexdec($color{1} . $color{2});
+		$g               = hexdec($color{3} . $color{4});
+		$b               = hexdec($color{5} . $color{6});
+		$activeLineColor = 'rgba(' . $r . ', ' . $g . ', ' . $b . ', .5)';
+
+		// Set the color for matched tags.
+		$color               = $this->params->get('highlightMatchColor', '#fa542f');
+		$r                   = hexdec($color{1} . $color{2});
+		$g                   = hexdec($color{3} . $color{4});
+		$b                   = hexdec($color{5} . $color{6});
+		$highlightMatchColor = 'rgba(' . $r . ', ' . $g . ', ' . $b . ', .5)';
+
+		JFactory::getDocument()->addStyleDeclaration(
+		"
+		.CodeMirror
+		{
+			font-family: " . $fontFamily . ";
+			font-size: " . $fontSize . ";
+			line-height: " . $lineHeight . ";
+			border: 1px solid #ccc;
+		}
+		/* In order to hide the Joomla menu */
+		.CodeMirror-fullscreen
+		{
+			z-index: 1040;
+		}
+		/* Make the fold marker a little more visible/nice */
+		.CodeMirror-foldmarker
+		{
+			background: rgb(255, 128, 0);
+			background: rgba(255, 128, 0, .5);
+			box-shadow: inset 0 0 2px rgba(255, 255, 255, .5);
+			font-family: serif;
+			font-size: 90%;
+			border-radius: 1em;
+			padding: 0 1em;
+			vertical-align: middle;
+			color: white;
+			text-shadow: none;
+		}
+		.CodeMirror-foldgutter, .CodeMirror-markergutter { width: 1.2em; text-align: center; }
+		.CodeMirror-markergutter { cursor: pointer; }
+		.CodeMirror-markergutter-mark { cursor: pointer; text-align: center; }
+		.CodeMirror-markergutter-mark:after { content: \"\25CF\"; }
+		.CodeMirror-activeline-background { background: " . $activeLineColor . "; }
+		.CodeMirror-matchingtag { background: " . $highlightMatchColor . "; }
+		"
+		);
 
 		$dispatcher->trigger('onCodeMirrorAfterInit', array(&$this->params));
 	}
