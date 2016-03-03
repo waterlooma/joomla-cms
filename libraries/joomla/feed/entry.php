@@ -71,7 +71,11 @@ class JFeedEntry
 		// Ensure that setting a date always sets a JDate instance.
 		if ((($name == 'updatedDate') || ($name == 'publishedDate')) && !($value instanceof JDate))
 		{
-			$value = new JDate($value);
+			try {
+				$value = new JDate($value);
+			} catch (Exception $e) {
+				throw new RunTimeException($e->getMessage());
+			}
 		}
 
 		// Validate that any authors that are set are instances of JFeedPerson or null.
