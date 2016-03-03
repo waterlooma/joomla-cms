@@ -76,9 +76,12 @@ class JFeed implements ArrayAccess
 		// Ensure that setting a date always sets a JDate instance.
 		if ((($name == 'updatedDate') || ($name == 'publishedDate')) && !($value instanceof JDate))
 		{
-			try {
+			try
+			{
 				$value = new JDate($value);
-			} catch (Exception $e) {
+			}
+			catch (Exception $e)
+			{
 				throw new RunTimeException($e->getMessage());
 			}
 		}
