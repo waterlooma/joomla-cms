@@ -570,7 +570,7 @@ class JTwitterStatuses extends JTwitterObject
 	 * 								   POST statuses/update_with_media.
 	 * @param   boolean  $hide_thread  Specifies whether the embedded Tweet should automatically show the original message in the case that
 	 * 								   the embedded Tweet is a reply.
-	 * @param   boolean  $omit_script  Specifies whether the embedded Tweet HTML should include a <script> element pointing to widgets.js. In cases where
+	 * @param   boolean  $omit_script  Specifies whether the embedded Tweet HTML should include a `<script>` element pointing to widgets.js. In cases where
 	 * 								   a page already includes widgets.js, setting this value to true will prevent a redundant script element from being included.
 	 * @param   string   $align        Specifies whether the embedded Tweet should be left aligned, right aligned, or centered in the page.
 	 * 								   Valid values are left, right, center, and none.
