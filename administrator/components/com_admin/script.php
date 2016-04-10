@@ -1668,7 +1668,7 @@ class JoomlaInstallerScript
 	 *
 	 * @since   3.5
 	 */
-	private function convertTablesToUtf8mb4()
+	public function convertTablesToUtf8mb4()
 	{
 		$db = JFactory::getDbo();
 
