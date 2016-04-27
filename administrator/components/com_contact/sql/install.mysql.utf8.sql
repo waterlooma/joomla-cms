@@ -1,5 +1,5 @@
 CREATE TABLE `#__contact_details` (
-  `id` integer unsigned NOT NULL auto_increment,
+  `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL default '',
   `alias` varchar(255) NOT NULL default '',
   `con_position` varchar(255) default NULL,
