@@ -77,18 +77,8 @@ var JFormValidator = function() {
   		refreshFormLabels(form, form.elements);
     
     $label = $elem.data('label');
-    
-		if ($label.length <= 0)
-		{
-			var $parentElem = $elem.parent();
-		  parentTagName = $parentElem.get(0).tagName.toLowerCase();
-		  
-			if(parentTagName == "label")
-			{
-				$label = $parentElem;
-				$elem.data('label', $label);
-			}
-		}
+		if (!$label) $elem.data('label', jQuery());  // should never be needed because refreshFormLabels() should have set it
+
 		return $label.length ? $label : false;
  	},
 

@@ -392,7 +392,7 @@
 	    
 			$label = $elem.data('label');
 	    
-			if ($label.length <= 0)
+			if (!$label || $label.length <= 0)  // we check for non-empty $label, but refreshFormLabels() should guarantee it to always be a jQuery object
 			{
 				var $parentElem = $elem.parent();
 			  parentTagName = $parentElem.get(0).tagName.toLowerCase();
@@ -402,6 +402,7 @@
 					$label = $parentElem;
 					$elem.data('label', $label);
 				}
+				else if (!$label) $elem.data('label', jQuery());  // should never be needed because refreshFormLabels() should have set it
 			}
 
 			return $label;
