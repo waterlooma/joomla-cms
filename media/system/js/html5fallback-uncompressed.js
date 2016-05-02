@@ -83,6 +83,7 @@
 
 		polyfill : function(elem){
 			if(elem.nodeName.toLowerCase() === 'form')return true;
+			if(!elem.form || !elem.form.H5Form) return true;   // Sanity check elem.form should be set
 			var	self = elem.form.H5Form;
 			self.placeholder(self, elem);
 			self.numberType(self, elem);
@@ -115,6 +116,10 @@
 				f = form.elements,
 				flen = f.length,
 				isFieldValid = true;
+
+			// Remove any inline error messages (in case they were added by a previous validation)
+			jQuery('.invalid_jfield_message').remove();
+
 			form.isValid = true;
 
 			for(var i=0; i<flen; i++) {
@@ -143,13 +148,8 @@
 			if(elem.form === undefined){
 				return null;
 			}
-
-			$elem = $(elem);
-			if ($elem.hasClass('novalidate')) {
-				return true;
-			}
-
 			var	self = elem.form.H5Form,
+				$elem = $(elem),
 				isMissing = false,
 				isRequired = !!($(elem).attr("required")),
 				isDisabled = !!($elem.attr("disabled"));
@@ -183,13 +183,13 @@
 
 			if(!elem.validityState.valid){
 				$elem.addClass(self.options.invalidClass);
-				var $labelref = self.findLabel($elem);
-				$labelref.addClass(self.options.invalidClass);
+				var $label = self.findLabel($elem);
+				if ($label) $label.addClass(self.options.invalidClass);
 			}
 			else{
 				$elem.removeClass(self.options.invalidClass);
-				var $labelref = self.findLabel($elem);
-				$labelref.removeClass(self.options.invalidClass)
+				var $label = self.findLabel($elem);
+				if ($label) $label.removeClass(self.options.invalidClass)
 			}
 			return elem.validityState.valid;
 		},
@@ -338,7 +338,7 @@
 		//Extras
 		refreshFormLabels : function(form, f)
 		{
-			// Iteration through DOM labels updating 
+			// Iteration through DOM labels
 			var $lbl, $el, for_id, el_id;
 			var $lbls_hash = {};
 			jQuery('label').each(function()
@@ -348,10 +348,10 @@
 				if (for_id)
 				{
 					$lbls_hash[for_id] = $lbl;
-					//return;  // return will give minor performance improvement, but we don't use it to also index id-lbl
 				}
 
-				// Compatibility check ID-lbl as ID of label, it is better not to rely on this!, be compliant and specify "for="
+				// Also check ID-lbl as ID of label, needed for fieldset class="radio/checkbox"
+				// for other cases it is better not to rely on this, be compliant and specify ' for="..." '
 				var lbl_id = $lbl.attr('id');
 				if (lbl_id && lbl_id.indexOf('-lbl', lbl_id.length - 4) !== -1) {
 					$lbls_hash[lbl_id.slice(0, -4)] = $lbl;
@@ -360,7 +360,7 @@
 
 			// Set to zero length the .data('label') of elements without one
 			if (typeof f === 'undefined') f = form.elements;
-			var $empty = jQuery();
+
 			for(var i=0; i<f.length; i++)
 			{
 				$el = jQuery(f[i]);
@@ -369,7 +369,7 @@
 					el_id = $el.attr('id');
 					(el_id && $lbls_hash.hasOwnProperty(el_id)) ?
 						$el.data('label', $lbls_hash[el_id]) :
-						$el.data('label', $empty) ;
+						$el.data('label', false) ;
 				}
 			}
 		},
@@ -384,27 +384,31 @@
 			if ( !!$label ) ; // $label && $label !== undefined
 			
 			else if (!id)
-				$elem.data('label', jQuery());
+				$elem.data('label', false);
 			
     	// New element encountered (first run or / newly injected into the dom), redo iteration of DOM labels ... updating this and any other injected elements
     	else
 				self.refreshFormLabels(form, form.elements);
-	    
+
+	    // Before returning label checking if it is set, (refreshFormLabels() should have set it, but check anyway)
 			$label = $elem.data('label');
 	    
-			if (!$label || $label.length <= 0)  // we check for non-empty $label, but refreshFormLabels() should guarantee it to always be a jQuery object
+			// Usage of INPUT inside LABEL, that also lucks both: for=ID and id=ID-lbl
+			// does not exist in Joomla code and checking it only wastes validation time
+			/*if (!$label)
 			{
-				var $parentElem = $elem.parent();
-			  parentTagName = $parentElem.get(0).tagName.toLowerCase();
-			  
-				if(parentTagName == "label")
+				if($elem.parent().get(0).tagName.toLowerCase() == "label")
 				{
-					$label = $parentElem;
+					$label = $elem.parent();
 					$elem.data('label', $label);
 				}
-				else if (!$label) $elem.data('label', jQuery());  // should never be needed because refreshFormLabels() should have set it
-			}
+			}*/ 
 
+			if ($label === undefined)
+			{
+				$label = false;
+				$elem.data('label', $label);
+			}
 			return $label;
 		},
 		
@@ -417,22 +421,45 @@
 			}
 		},
 
-	    renderErrorMessages : function(self, form){
-	    	var f = form.elements,
+		renderErrorMessages : function(self, form)
+		{
+			var f = form.elements,
 				flen = f.length,
-				error = {};
-				error.errors = new Array();
-			while(flen--) {
-				var $elem = $(f[flen]),
-					$label = self.findLabel($elem);
-				if($elem.hasClass(self.options.requiredClass)) {
-						error.errors[flen] = $label.text().replace("*", "") + self.options.requiredMessage;
+				error = {},
+				errorCnt = 0;
+
+			error.error = new Array();
+			while(flen--)
+			{
+				var $elem = $(f[flen]);
+				var errorMessage = '';
+
+				if ($elem.hasClass(self.options.requiredClass)) {
+					errorMessage = self.options.requiredMessage;
 				}
-				if($elem.hasClass(self.options.patternClass)) {
-						error.errors[flen] = $label.text().replace("*", "") + self.options.patternMessage;
+				else if ($elem.hasClass(self.options.patternClass)) {
+					errorMessage = self.options.patternMessage;
+				}
+				else if ( $elem.is(':invalid') ) {
+					// Catch case that HTML5 validation was triggered via JS code
+					if (f[flen].tagName.toLowerCase() != 'fieldset' || $elem.hasClass('radio') || $elem.hasClass('checkboxes'))
+					{
+						errorMessage  = f[flen].title || (!!($elem.attr("required")) ? self.options.requiredMessage : self.options.patternMessage);
+					}
+				}
+				
+				if ( errorMessage )
+				{
+					// To be used for error message list (e.g. at top of the page)
+					var $label = self.findLabel($elem);
+					if ($label) error.error[errorCnt++] = $label.text().replace("*", "") + ' ' + errorMessage;
+					
+					// Add inline error message if label was missing or if it is desired
+					if (!$label) $('<span class="alert alert-error invalid_jfield_message" style="display:inline-block; margin: 2px 12px;">' + errorMessage + '</span>').insertAfter($elem);
 				}
 			}
-			if(error.errors.length > 0){
+
+			if(error.error.length > 0){
 				Joomla.renderMessages(error);
 			}
 		}

@@ -34,10 +34,10 @@ var JFormValidator = function() {
 			if (for_id)
 			{
 				$lbls_hash[for_id] = $lbl;
-				//return;  // return will give minor performance improvement, but we don't use it to also index id-lbl
 			}
 
-			// Compatibility check ID-lbl as ID of label, it is better not to rely on this!, be compliant and specify "for="
+			// Also check ID-lbl as ID of label, needed for fieldset class="radio/checkbox"
+			// for other cases it is better not to rely on this, be compliant and specify ' for="..." '
 			var lbl_id = $lbl.attr('id');
 			if (lbl_id && lbl_id.indexOf('-lbl', lbl_id.length - 4) !== -1) {
 				$lbls_hash[lbl_id.slice(0, -4)] = $lbl;
@@ -46,7 +46,7 @@ var JFormValidator = function() {
 
 		// Set to zero length the .data('label') of elements without one
 		if (typeof f === 'undefined') f = form.elements;
-		var $empty = jQuery();
+
 		for(var i=0; i<f.length; i++)
 		{
 			$el = jQuery(f[i]);
@@ -55,7 +55,7 @@ var JFormValidator = function() {
 				el_id = $el.attr('id');
 				(el_id && $lbls_hash.hasOwnProperty(el_id)) ?
 					$el.data('label', $lbls_hash[el_id]) :
-					$el.data('label', $empty) ;
+					$el.data('label', false) ;
 			}
 		}
 	},
@@ -70,16 +70,20 @@ var JFormValidator = function() {
 		if ( !!$label ) ;  // $label && $label !== undefined
 		
 		else if (!id)
-			$elem.data('label', jQuery());
+			$elem.data('label', false);
   	
    	// New element encountered (first run or / newly injected into the dom), redo iteration of DOM labels ... updating this and any other injected elements
   	else
   		refreshFormLabels(form, form.elements);
-    
-    $label = $elem.data('label');
-		if (!$label) $elem.data('label', jQuery());  // should never be needed because refreshFormLabels() should have set it
 
-		return $label.length ? $label : false;
+    // Before returning label checking if it is set, (refreshFormLabels() should have set it, but check anyway)
+    $label = $elem.data('label');
+		if ($label === undefined)
+		{
+			$label = false;
+			$elem.data('label', $label);
+		}
+		return $label;
  	},
 
  	handleResponse = function(state, $el) {
@@ -146,6 +150,9 @@ var JFormValidator = function() {
  	isValid = function(form) {
  		var fields, valid = true, message, error, label, invalid = [], i, l;
 
+		// Remove any inline error messages (in case they were added by a previous validation)
+		jQuery('.invalid_jfield_message').remove();
+
  		// Validate form fields
  		fields = jQuery(form).find('input, textarea, select, fieldset');
  	 	for (i = 0, l = fields.length; i < l; i++) {
@@ -173,6 +180,10 @@ var JFormValidator = function() {
  	 	 		label = jQuery(invalid[i]).data("label");
  	 			if (label) {
  	 	 			error.error.push(message + label.text().replace("*", ""));
+				}
+				// Fallback to adding an inline message, if label was not found
+				else {
+					jQuery('<span class="alert alert-error invalid_jfield_message" style="display:inline-block; margin: 2px 12px;">' + message + '</span>').insertAfter( jQuery(invalid[i]) );
 				}
  	 	 	}
  	 	 	Joomla.renderMessages(error);
