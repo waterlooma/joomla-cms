@@ -76,7 +76,15 @@ if ($meter)
 		jQuery(document).ready(function($){
 			'use strict';
 			var options = {};
-			options.common = {};
+			options.common = {
+				onKeyUp: function (evt, data) {
+					if (data.score > +" . $threshold . ") {
+						$(evt.target).addClass('invalid');
+					} else {
+						$(evt.target).removeClass('invalid');
+					}
+				}
+			};
 			" . $username . "
 			options.common.minChar = " . $minLength . ";
 			options.ui = {
@@ -99,10 +107,12 @@ if ($meter)
 				wordTwoCharacterClasses: '" . JText::_('JFIELD_PASSWORD_INDICATE_CHARCLASS') . "',
 			};
 			jQuery('#" . $id . "').pwstrength(options);
+			
 		});
 		"
 	);
 }
+echo $threshold;
 ?>
 <input type="password" name="<?php echo $name; ?>" id="<?php echo $id; ?>" value="<?php
 echo htmlspecialchars($value, ENT_COMPAT, 'UTF-8'); ?>" <?php
