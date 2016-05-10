@@ -1689,6 +1689,15 @@ legend + .control-group {
 .control-label .hasTooltip {
 	display: inline-block;
 }
+.subform-repeatable-wrapper .btn-group>.btn.button {
+	min-width: 0;
+}
+.subform-repeatable-wrapper .ui-sortable-helper {
+	background: #fff;
+}
+.subform-repeatable-wrapper tr.ui-sortable-helper {
+	display: table;
+}
 table {
 	max-width: 100%;
 	background-color: transparent;
@@ -7059,6 +7068,7 @@ h4,
 h5,
 h6 {
 	margin: 12px 0;
+	word-wrap: break-word;
 }
 h1 {
 	font-size: 26px;
@@ -7088,6 +7098,9 @@ h6 {
 	padding-bottom: 17px;
 	margin: 20px 0 18px 0;
 	border-bottom: 1px solid #eeeeee;
+}
+p {
+	word-wrap: break-word;
 }
 .item-title {
 	margin-bottom: 9px;
@@ -7497,6 +7510,12 @@ code {
 	font-weight: bold;
 	padding: 1px 4px;
 }
+dt.result-title {
+	word-wrap: break-word;
+}
+dd.result-text {
+	word-wrap: break-word;
+}
 body.modal-open {
 	overflow: hidden;
 	-ms-overflow-style: none;
@@ -7523,4 +7542,7 @@ body.modal-open {
 }
 .container-popup {
 	padding: 28px 10px 10px 10px;
+}
+li {
+	word-wrap: break-word;
 }

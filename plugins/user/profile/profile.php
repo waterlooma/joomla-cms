@@ -9,6 +9,8 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\Utilities\ArrayHelper;
+
 /**
  * An example custom profile plugin.
  *
@@ -129,7 +131,7 @@ class PlgUserProfile extends JPlugin
 	}
 
 	/**
-	 * Returns a anchor tag generated from a given value
+	 * Returns an anchor tag generated from a given value
 	 *
 	 * @param   string  $value  url to use
 	 *
@@ -397,7 +399,7 @@ class PlgUserProfile extends JPlugin
 	 */
 	public function onUserAfterSave($data, $isNew, $result, $error)
 	{
-		$userId = JArrayHelper::getValue($data, 'id', 0, 'int');
+		$userId = ArrayHelper::getValue($data, 'id', 0, 'int');
 
 		if ($userId && $result && isset($data['profile']) && (count($data['profile'])))
 		{
@@ -454,7 +456,7 @@ class PlgUserProfile extends JPlugin
 			return false;
 		}
 
-		$userId = JArrayHelper::getValue($user, 'id', 0, 'int');
+		$userId = ArrayHelper::getValue($user, 'id', 0, 'int');
 
 		if ($userId)
 		{
