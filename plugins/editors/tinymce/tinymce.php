@@ -611,6 +611,18 @@ class PlgEditorTinymce extends JPlugin
 			$toolbar4_add[] = $custom_button;
 		}
 
+		// Drag and drop Images
+		$dragdrop   = $this->params->get('drag_drop', 1);
+		$scriptFunc = '';
+		$scriptInit = '';
+
+		if ($dragdrop)
+		{
+			$ddTemp = $this->dragAndDrop();
+			$scriptFunc = $ddTemp['scriptFunc'];
+			$scriptInit = $ddTemp['scriptInit'];
+		}
+
 		// Prepare config variables
 		$plugins  = implode(',', $plugins);
 		$elements = implode(',', $elements);
@@ -674,8 +686,10 @@ class PlgEditorTinymce extends JPlugin
 						remove_script_host : false,
 						// Layout
 						$content_css
-						document_base_url : \"" . JUri::root() . "\"
-					});
+						document_base_url : \"" . JUri::root() . "\",
+						$scriptInit
+				});
+				$scriptFunc
 				</script>";
 				break;
 
@@ -721,8 +735,9 @@ class PlgEditorTinymce extends JPlugin
 					$resizing
 					height : \"$html_height\",
 					width : \"$html_width\",
-
+					$scriptInit
 				});
+				$scriptFunc
 				</script>";
 				break;
 
@@ -785,8 +800,9 @@ class PlgEditorTinymce extends JPlugin
 					image_advtab: $image_advtab,
 					height : \"$html_height\",
 					width : \"$html_width\",
-
+					$scriptInit
 				});
+				$scriptFunc
 				</script>";
 				break;
 		}
@@ -957,5 +973,146 @@ class PlgEditorTinymce extends JPlugin
 	private function _toogleButton($name)
 	{
 		return JLayoutHelper::render('joomla.tinymce.togglebutton', $name);
+	}
+
+	/**
+	 * Enable drag and drop images
+	 *
+	 * @return  array
+	 */
+	private function dragAndDrop()
+	{
+		$scriptInit = '';
+		$scriptFunc = '';
+		$path       = '';
+		$isSubDir    = '';
+		$user       = JFactory::getUser();
+		$session    = JFactory::getSession();
+		$url        = JUri::base() . 'index.php?option=com_media&task=file.upload&tmpl=component&'
+			. $session->getName() . '=' . $session->getId()
+			. '&' . JSession::getFormToken() . '=1'
+			. '&asset=image&format=json';
+
+		// Check if user is authorised for uploads
+		if (!$user->authorise('core.create', 'com_media'))
+		{
+			return array(
+				'scriptInit' => $scriptInit,
+				'scriptFunc' => $scriptFunc,
+			);
+		}
+
+		if (JFactory::getApplication()->isSite())
+		{
+			$url = htmlentities($url, null, 'UTF-8', null);
+		}
+
+		// Is Joomla installed in subdirectory
+		if (JUri::root(true) != '/')
+		{
+			$isSubDir = JUri::root(true);
+		}
+
+		// Get specific path
+		$tempPath = $this->params->get('path', '');
+
+		if (!empty($tempPath))
+		{
+			$tempPath = rtrim($tempPath, '/');
+			$tempPath = ltrim($tempPath, '/');
+			$path = $tempPath;
+		}
+
+		// Enable Drag and Drop
+		$scriptInit = "
+					paste_data_images: true,
+					setup : function(ed) {
+						ed.on('drop', function(e) {
+							for (var i = 0, f; f = e.dataTransfer.files[i]; i++) {
+								var ext = f.name.split('.').pop().toLowerCase();
+								if (jQuery.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) != -1) {
+									jQuery('<div id=\"jloader\" />').css({
+										position: 'absolute',
+										width: '100%',
+										height: '100%',
+										left: 0,
+										top: 0,
+										opacity: 0.55,
+										zIndex: 1000000,
+										background: 'url(/media/jui/img/ajax-loader.gif) #fff no-repeat 50% 50%'
+									}).appendTo(jQuery('.editor').css('position', 'relative'));
+									UploadFile(f);
+								}
+							}
+							e.preventDefault();
+							return;
+						});
+					}
+			";
+
+		// AJAX upload code
+		$scriptFunc = "
+				function UploadFile(file) {
+					var isSubDir = '" . $isSubDir . "';
+					var fd = new FormData();
+					fd.append('Filedata', file);
+					fd.append('folder', '" . $path . "');
+
+					jQuery.ajax({
+						url: '$url',
+						dataType: 'json',
+						type: 'post',
+						contentType: 'application/json',
+						enctype: 'multipart/form-data',
+						data: fd,
+						cache: false,
+						contentType: false,
+						processData: false,
+						xhr: function() {
+							var myXhr = jQuery.ajaxSettings.xhr();
+							return myXhr;
+						},
+						success: function(data, myXhr){
+							if (data.status == 0) {
+								if (data.dataUrl) {
+									var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
+									newNode.src= isSubDir + data.dataUrl;  // add src attribute
+									tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
+									tinyMCE.execCommand('mceRepaint');
+								}
+								jQuery('#jloader').remove();
+								jQuery('<div id=\"error\" />').css({
+									position: 'absolute',
+									width: '100%',
+									height: '100%',
+									left: 0,
+									top: 0,
+									opacity: 0.55,
+									zIndex: 1000000,
+									background: 'darkred 50% 50%'
+								}).appendTo(jQuery('.editor').css('position', 'relative'));
+								jQuery('#error').html('<p style=\"margin-top: 30%;margin-left:15%; color:#fff;font-size:3em;\">' + data.error + '</p>');
+								setTimeout(function(){ jQuery('#error').remove(); }, 500);
+							}
+							if (data.status == 1) {
+								jQuery('#jloader').css({background: 'green'});
+								var newNode = tinyMCE.activeEditor.getDoc().createElement ( 'img' );  // create img node
+								newNode.src= isSubDir + data.dataUrl;  // add src attribute
+								tinyMCE.activeEditor.execCommand('mceInsertContent', false, newNode.outerHTML);
+								tinyMCE.execCommand('mceRepaint');
+								setTimeout(function(){ jQuery('#jloader').remove(); }, 1500);
+							}
+						},
+						error: function( myXhr, errorThrown ){
+							setTimeout(function(){ jQuery('#jloader').remove(); }, 500);
+						}
+					});
+				}
+		";
+
+		return array(
+			'scriptInit' => $scriptInit,
+			'scriptFunc' => $scriptFunc,
+		);
 	}
 }
