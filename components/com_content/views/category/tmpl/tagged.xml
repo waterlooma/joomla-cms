@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-	<layout title="COM_CONTENT_CATEGORY_VIEW_BLOG_TITLE" option="COM_CONTENT_CATEGORY_VIEW_BLOG_OPTION">
-		<help key = "JHELP_MENUS_MENU_ITEM_ARTICLE_CATEGORY_BLOG" />
+	<layout title="COM_CONTENT_CATEGORY_VIEW_TAGGED_TITLE" option="COM_CONTENT_CATEGORY_VIEW_TAGGED_OPTION">
+		<help key = "JHELP_MENUS_MENU_ITEM_ARTICLE_TAGGED" />
 		<message>
 			<![CDATA[COM_CONTENT_CATEGORY_VIEW_BLOG_DESC]]>
 		</message>
@@ -18,6 +18,13 @@
 				label="JGLOBAL_CHOOSE_CATEGORY_LABEL"
 				required="true"
 			/>
+
+			<field name="filter_tag" type="tag"
+				description="JTAG_DESC"
+				label="JTAG"
+				>
+				<option value="">JNONE</option>
+			</field>
 		</fieldset>
 	</fields>
 
